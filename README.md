@@ -55,23 +55,6 @@
 12. In the python terminal, enter the following: db.create_all()
 13. Exit the python terminal with the following command: quit()
 
-# Setup Google Authentication
-1. Go to https://console.developers.google.com/ and sign up for a developer account using a personal google account.
-2. Click "CREATE PROJECT" or in the dropdown menu called "Select a Project" in the top, click "NEW PROJECT".
-3. Make a new project named whatever you'd like with "No organization" selected.
-4. Click "Credentials" in the left hand bar, then click "+ CREATE CREDENTIALS" and then click "OAuth client ID".
-5. If you see a warning that says "To create an OAuth client ID, you must first set a product name on the consent screen", do the following steps:
-1. Click the "CONFIGURE CONSENT SCREEN" button.
-2. Choose "External"
-3. For "Application name," fill in the name you used for step 3.
-4. Press save.
-6. Go back to Credentials -> Create Credentials -> OAuth client ID. Click "web application".
-7. Copy down your "Client ID" and save it for later
-8. Under "URI's", enter the domain name from where you will be hosting this project so Google can approve authentication requests.
-9. Open project2-m2-tma26/scripts/LoginButton_Google.jsx
-10. Replace the text next to "clientId" with the client id you saved in step 7.
-11. Save the file and close it.
-
 # Run the Project
 1. make sure you are in the cloned repo directory ("cds_backend")
 2. Enter the following command: npm run watch
