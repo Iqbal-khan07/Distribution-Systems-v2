@@ -1,7 +1,11 @@
+.title {
+    font-size: 25px;
+}
+
 .table {
     minWidth: 500;
 }
 
 .tableHeader {
-    font-size: 20px;
+    font-size: 18px;
 }

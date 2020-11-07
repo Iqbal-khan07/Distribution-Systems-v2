@@ -122,7 +122,7 @@ export default function ShopTable() {
       <StylesProvider injectFirst>
     <TableContainer component={Paper}>
         <Toolbar>
-            <Typography variant="h6">
+            <Typography variant="h6" className={styles.title}>
                 Shops
             </Typography>
         </Toolbar>
