@@ -3,7 +3,7 @@
 }
 
 .table {
-    minWidth: 500;
+    min-width: 500;
 }
 
 .tableHeader {
