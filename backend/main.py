@@ -29,6 +29,6 @@ def deploy_index():
 if __name__ == '__main__':
     # database bootstrap function
     # remove / comment out this line after running once to prevent data redundancy
-    sql_related.Sys_user.bootstrap_populate(db)
+    sql_related.database_bootstrap(db)
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"))
