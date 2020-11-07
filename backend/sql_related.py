@@ -28,6 +28,12 @@ class Sys_user(db.Model):
     @staticmethod
     def bootstrap_populate(database):
         """database bootstrap function for Sys_user"""
+        
+        # delete all current entries
+        for entry in database.session.query(Sys_user).all():
+            database.session.delete(entry)
+        
+        # add bootrap entries
         database.session.add(Sys_user(
             "John",
             "Smith",
