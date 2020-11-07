@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, useTheme , withStyles, StylesProvider} from '@material-ui/core/styles';
 import {TableContainer, Table, TableHead, TableBody, TableCell, TableFooter, 
     TablePagination, TableRow, Paper, IconButton, Toolbar, Typography} from '@material-ui/core';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import InfoIcon from '@material-ui/icons/Info';
+import styles from './ShopTable.module.css';
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -14,8 +16,8 @@ const useStyles1 = makeStyles((theme) => ({
     marginLeft: theme.spacing(2.5),
   },
 }));
-
-function TablePaginationActions(props) {
+  
+  function TablePaginationActions(props) {
   const classes = useStyles1();
   const theme = useTheme();
   const { count, page, rowsPerPage, onChangePage } = props;
@@ -93,15 +95,7 @@ const rows = [
   createData(111123, 'Store Name', '123 Main Street Anytown, USA'),
 ].sort((a, b) => (a.id < b.id ? -1 : 1));
 
-const useStyles2 = makeStyles({
-  table: {
-    minWidth: 500,
-  },
-});
-
-
 export default function ShopTable() {
-  const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -116,20 +110,29 @@ export default function ShopTable() {
     setPage(0);
   };
 
+  const StyledTableRow = withStyles((theme) => ({
+    root: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+    },
+  }))(TableRow);
+  
   return (
+      <StylesProvider injectFirst>
     <TableContainer component={Paper}>
         <Toolbar>
             <Typography variant="h6">
                 Shops
             </Typography>
         </Toolbar>
-        <Table className={classes.table} size="small" aria-label="custom pagination table">
+        <Table className={styles.table} size="small" aria-label="custom pagination table">
         <TableHead>
           <TableRow>
-            <TableCell>Id</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Address</TableCell>
-            <TableCell align="right">Options</TableCell>
+            <TableCell className={styles.tableHeader}>Id</TableCell>
+            <TableCell className={styles.tableHeader}>Name</TableCell>
+            <TableCell className={styles.tableHeader}>Address</TableCell>
+            <TableCell className={styles.tableHeader} align="center">Options</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -137,17 +140,22 @@ export default function ShopTable() {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row) => (
-            <TableRow key={row.id}>
-              <TableCell component="th" scope="row">
+            <StyledTableRow key={row.id}>
+              <TableCell>
                 {row.id}
               </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
+              <TableCell>
                 {row.name}
               </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
+              <TableCell>
                 {row.address}
               </TableCell>
-            </TableRow>
+              <TableCell align="center">
+                <IconButton aria-label="get info">
+                    <InfoIcon />
+                </IconButton>
+              </TableCell>
+            </StyledTableRow>
           ))}
 
           {emptyRows > 0 && (
@@ -176,5 +184,6 @@ export default function ShopTable() {
         </TableFooter>
       </Table>
     </TableContainer>
+    </StylesProvider>
   );
 }
