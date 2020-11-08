@@ -6,7 +6,12 @@ from backend_main import db
 
 
 class Sys_user_role(db.Model):
-    """system user role database table definition"""
+    """system user role database table definition
+    Stores roles for sys_user
+    1 = Order Taker
+    2 = Order Fulfiller
+    3 = Administrator"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
     
@@ -17,7 +22,6 @@ class Sys_user_role(db.Model):
     def bootstrap_populate(database):
         """database bootstrap function for Sys_user_role"""
         
-        # add bootrap entries
         database.session.add(Sys_user_role(
             "Order Taker"))
         database.session.add(Sys_user_role(
@@ -29,13 +33,14 @@ class Sys_user_role(db.Model):
 
 
 class Sys_user(db.Model):
-    """system user database table definition"""
+    """sys_user database table definition
+    Stores all employee / system user information"""
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name_first = db.Column(db.String(50), nullable=False)
     name_last = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False)
     # Note, password is currently plain text. In the future,
-    # make this a hash with a salt
+    # make this a hash with a salt, make salt another field
     password = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(10), nullable=True)
     role = db.Column(db.Integer, db.ForeignKey('sys_user_role.id'), nullable=False)
@@ -50,9 +55,8 @@ class Sys_user(db.Model):
         
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for Sys_user"""
+        """database bootstrap function for sys_user"""
         
-        # add bootrap entries
         database.session.add(Sys_user(
             "Order",
             "Taker",
@@ -79,7 +83,8 @@ class Sys_user(db.Model):
         
         
 class Zone(db.Model):
-    """zone database table definition"""
+    """zone database table definition
+    Zones are assigned to companyies and shops"""
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     
@@ -90,7 +95,6 @@ class Zone(db.Model):
     def bootstrap_populate(database):
         """database bootstrap function for zone"""
         
-        # add bootrap entries
         database.session.add(Zone(
             "Temp Zone 1"))
         database.session.add(Zone(
@@ -115,7 +119,6 @@ class Shop_category(db.Model):
     def bootstrap_populate(database):
         """database bootstrap function for Shop_category"""
         
-        # add bootrap entries
         database.session.add(Shop_category(
             "Temp Category 1"))
         database.session.add(Shop_category(
@@ -148,9 +151,8 @@ class Shop(db.Model):
         
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for Shop"""
+        """database bootstrap function for shop"""
         
-        # add bootrap entries
         database.session.add(Shop(
             "Temp Store 1",
             None,
@@ -195,7 +197,6 @@ class Shop_zone(db.Model):
     def bootstrap_populate(database):
         """database bootstrap function for shop_zone"""
         
-        # add bootrap entries
         database.session.add(Shop_zone(
             1,
             1))
@@ -235,14 +236,13 @@ class Company(db.Model):
     def bootstrap_populate(database):
         """database bootstrap function for company"""
         
-        # add bootrap entries
         database.session.add(Company(
             "Company 1"))
         database.session.add(Company(
             "Compnay 2"))
             
         database.session.commit()
-        
+
         
 class Company_zone(db.Model):
     """company_zone database table definition"""
@@ -257,7 +257,6 @@ class Company_zone(db.Model):
     def bootstrap_populate(database):
         """database bootstrap function for company_zone"""
         
-        # add bootrap entries
         database.session.add(Company_zone(
             1,
             2))
@@ -276,7 +275,7 @@ class Company_zone(db.Model):
         
         
 class Company_product(db.Model):
-    """company product database table definition"""
+    """company_product database table definition"""
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     company = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
@@ -295,9 +294,8 @@ class Company_product(db.Model):
         
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for company products"""
+        """database bootstrap function for company_product"""
         
-        # add bootrap entries
         database.session.add(Company_product(
             1,
             "C1 Item 1",
@@ -390,7 +388,6 @@ class Shop_order(db.Model):
         # one week ahead for projected delivery date
         week_forward = current_time_utc + datetime.timedelta(days=7)
         
-        # add bootrap entries
         # order placed and paid
         database.session.add(Shop_order(
             1,
@@ -443,7 +440,6 @@ class Shop_order_item(db.Model):
     def bootstrap_populate(database):
         """database bootstrap function for shop_order_items"""
         
-        # add bootrap entries
         database.session.add(Shop_order_item(
             1,
             2,
