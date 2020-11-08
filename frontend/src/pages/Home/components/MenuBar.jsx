@@ -1,3 +1,4 @@
+import React from "react";
 import { AppBar, Toolbar, Button} from '@material-ui/core';
 import styles from './MenuBar.module.css';
 import { StylesProvider } from '@material-ui/core/styles';
@@ -10,7 +11,7 @@ const MenuBar = () => {
                 <Toolbar className={styles.menu}>
                     <div className={styles.logo}>
                         Commercial Distribution Solutions
-                        <img src='./CDSLogo.png' alt='CDS Logo' height='50'></img>
+                        <img src='../CDSLogo.png' alt='CDS Logo' height='50'/>
                     </div>
                     <div className={styles.grow}/>
                     <Button className={styles.button}>

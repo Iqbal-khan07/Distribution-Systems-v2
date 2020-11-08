@@ -1,3 +1,4 @@
+import React from "react";
 import MenuBar from './components/MenuBar';
 import styles from './Home.module.css';
 
