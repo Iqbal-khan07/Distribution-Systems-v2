@@ -17,7 +17,7 @@ class Shop(db.Model):
         self.address = address_i
 
 
-class User(db.Model):
+class UserTable(db.Model):
     """User database table definition"""
     id = db.Column(db.Integer, primary_key=True)
     role = db.Column(db.Integer)
