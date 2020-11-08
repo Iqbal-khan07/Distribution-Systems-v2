@@ -1,6 +1,7 @@
 """sql_related.py: all SQL interface functions and table definitions"""
 
 import flask_sqlalchemy
+import datetime
 from backend_main import db
 
 
@@ -177,8 +178,8 @@ class Company(db.Model):
         database.session.commit()
         
         
-class Company_products(db.Model):
-    """company products database table definition"""
+class Company_product(db.Model):
+    """company product database table definition"""
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     company = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
@@ -200,28 +201,28 @@ class Company_products(db.Model):
         """database bootstrap function for company products"""
         
         # add bootrap entries
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             1,
             "C1 Item 1",
             1.00,
             2.00,
             1,
             None))
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             1,
             "C1 Item 2",
             2.00,
             4.00,
             2,
             "Item 2!"))
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             1,
             "C1 Item 3",
             300.00,
             600.00,
             30,
             "Big Item 3"))
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             1,
             "C1 Item 4",
             44.00,
@@ -229,34 +230,165 @@ class Company_products(db.Model):
             4,
             None))
             
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             2,
             "C2 Item 1",
             100.00,
             200.00,
             1,
             "Big Item"))
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             2,
             "C2 Item 2",
             0.01,
             0.02,
             1,
             "Small Item"))
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             2,
             "C2 Item 3",
             10000.00,
             20000.00,
             1,
             "Huge Item"))
-        database.session.add(Company_products(
+        database.session.add(Company_product(
             2,
             "C2 Item 4",
             4.44,
             8.88,
             1,
             None))
+            
+        database.session.commit()
+        
+        
+class Shop_order(db.Model):
+    """shop_order database table definition"""
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    shop = db.Column(db.Integer, db.ForeignKey('shop.id'), nullable=False)
+    price_due = db.Column(db.Numeric(10, 2), nullable=False)
+    price_paid = db.Column(db.Boolean(), nullable=False)
+    date_ordered = db.Column(db.DateTime(True), nullable=False)
+    date_delivered_projected = db.Column(db.DateTime(True), nullable=False)
+    date_delivered = db.Column(db.DateTime(True), nullable=True)
+    order_taker = db.Column(db.Integer, db.ForeignKey('sys_user.id'), nullable=False)
+    order_fulfiller = db.Column(db.Integer, db.ForeignKey('sys_user.id'), nullable=True)
+    completed = db.Column(db.Boolean(), nullable=False)
+    
+    def __init__(self, sh, pd, pp, do, ddp, dd, ot, of, co):
+        self.shop = sh
+        self.price_due = pd
+        self.price_paid = pp
+        self.date_ordered = do
+        self.date_delivered_projected = ddp
+        self.date_delivered = dd
+        self.order_taker = ot
+        self.order_fulfiller = of
+        self.completed = co
+        
+    @staticmethod
+    def bootstrap_populate(database):
+        """database bootstrap function for shop_order"""
+        current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+        # one week ahead for projected delivery date
+        week_forward = current_time_utc + datetime.timedelta(days=7)
+        
+        # add bootrap entries
+        # order placed and paid
+        database.session.add(Shop_order(
+            1,
+            40614.00,
+            True,
+            current_time_utc,
+            week_forward,
+            None,
+            1,
+            None,
+            False))
+        # order placed and not paid
+        database.session.add(Shop_order(
+            2,
+            7928.00,
+            False,
+            current_time_utc,
+            week_forward,
+            None,
+            1,
+            None,
+            False))
+        # order placed, paid and delivered
+        database.session.add(Shop_order(
+            3,
+            400400.00,
+            True,
+            current_time_utc,
+            week_forward,
+            week_forward,
+            1,
+            2,
+            True))
+            
+        database.session.commit()
+        
+        
+class Shop_order_item(db.Model):
+    """shop_order_item database table definition"""
+    shop_order = db.Column(db.Integer, db.ForeignKey('shop_order.id'), primary_key=True, nullable=False)
+    company_product = db.Column(db.Integer, db.ForeignKey('company_product.id'), primary_key=True, nullable=False)
+    quantity_units = db.Column(db.Integer, nullable=False)
+    
+    def __init__(self, so, cp, qu):
+        self.shop_order = so
+        self.company_product = cp
+        self.quantity_units = qu
+        
+    @staticmethod
+    def bootstrap_populate(database):
+        """database bootstrap function for shop_order_items"""
+        
+        # add bootrap entries
+        database.session.add(Shop_order_item(
+            1,
+            2,
+            6))
+        database.session.add(Shop_order_item(
+            1,
+            7,
+            2))
+        database.session.add(Shop_order_item(
+            1,
+            6,
+            100))
+        database.session.add(Shop_order_item(
+            1,
+            5,
+            3))
+            
+        database.session.add(Shop_order_item(
+            2,
+            1,
+            200))
+        database.session.add(Shop_order_item(
+            2,
+            4,
+            100))
+        database.session.add(Shop_order_item(
+            2,
+            8,
+            600))
+            
+        database.session.add(Shop_order_item(
+            3,
+            7,
+            20))
+        database.session.add(Shop_order_item(
+            3,
+            3,
+            10))
+        database.session.add(Shop_order_item(
+            3,
+            6,
+            10000))
             
         database.session.commit()
     
@@ -267,4 +399,6 @@ def database_bootstrap(database):
     Shop_category.bootstrap_populate(database)
     Shop.bootstrap_populate(database)
     Company.bootstrap_populate(database)
-    Company_products.bootstrap_populate(database)
+    Company_product.bootstrap_populate(database)
+    Shop_order.bootstrap_populate(database)
+    Shop_order_item.bootstrap_populate(database)
