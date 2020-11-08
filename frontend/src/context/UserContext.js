@@ -1,13 +1,27 @@
 import React, {createContext, useState} from "react";
+import HomeIcon from "@material-ui/icons/Home";
 
 export const UserContext = createContext();
 
 const UserContextProvider = ({children}) => {
     const [user, setUser] = useState({
         email: undefined,
-        name: undefined,
+        name: "Zoraiz Naeem",
         role: undefined,
         imageUrl: undefined,
+        links: [
+        {
+            "icon": <HomeIcon style={{fontSize: 30}} />,
+            "text": 'Dashboard',
+            "to": '/shoptracker'
+        },
+        {
+            "icon": <HomeIcon style={{fontSize: 30}} />,
+            "text": 'Dashboard',
+            "to": '/shoptracke'
+        }
+    ]
+
     })
 
     const setName = (name) => {
