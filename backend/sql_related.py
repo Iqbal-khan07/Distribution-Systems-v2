@@ -78,6 +78,31 @@ class Sys_user(db.Model):
         database.session.commit()
         
         
+class Zone(db.Model):
+    """zone database table definition"""
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    
+    def __init__(self, na):
+        self.name = na
+        
+    @staticmethod
+    def bootstrap_populate(database):
+        """database bootstrap function for zone"""
+        
+        # add bootrap entries
+        database.session.add(Zone(
+            "Temp Zone 1"))
+        database.session.add(Zone(
+            "Temp Zone 2"))
+        database.session.add(Zone(
+            "Temp Zone 3"))
+        database.session.add(Zone(
+            "Temp Zone 4"))
+            
+        database.session.commit()
+        
+        
 class Shop_category(db.Model):
     """shop category database table definition"""
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -157,6 +182,47 @@ class Shop(db.Model):
         database.session.commit()
         
         
+class Shop_zone(db.Model):
+    """shop_zone database table definition"""
+    shop = db.Column(db.Integer, db.ForeignKey('shop.id'), primary_key=True, nullable=False)
+    zone = db.Column(db.Integer, db.ForeignKey('zone.id'), primary_key=True, nullable=False)
+    
+    def __init__(self, sh, zo):
+        self.shop = sh
+        self.zone = zo
+        
+    @staticmethod
+    def bootstrap_populate(database):
+        """database bootstrap function for shop_zone"""
+        
+        # add bootrap entries
+        database.session.add(Shop_zone(
+            1,
+            1))
+        database.session.add(Shop_zone(
+            1,
+            4))
+            
+        database.session.add(Shop_zone(
+            2,
+            3))
+            
+        database.session.add(Shop_zone(
+            3,
+            1))
+        database.session.add(Shop_zone(
+            3,
+            2))
+        database.session.add(Shop_zone(
+            3,
+            3))
+        database.session.add(Shop_zone(
+            3,
+            4))
+            
+        database.session.commit()
+        
+        
 class Company(db.Model):
     """company database table definition"""
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -174,6 +240,37 @@ class Company(db.Model):
             "Company 1"))
         database.session.add(Company(
             "Compnay 2"))
+            
+        database.session.commit()
+        
+        
+class Company_zone(db.Model):
+    """company_zone database table definition"""
+    company = db.Column(db.Integer, db.ForeignKey('company.id'), primary_key=True, nullable=False)
+    zone = db.Column(db.Integer, db.ForeignKey('zone.id'), primary_key=True, nullable=False)
+    
+    def __init__(self, co, zo):
+        self.company = co
+        self.zone = zo
+        
+    @staticmethod
+    def bootstrap_populate(database):
+        """database bootstrap function for company_zone"""
+        
+        # add bootrap entries
+        database.session.add(Company_zone(
+            1,
+            2))
+        database.session.add(Company_zone(
+            1,
+            3))
+            
+        database.session.add(Company_zone(
+            2,
+            1))
+        database.session.add(Company_zone(
+            2,
+            4))
             
         database.session.commit()
         
@@ -396,9 +493,12 @@ class Shop_order_item(db.Model):
 def database_bootstrap(database):
     Sys_user_role.bootstrap_populate(database)
     Sys_user.bootstrap_populate(database)
+    Zone.bootstrap_populate(database)
     Shop_category.bootstrap_populate(database)
     Shop.bootstrap_populate(database)
+    Shop_zone.bootstrap_populate(database)
     Company.bootstrap_populate(database)
+    Company_zone.bootstrap_populate(database)
     Company_product.bootstrap_populate(database)
     Shop_order.bootstrap_populate(database)
     Shop_order_item.bootstrap_populate(database)
