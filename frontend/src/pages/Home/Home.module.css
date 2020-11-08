@@ -3,8 +3,8 @@
 }
 
 .background {
-    background: url('./Warehouse.jpg') no-repeat center center fixed;
+    background: url('../../static/images/Warehouse.jpg') no-repeat center center fixed;
     background-size: 100% 100%;
     opacity: 0.85;
-    height: 700px;
+    height: 100vh;
 }
