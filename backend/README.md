@@ -27,15 +27,15 @@
 6. in the psql terminal, ensure that your new user exists with the command: \du (you should see an entry with the name of your username)
 7. ensure that your new database exists with the command: \l (you should see an entry with the name of your username)
 8. create a new user that python can log into postgresql with: create user { username here } superuser password '{ password here }'; 
-1. make sure to get rid of\ the {} in there, but not the '' for the password.
+    1. make sure to get rid of\ the {} in there, but not the '' for the password.
 9. exit the postgresql terminal with this command: \q
 
 # Setup Project to Run
 1. create a file in directory "Distribution-System-CS490/backend" named sql.env
 2. put the following line in sql.env: DATABASE_URL='postgresql://{user}:{pass}@localhost/{dbname}'
-1. replace {user} with the username you created in "Setup Postgresql Database" part 8
-2. replace {pass} with the password you created in "Setup Postgresql Database" part 8
-3. replace {dbname} with your username
+    1. replace {user} with the username you created in "Setup Postgresql Database" part 8
+    2. replace {pass} with the password you created in "Setup Postgresql Database" part 8
+    3. replace {dbname} with your username
 3. run the following command to open pg_hba.conf: sudo vim /var/lib/pgsql9/data/pg_hba.conf
 4. type in the following within vim: :%s/ident/md5/g
 5. press enter
@@ -50,8 +50,8 @@
 
 # Bootstrap the Database
 1. If you already have previous versions of this projects database on your system or want to reset the database, do the following
-1. run the following command: psql
-2. in the psql terminal, enter the following command: DROP TABLE IF EXISTS shop_order_item, shop_order, company_product, company_zone, company, shop_zone, shop, shop_category, zone, sys_user, sys_user_role;
+    1. run the following command: psql
+    2. in the psql terminal, enter the following command: DROP TABLE IF EXISTS shop_order_item, shop_order, company_product, company_zone, company, shop_zone, shop, shop_category, zone, sys_user, sys_user_role;
 2. Enter the following command: python backend_main.python
 3. Now press control+c to stop the python file from running
 4. comment out line 32 in backend_main.py "sql_related.database_bootstrap(db)"
