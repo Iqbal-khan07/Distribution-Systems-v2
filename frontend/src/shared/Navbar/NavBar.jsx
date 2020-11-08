@@ -64,6 +64,7 @@ const Navbar = (props) => {
                     onClick={handleToggleOpen}
                     edge="start"
                     className={clsx(classes.menuButton)}
+                    style={{color: "rgb(255, 255, 255, 0.7)"}}
                 >
                     <MenuIcon />
                 </IconButton>
@@ -82,6 +83,7 @@ const Navbar = (props) => {
                 <IconButton
                     style={{padding: 10}}
                     onClick={handleLogout}
+                    style={{color: "rgb(255, 255, 255, 0.7)"}}
                 >
                     <ExitToAppIcon
                         style={{color: 'white', fontSize: 35}}
