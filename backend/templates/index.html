@@ -5,7 +5,32 @@
         <link rel="stylesheet" href={{ url_for("static", filename="index.css") }} >
     </head>
     <body>
+        <input type="text" id="role" name="role" />
+        <input type="text" id="user" name="user" />
+        <input type="text" id="pass" name ="pass">
+        <button onclick="return login()">Submit</button>  
         <div id="content"></div>
+        <script>
+            function login() {
+                // Form fields, see IDs above
+                const person = {
+                    role: document.getElementById('role').value,
+                    username: document.getElementById('user').value,
+                    pass: document.getElementById('pass').value
+                }
+        
+                const http = new XMLHttpRequest()
+                http.open('POST', 'https://b39e45c680bb4a5cb9f83cfc2b9e1cc1.vfs.cloud9.us-east-1.amazonaws.com/api/people')
+                http.setRequestHeader('Content-type', 'application/json')
+                http.send(JSON.stringify(person)) // Make sure to stringify
+                http.onload = function() {
+                    // Do whatever with response
+                    alert(http.responseText)
+                }
+            }
+        </script>
+        <!--
         <script type="text/javascript" src="/static/script.js"></script>
+        -->
     </body>
 </html>
