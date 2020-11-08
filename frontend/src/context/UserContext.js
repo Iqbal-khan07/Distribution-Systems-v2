@@ -1,5 +1,10 @@
 import React, {createContext, useState} from "react";
 import HomeIcon from "@material-ui/icons/Home";
+import StoreIcon from '@material-ui/icons/Store';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import SettingsIcon from '@material-ui/icons/Settings';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import StorageIcon from '@material-ui/icons/Storage';
 
 export const UserContext = createContext();
 
@@ -13,13 +18,30 @@ const UserContextProvider = ({children}) => {
         {
             "icon": <HomeIcon style={{fontSize: 30}} />,
             "text": 'Dashboard',
+            "to": '/dashboard'
+        }, {
+            "icon": <StoreIcon style={{fontSize: 30}} />,
+            "text": 'Shop Tracker',
             "to": '/shoptracker'
+        }, {
+            "icon": <ListAltIcon style={{fontSize: 30}} />,
+            "text": 'Orders',
+            "to": '/orders'
+        },{
+            "icon": <StorageIcon style={{fontSize: 30}} />,
+            "text": 'Inventory Manager',
+            "to": '/inventory'
         },
         {
-            "icon": <HomeIcon style={{fontSize: 30}} />,
-            "text": 'Dashboard',
-            "to": '/shoptracke'
+            "icon": <PeopleAltIcon style={{fontSize: 30}} />,
+            "text": 'Employers',
+            "to": '/employers'
+        }, {
+            "icon": <SettingsIcon style={{fontSize: 30}} />,
+            "text": 'Settings',
+            "to": '/settings'
         }
+
     ]
 
     })
