@@ -38,18 +38,22 @@ class Sys_user(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name_first = db.Column(db.String(50), nullable=False)
     name_last = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    sys_username = db.Column(db.String(50), nullable=False, unique=True)
     # Note, password is currently plain text. In the future,
     # make this a hash with a salt, make salt another field
     password = db.Column(db.String(255), nullable=False)
+    email_google = db.Column(db.String(100), nullable=False, unique=True)
+    email_fb = db.Column(db.String(100), nullable=False, unique=True)
     phone_number = db.Column(db.String(10), nullable=True)
     role = db.Column(db.Integer, db.ForeignKey('sys_user_role.id'), nullable=False)
     
-    def __init__(self, nf, nl, em, pw, pn, ro):
+    def __init__(self, nf, nl, su, pw, eg, ef, pn, ro):
         self.name_first = nf
         self.name_last = nl
-        self.email = em
+        self.sys_username = su
         self.password = pw
+        self.email_google = eg
+        self.email_fb = ef
         self.phone_number = pn
         self.role = ro
         
@@ -60,22 +64,28 @@ class Sys_user(db.Model):
         database.session.add(Sys_user(
             "Order",
             "Taker",
-            "ot@cds.com",
+            "order_taker",
             "ot1234",
+            "order_taker@gmail.com",
+            "order_taker@gmail.com",
             "1234567890",
             1))
         database.session.add(Sys_user(
             "Order",
             "Fulfiller",
-            "of@cds.com",
+            "order_fulfiller",
             "of1234",
+            "order_fulfiller@gmail.com",
+            "order_fulfiller@gmail.com",
             "1234567890",
             2))
         database.session.add(Sys_user(
             "Administrator",
             "",
-            "admin@cds.com",
+            "admin",
             "root",
+            "administrator@gmail.com",
+            "administrator@gmail.com",
             "1234567890",
             3))
             
