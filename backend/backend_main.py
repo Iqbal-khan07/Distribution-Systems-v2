@@ -32,6 +32,9 @@ if __name__ == '__main__':
     # remove / comment out this line after running once to prevent data redundancy
     # sql_related.database_bootstrap(db)
     
-    print(sql_related.authenticate_email(db, json_mock.authenticate_email_google(), True))
+    # print(sql_related.authenticate_default(db, json_mock.authenticate_default()))
+    # print(sql_related.authenticate_email(db, json_mock.authenticate_email_google(), True))
+    # print(sql_related.authenticate_email(db, json_mock.authenticate_email_facebook(), False))
+    print(sql_related.request_company_product(db))
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"))

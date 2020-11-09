@@ -59,7 +59,7 @@ class Sys_user(db.Model):
         self.phone_number = pn
         self.role = ro
         
-    def get_info_response(self, database):
+    def authenticate_response(self, database):
         role_name = (database.session.query(Sys_user_role).filter(
             Sys_user_role.id == self.role).all())[0].name
         
@@ -72,7 +72,7 @@ class Sys_user(db.Model):
             "email_fb": str(self.email_fb),
             "phone_number": str(self.phone_number),
             "role": str(self.role),
-            "role_name": role_name
+            "role_name": str(role_name)
         }
         
     @staticmethod
@@ -267,7 +267,7 @@ class Company(db.Model):
         database.session.add(Company(
             "Company 1"))
         database.session.add(Company(
-            "Compnay 2"))
+            "Company 2"))
             
         database.session.commit()
 
@@ -308,7 +308,7 @@ class Company_product(db.Model):
     company = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     price_buy = db.Column(db.Numeric(10, 2), nullable=False)
-    sell_price = db.Column(db.Numeric(10, 2), nullable=False)
+    price_sell = db.Column(db.Numeric(10, 2), nullable=False)
     units_per_price = db.Column(db.Integer, nullable=False) 
     description = db.Column(db.String(255), nullable=True)
     
@@ -316,9 +316,25 @@ class Company_product(db.Model):
         self.company = co
         self.name = na
         self.price_buy = bp
-        self.sell_price = sp
+        self.price_sell = sp
         self.units_per_price = upp
         self.description = de
+        
+    def request_company_product_response(self, database):
+        company_name = (database.session.query(Company).filter(
+            Company.id == self.company).all())[0].name
+        
+        return {
+            "id": str(self.id),
+            "company": str(self.company),
+            "company_name": str(company_name),
+            "name": str(self.name),
+            "price_buy": str(self.price_buy),
+            "sell_price": str(self.price_sell),
+            "units_per_price": str(self.units_per_price),
+            "price_sell_per_unit": str(self.price_sell / self.units_per_price),
+            "description": str(self.description)
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -383,7 +399,7 @@ class Company_product(db.Model):
             None))
             
         database.session.commit()
-        
+      
         
 class Shop_order(db.Model):
     """shop_order database table definition"""
@@ -546,10 +562,7 @@ def authenticate_default(database, data):
                         == password_login).all()
                     
                     if query_result:
-                        role_name = (database.session.query(Sys_user_role).filter(
-                            Sys_user_role.id == query_result[0].role).all())[0].name
-                        
-                        response_inner = query_result[0].get_info_response(database)
+                        response_inner = query_result[0].authenticate_response(database)
                     else:
                         response_inner = "invalid login credentials"
                 else:
@@ -587,10 +600,7 @@ def authenticate_email(database, data, google):
                         Sys_user.email_fb == email_login).all()
                 
                 if query_result:
-                    role_name = (database.session.query(Sys_user_role).filter(
-                        Sys_user_role.id == query_result[0].role).all())[0].name
-                    
-                    response_inner = query_result[0].get_info_response(database)
+                    response_inner = query_result[0].authenticate_response(database)
                 else:
                     response_inner = "invalid login credentials"
             else:
@@ -601,7 +611,21 @@ def authenticate_email(database, data, google):
         response_inner = "404: No JSON object in request"
         
     response = {
-            "authenticate_default_response": response_inner
+            "authenticate_email_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def request_company_product(database):
+    query_result = database.session.query(Company_product).all()
+    
+    result = []
+    
+    for item in query_result:
+        result.append(item.request_company_product_response(database))
+        
+    response = {
+            "request_company_product_response": result
         }
         
     return json.dumps(response, indent = 4)
