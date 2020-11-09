@@ -10,26 +10,31 @@ produces:
 
 basePath: "/api"
 
-security:
-  - APIKeyHeader: []
+
 
 # Paths supported by the server application
 paths:
   /user:
     get:
-      operationId: "people.read"
+      operationId: "api.user_read"
       tags:
-        - "People"
-      summary: "The people data structure supported by the server application"
-      description: "Read the list of people"
+        - "Users"
+      summary: "The user data structure supported by the server application"
+      description: "Read the list of users"
       responses:
         200:
-          description: "Successful read people list operation"
+          description: "Successful read user list operation"
           schema:
             type: "array"
             items:
               properties:
-                username:
+                first:
+                  type: "string"
+                last:
+                  type: "string"
+                email:
+                  type: "string"
+                number:
                   type: "string"
                 role:
                   type: "string"
@@ -37,60 +42,252 @@ paths:
                   type: "string"
                   
     post:
-      operationId: people.create
+      operationId: api.user_create
       tags:
-        - People
-      summary: Create a person and add it to the people list
-      description: Create a new person in the people list
+        - Users
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
       parameters:
-        - name: person
+        - name: new_user
           in: body
-          description: Person to create
+          description: User to create
           required: True
           schema:
             type: object
             properties:
-              username:
+              first:
                 type: string
-                description: First name of person to create
-              role:
+                description: Email of user to create
+              last:
                 type: string
-                description: Last name of person to create
+                description: Email of user to create    
+              email:
+                type: string
+                description: Email of user to create
               password:
                 type: string
-                description: Password of person to create
+                description: Password of user to create
+              number:
+                type: string
+                description: Password of user to create
+              role:
+                type: string
+                description: Role of user to create
+
       responses:
         201:
-          description: Successfully created person in list
+          description: Successfully created user in list
   
-  /user/{username}:
+  /user/{user_email}:
     get:
-      operationId: people.read_one
+      operationId: api.user_read_one
       tags:
-        - People
-      summary: Read one person from the people list
-      description: Read one person from the people list
+        - Users
+      summary: Read one user from the users list
+      description: Read one user from the users list
       parameters:
-        - name: username
+        - name: user_email
           in: path
-          description: Username of the person to get from the list
+          description: Email of the user to get from the list
           type: string
           required: True
       responses:
         200:
-          description: Successfully read person from people list operation
+          description: Successfully read email from user list operation
           schema:
             properties:
-              username:
+              first:
+                type: string
+              last:
+                type: string
+              email:
+                type: string
+              number:
                 type: string
               role:
                 type: string
               timestamp:
                 type: string
+  /shop:
+    get:
+      operationId: "api.shop_read"
+      tags:
+        - "Shops"
+      summary: "The user data structure supported by the server application"
+      description: "Read the list of users"
+      responses:
+        200:
+          description: "Successful read user list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                name:
+                  type: "string"
+                email:
+                  type: "string"
+                number:
+                  type: "string"
+                catagory:
+                  type: "string"
+                street:
+                  type: "string"
+                city:
+                  type: "string"
+                providence:
+                  type: "string"
+                zip:
+                  type: "string"
+                timestamp:
+                  type: "string"
+                  
+    post:
+      operationId: api.shop_create
+      tags:
+        - Users
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
+      parameters:
+        - name: new_shop
+          in: body
+          description: User to create
+          required: True
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Email of user to create
+              email:
+                type: string
+                description: Email of user to create
+              number:
+                type: string
+                description: Email of user to create
+              catagory:
+                type: string
+                description: Email of user to create
+              street:
+                type: string
+                description: Email of user to create
+              city:
+                type: string
+                description: Role of user to create
+              providence:
+                type: string
+                description: Password of user to create
+              zip:
+                type: string
+                description: Email of user to create
+      responses:
+        201:
+          description: Successfully created user in list
+  
+  /shop/{shop_name}:
+    get:
+      operationId: api.shop_read_one
+      tags:
+        - Users
+      summary: Read one user from the users list
+      description: Read one user from the users list
+      parameters:
+        - name: shop_name
+          in: path
+          description: Email of the user to get from the list
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read email from user list operation
+          schema:
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              number:
+                type: string
+              catagory:
+                type: string
+              street:
+                type: string
+              city:
+                type: string
+              providence:
+                type: string
+              zip:
+                type: string
+              timestamp:
+                type: string
+  /company:
+    get:
+      operationId: "api.company_read"
+      tags:
+        - "Users"
+      summary: "The user data structure supported by the server application"
+      description: "Read the list of users"
+      responses:
+        200:
+          description: "Successful read user list operation"
+          schema:
+            type: "array"
+            items:
+              properties:
+                name:
+                  type: "string"
+                timestamp:
+                  type: "string"
+                  
+    post:
+      operationId: api.company_create
+      tags:
+        - Users
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
+      parameters:
+        - name: new_company
+          in: body
+          description: User to create
+          required: True
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Email of user to create
+      responses:
+        201:
+          description: Successfully created user in list
+  
+  /user/{company_name}:
+    get:
+      operationId: api.company_read_one
+      tags:
+        - Users
+      summary: Read one user from the users list
+      description: Read one user from the users list
+      parameters:
+        - name: company_name
+          in: path
+          description: Email of the user to get from the list
+          type: string
+          required: True
+      responses:
+        200:
+          description: Successfully read email from user list operation
+          schema:
+            properties:
+              name:
+                type: string
+              timestamp:
+                type: string
+                
+                
+                
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
     in: header
     name: X-API-Key
-    x-apikeyInfoFunc: people.basic_auth
+    x-apikeyInfoFunc: api.basic_auth
     

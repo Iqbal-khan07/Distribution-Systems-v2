@@ -14,6 +14,8 @@
 7. sudo pip install eventlet
 8. sudo pip install Flask-SQLAlchemy==2.1
 9. sudo pip install requests
+10. sudo pip install -U flask-cors
+11. sudo pip install connexion
  
 # Clone this Repository 
 0. https://github.com/Zoraiz-Naeem/Distribution-System-CS490/tree/backend-development

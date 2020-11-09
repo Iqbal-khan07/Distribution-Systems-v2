@@ -6,8 +6,8 @@ import os
 import flask
 import flask_sqlalchemy
 import json
-import sql_related
 import connexion
+from flask_cors import CORS
 
 
 dotenv_path = join(dirname(__file__), 'sql.env')
@@ -23,16 +23,32 @@ apps.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app = connexion.App(__name__, specification_dir='./')
 
 db = flask_sqlalchemy.SQLAlchemy(apps)
+db.init_app(apps)
+db.app = apps
 
-db = flask_sqlalchemy.SQLAlchemy(app)
-db.init_app(app)
-db.app = app
+import sql_related
+
+
+def db_bootstrap():
+    try:
+        db.session.query(sql_related.Sys_user).all()
+    except:
+        print("Error in Database")
+        return
+    users = db.session.query(sql_related.Sys_user).all()
+    dataCheck = [ db_name.email for db_name in users]
+    
+    
+    if(dataCheck != []):
+        print("Items exist in Database")
+        return
+    sql_related.database_bootstrap(db)
 
 def restEndpoint():
     #Create Connexion Application Instance
     global app
     app = connexion.App(__name__, specification_dir='./')
-    
+    CORS(app.app)
     # Read the swagger.yml file to configure the endpoints
     app.add_api('swagger.yml')
     
@@ -56,7 +72,7 @@ if __name__ == '__main__':
     # remove / comment out this line after running once to prevent data redundancy
     init_db(apps)
     restEndpoint()
-    sql_related.database_bootstrap(db)
+    db_bootstrap()
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"), debug = True)
     
