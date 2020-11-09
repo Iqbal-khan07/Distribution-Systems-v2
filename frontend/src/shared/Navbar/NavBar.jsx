@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         height: 65,
         marginLeft: theme.template.sideDrawerClosedWidth,
         width: `calc(100% - ${theme.template.sideDrawerClosedWidth}px)`,
-        backgroundColor: "#464646",
+        backgroundColor: "#4A5256",
 
     },
 

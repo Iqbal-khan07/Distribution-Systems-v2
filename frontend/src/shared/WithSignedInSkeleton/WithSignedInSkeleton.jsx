@@ -11,10 +11,9 @@ const useStyles = makeStyles((theme) => ({
     },
 
     title: {
-        margin: '5px 0 0 0',
-        color: '#30d215',
-        padding: 0
+        color: '#5DB285',
     },
+    
     toolbar: {
         display: 'flex',
         alignItems: 'center',

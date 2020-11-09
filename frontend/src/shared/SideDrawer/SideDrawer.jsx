@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     sideDrawerPaper: {
-        backgroundColor: "#202020",
+        backgroundColor: "#232E33",
         borderColor: "#000000"
     },
 
@@ -93,24 +93,22 @@ const useStyles = makeStyles((theme) => ({
 
     listItemSelected: {
         borderLeftColor: theme.palette.primary.main,
-        backgroundColor: '#2a9a17',
+        backgroundColor: '#5DB285',
         "&:hover": {
-            backgroundColor: "#2a9a17",
+            backgroundColor: "#BFDCCD",
         },
         "&:focus":{
-            backgroundColor: "#2a9a17",
+            backgroundColor: "#BFDCCD",
         }
     },
 
     listItemRoot: {
-        backgroundColor: '#202020',
+        backgroundColor: "inheret",
         "&:hover": {
-            backgroundColor: "#2a9a17",
-            borderColor: "#2a9a17"
+            backgroundColor: "#BFDCCD",
         },
         "&:focus":{
-            backgroundColor: "#2a9a17",
-            borderColor: "#2a9a17"
+            backgroundColor: "#5DB285",
         }
     },
 }));
