@@ -59,7 +59,7 @@ class Sys_user(db.Model):
         self.phone_number = pn
         self.role = ro
         
-    def get_info(self, database):
+    def get_info_response(self, database):
         role_name = (database.session.query(Sys_user_role).filter(
             Sys_user_role.id == self.role).all())[0].name
         
@@ -68,7 +68,6 @@ class Sys_user(db.Model):
             "name_first": str(self.name_first),
             "name_last": str(self.name_last),
             "sys_username": str(self.sys_username),
-            "password": str(self.password),
             "email_google": str(self.email_google),
             "email_fb": str(self.email_fb),
             "phone_number": str(self.phone_number),
@@ -550,7 +549,7 @@ def authenticate_default(database, data):
                         role_name = (database.session.query(Sys_user_role).filter(
                             Sys_user_role.id == query_result[0].role).all())[0].name
                         
-                        response_inner = query_result[0].get_info(database)
+                        response_inner = query_result[0].get_info_response(database)
                     else:
                         response_inner = "invalid login credentials"
                 else:
@@ -591,7 +590,7 @@ def authenticate_email(database, data, google):
                     role_name = (database.session.query(Sys_user_role).filter(
                         Sys_user_role.id == query_result[0].role).all())[0].name
                     
-                    response_inner = query_result[0].get_info(database)
+                    response_inner = query_result[0].get_info_response(database)
                 else:
                     response_inner = "invalid login credentials"
             else:
