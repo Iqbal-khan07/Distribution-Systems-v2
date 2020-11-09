@@ -141,7 +141,7 @@ const SideDrawer = (props) => {
                 })}
             >
 
-                <img src={LogoBackground}/>
+                <img src={LogoBackground} alt="CDS Logo"/>
                 <span className={classes.logoName} >
                     <p>Commercial</p>
                     <p>Distribution</p>

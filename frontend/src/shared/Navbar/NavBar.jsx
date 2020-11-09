@@ -81,9 +81,8 @@ const Navbar = (props) => {
                 />
 
                 <IconButton
-                    style={{padding: 10}}
+                    style={{padding: 10, color: "rgb(255, 255, 255, 0.7)"}}
                     onClick={handleLogout}
-                    style={{color: "rgb(255, 255, 255, 0.7)"}}
                 >
                     <ExitToAppIcon
                         style={{color: 'white', fontSize: 35}}
