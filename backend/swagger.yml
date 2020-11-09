@@ -10,7 +10,9 @@ produces:
 
 basePath: "/api"
 
-
+#Global API Key Security
+#security:
+#  - APIKeyHeader: []
 
 # Paths supported by the server application
 paths:
