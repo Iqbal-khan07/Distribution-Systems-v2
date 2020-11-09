@@ -2,6 +2,8 @@
 
 import flask_sqlalchemy
 import datetime
+import json
+from flask import jsonify
 from backend_main import db
 
 
@@ -56,6 +58,23 @@ class Sys_user(db.Model):
         self.email_fb = ef
         self.phone_number = pn
         self.role = ro
+        
+    def get_info(self, database):
+        role_name = (database.session.query(Sys_user_role).filter(
+            Sys_user_role.id == self.role).all())[0].name
+        
+        return {
+            "id": str(self.id),
+            "name_first": str(self.name_first),
+            "name_last": str(self.name_last),
+            "sys_username": str(self.sys_username),
+            "password": str(self.password),
+            "email_google": str(self.email_google),
+            "email_fb": str(self.email_fb),
+            "phone_number": str(self.phone_number),
+            "role": str(self.role),
+            "role_name": role_name
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -508,3 +527,43 @@ def database_bootstrap(database):
     Company_product.bootstrap_populate(database)
     Shop_order.bootstrap_populate(database)
     Shop_order_item.bootstrap_populate(database)
+
+# database queries for HTTP requests    
+def authenticate_default(database, data):
+    """this function authenticates a user based upon sys_username 
+    and password by checking passed parameters against the database"""
+    
+    try:
+        data_loaded = json.loads(data)
+        
+        if "authenticate_default" in data_loaded:
+            if "username" in data_loaded["authenticate_default"]:
+                if "password" in data_loaded["authenticate_default"]:
+                    username_login = data_loaded["authenticate_default"]["username"]
+                    password_login = data_loaded["authenticate_default"]["password"]
+                    
+                    query_result = database.session.query(Sys_user).filter(
+                        Sys_user.sys_username == username_login, Sys_user.password \
+                        == password_login).all()
+                    
+                    if query_result:
+                        role_name = (database.session.query(Sys_user_role).filter(
+                            Sys_user_role.id == query_result[0].role).all())[0].name
+                        
+                        response_inner = query_result[0].get_info(database)
+                    else:
+                        response_inner = "invalid login credentials"
+                else:
+                    response_inner = "404: No password in request"
+            else:
+                response_inner = "404: No username in request"
+        else:
+            response_inner = "404: No authenticate_default in request"
+    except ValueError:
+        response_inner = "404: No JSON object in request"
+        
+    response = {
+            "authenticate_default_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)
