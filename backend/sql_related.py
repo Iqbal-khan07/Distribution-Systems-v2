@@ -86,7 +86,7 @@ class Sys_user(db.Model):
             "order_taker",
             "ot1234",
             "order_taker@gmail.com",
-            "order_taker@gmail.com",
+            "order_taker@other.com",
             "1234567890",
             1))
         database.session.add(Sys_user(
@@ -95,7 +95,7 @@ class Sys_user(db.Model):
             "order_fulfiller",
             "of1234",
             "order_fulfiller@gmail.com",
-            "order_fulfiller@gmail.com",
+            "order_fulfiller@other.com",
             "1234567890",
             2))
         database.session.add(Sys_user(
@@ -104,7 +104,7 @@ class Sys_user(db.Model):
             "admin",
             "root",
             "administrator@gmail.com",
-            "administrator@gmail.com",
+            "administrator@other.com",
             "1234567890",
             3))
             
@@ -559,6 +559,45 @@ def authenticate_default(database, data):
                 response_inner = "404: No username in request"
         else:
             response_inner = "404: No authenticate_default in request"
+    except ValueError:
+        response_inner = "404: No JSON object in request"
+        
+    response = {
+            "authenticate_default_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def authenticate_email(database, data, google):
+    """this function authenticates a user based upon an email address 
+    if google = True, this is a google login
+    if google = False, this is a Facebook login"""
+    
+    try:
+        data_loaded = json.loads(data)
+        
+        if "authenticate_email" in data_loaded:
+            if "email" in data_loaded["authenticate_email"]:
+                email_login = data_loaded["authenticate_email"]["email"]
+                
+                if google:
+                    query_result = database.session.query(Sys_user).filter(
+                        Sys_user.email_google == email_login).all()
+                else:
+                    query_result = database.session.query(Sys_user).filter(
+                        Sys_user.email_fb == email_login).all()
+                
+                if query_result:
+                    role_name = (database.session.query(Sys_user_role).filter(
+                        Sys_user_role.id == query_result[0].role).all())[0].name
+                    
+                    response_inner = query_result[0].get_info(database)
+                else:
+                    response_inner = "invalid login credentials"
+            else:
+                response_inner = "404: No email in request"
+        else:
+            response_inner = "404: No authenticate_email in request"
     except ValueError:
         response_inner = "404: No JSON object in request"
         
