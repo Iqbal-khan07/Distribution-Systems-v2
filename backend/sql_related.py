@@ -843,7 +843,8 @@ def request_shop_category(database):
     return json.dumps(response, indent = 4)
     
 def create_shop(database, data):
-    """Adds a new entry to the shop table based on JSON data"""
+    """Adds a new entry to the shop table and populates shop_zone 
+        entries for itbased on JSON data"""
     
     data_loaded = json.loads(data)["create_shop"]
     
@@ -906,7 +907,7 @@ def create_shop(database, data):
     return json.dumps(response, indent = 4)
     
 def create_zone(database, data):
-    """Adds a new entry to the zone table based on JSON data"""
+    """Adds a new entry to the Zone table based on JSON data"""
     
     data_loaded = json.loads(data)["create_zone"]
     
@@ -933,6 +934,126 @@ def create_zone(database, data):
     
     response = {
             "create_zone_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def create_shop_category(database, data):
+    """Adds a new entry to the Shop_category table based on JSON data"""
+    
+    data_loaded = json.loads(data)["create_shop_category"]
+    
+    # validate relational data fields
+    shop_category_type_valid = True
+    
+    if database.session.query(Shop_category).filter(
+        Shop_category.type == data_loaded["type"]).count() != 0:
+            
+        shop_category_type_valid = False
+        
+    if shop_category_type_valid:
+        # create new Shop_category object
+        new_shop_category = Shop_category(data_loaded["type"])
+        
+        # add, commit, then refresh Shop_category object to update with commit    
+        database.session.add(new_shop_category)
+        database.session.commit()
+        database.session.refresh(new_shop_category)
+        
+        response_inner = new_shop_category.request_category_info()
+    else:
+        response_inner = "404: shop category already exists"
+    
+    response = {
+            "create_shop_category_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def create_shop_order(database, data):
+    """Adds a new entry to the Shop_order table and
+        populates Shop_order_item entries for it based on JSON data"""
+    
+    data_loaded = json.loads(data)["create_shop_order"]
+    
+    # validate relational data fields
+    shop_id_valid = True
+    order_taker_valid = True
+    shop_order_items_valid = True
+    
+    if database.session.query(Shop).filter(Shop.id \
+        == data_loaded["shop_id"]).count() == 0:
+            
+        shop_id_valid = False
+        
+    if database.session.query(Sys_user).filter(Sys_user.id \
+        == data_loaded["order_taker_id"]).count() == 0:
+            
+        order_taker_valid = False
+        
+    price_total = float(0)
+        
+    for item in data_loaded["order_items"]:
+        product_entries = database.session.query(Company_product).filter(Company_product.id == item["id"])
+        
+        if product_entries.count() == 0:
+            shop_order_items_valid = False
+            break
+        else:
+            # calculate total price of order
+            price_total += float((product_entries[0].price_sell / 
+                product_entries[0].units_per_price) * item["quantity_units"])
+        
+    if shop_id_valid:
+        if order_taker_valid:
+            if shop_order_items_valid:
+                # get current datetime and one week from now
+                current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+                week_forward = current_time_utc + datetime.timedelta(days=7)
+                
+                # new Shop_order object
+                new_shop_order = Shop_order(
+                    data_loaded["shop_id"],
+                    price_total,
+                    False,
+                    current_time_utc,
+                    week_forward,
+                    None,
+                    data_loaded["order_taker_id"],
+                    None,
+                    False)
+                
+                # add, commit, then refresh Shop object to update with commit    
+                database.session.add(new_shop_order)
+                database.session.commit()
+                database.session.refresh(new_shop_order)
+                
+                # add new shop_zone entries to session
+                for item in data_loaded["order_items"]:
+                    # account for possible duplicate zone entries in request
+                    duplicate_check_query = database.session.query(Shop_order_item).filter(
+                        Shop_order_item.shop_order == new_shop_order.id, 
+                        Shop_order_item.company_product == item["id"])
+                        
+                    if duplicate_check_query.count() != 0:
+                        duplicate_check_query[0].quantity_units += item["quantity_units"]
+                    else:
+                        database.session.add(Shop_order_item(new_shop_order.id, item["id"], item["quantity_units"]))
+                
+                # commit new shop_zone entries 
+                database.session.commit()
+                
+                response_inner = new_shop_order.request_shop_order(database)
+            else:
+                response_inner = "404: Invalid company product id"
+        else:
+            response_inner = "404: Invalid order taker id"
+    else:
+        response_inner = "404: Invalid shop id"
+                
+    
+    response = {
+            "create_shop_response": response_inner
         }
         
     return json.dumps(response, indent = 4)

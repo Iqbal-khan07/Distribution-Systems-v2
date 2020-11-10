@@ -66,3 +66,56 @@ def create_zone():
         }
         
     return json.dumps(jsonmock, indent = 4)
+    
+def create_shop_category():
+    jsonmock = {
+            "create_shop_category": {
+                "type": "Temp Category 2"
+            }
+        }
+        
+    return json.dumps(jsonmock, indent = 4)
+    
+def create_shop_order():
+    jsonmock = {
+        "create_shop_order": {
+            "shop_id": 4,
+            "price_paid": True,
+            "order_taker_id": 1,
+            "order_items": [
+                {
+                    "id": 1,
+                    "quantity_units": 100
+                },
+                {
+                    "id": 2,
+                    "quantity_units": 100
+                },
+                {
+                    "id": 3,
+                    "quantity_units": 2
+                },
+                {
+                    "id": 4,
+                    "quantity_units": 10
+                },
+                {
+                    "id": 5,
+                    "quantity_units": 10
+                },
+                {
+                    "id": 6,
+                    "quantity_units": 10000
+                },
+                {
+                    "id": 7,
+                    "quantity_units": 1
+                },
+                {
+                    "id": 8,
+                    "quantity_units": 100
+                }]
+            }
+        }
+        
+    return json.dumps(jsonmock, indent = 4)

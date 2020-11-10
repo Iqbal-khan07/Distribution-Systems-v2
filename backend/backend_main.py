@@ -48,10 +48,18 @@ if __name__ == '__main__':
     # print("______________________________________________________")
     # print(sql_related.request_shop(db))
     
-    print(sql_related.request_zone(db))
-    print("______________________________________________________")
-    print(sql_related.create_zone(db, json_mock.create_zone()))
-    print("______________________________________________________")
-    print(sql_related.request_zone(db))
+    # print(sql_related.request_zone(db))
+    # print("______________________________________________________")
+    # print(sql_related.create_zone(db, json_mock.create_zone()))
+    # print("______________________________________________________")
+    # print(sql_related.request_zone(db))
+    
+    # print(sql_related.request_shop_category(db))
+    # print("______________________________________________________")
+    # print(sql_related.create_shop_category(db, json_mock.create_shop_category()))
+    # print("______________________________________________________")
+    # print(sql_related.request_shop_category(db))
+    
+    # print(sql_related.create_shop_order(db, json_mock.create_shop_order()))
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"))
