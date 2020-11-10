@@ -7,7 +7,6 @@ import os
 import flask
 import flask_sqlalchemy
 import json
-import sql_related
 import json_mock
 
 
@@ -22,6 +21,8 @@ db = flask_sqlalchemy.SQLAlchemy(app)
 db.init_app(app)
 db.app = app
 
+import sql_related
+
 @app.route('/')
 def deploy_index():
     """launches index.html through flask"""
@@ -35,6 +36,7 @@ if __name__ == '__main__':
     # print(sql_related.authenticate_default(db, json_mock.authenticate_default()))
     # print(sql_related.authenticate_email(db, json_mock.authenticate_email_google(), True))
     # print(sql_related.authenticate_email(db, json_mock.authenticate_email_facebook(), False))
-    print(sql_related.request_company_product(db))
+    # print(sql_related.request_company_product(db))
+    print(sql_related.request_shop_order_not_delivered(db))
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"))

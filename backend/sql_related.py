@@ -20,6 +20,15 @@ class Sys_user_role(db.Model):
     def __init__(self, na):
         self.name = na
         
+    def request_sys_user_role_info(self):
+        """produces a dictionary of all relevant sys_user_role information"""
+        
+        return \
+        {
+            "id": self.id,
+            "name": self.name
+        }
+        
     @staticmethod
     def bootstrap_populate(database):
         """database bootstrap function for Sys_user_role"""
@@ -37,6 +46,7 @@ class Sys_user_role(db.Model):
 class Sys_user(db.Model):
     """sys_user database table definition
     Stores all employee / system user information"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name_first = db.Column(db.String(50), nullable=False)
     name_last = db.Column(db.String(50), nullable=False)
@@ -59,20 +69,22 @@ class Sys_user(db.Model):
         self.phone_number = pn
         self.role = ro
         
-    def authenticate_response(self, database):
-        role_name = (database.session.query(Sys_user_role).filter(
-            Sys_user_role.id == self.role).all())[0].name
+    def request_sys_user_info(self, database):
+        """produces a dictionary of all relevant sys_user information"""
         
-        return {
-            "id": str(self.id),
-            "name_first": str(self.name_first),
-            "name_last": str(self.name_last),
-            "sys_username": str(self.sys_username),
-            "email_google": str(self.email_google),
-            "email_fb": str(self.email_fb),
-            "phone_number": str(self.phone_number),
-            "role": str(self.role),
-            "role_name": str(role_name)
+        sys_user_role = (database.session.query(Sys_user_role).filter(
+            Sys_user_role.id == self.role).all())[0].request_sys_user_role_info()
+        
+        return \
+        {
+            "id": self.id,
+            "name_first": self.name_first,
+            "name_last": self.name_last,
+            "sys_username": self.sys_username,
+            "email_google": self.email_google,
+            "email_fb": self.email_fb,
+            "phone_number": self.phone_number,
+            "sys_user_role": sys_user_role
         }
         
     @staticmethod
@@ -113,6 +125,7 @@ class Sys_user(db.Model):
 class Zone(db.Model):
     """zone database table definition
     Zones are assigned to companyies and shops"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     
@@ -137,11 +150,21 @@ class Zone(db.Model):
         
 class Shop_category(db.Model):
     """shop category database table definition"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     type = db.Column(db.String(100), nullable=False)
     
     def __init__(self, ty):
         self.type = ty
+        
+    def request_category_info(self):
+        """produces a dictionary of all relevant shop information"""
+        
+        return \
+        {
+            "id": self.id,
+            "type": self.type
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -157,6 +180,7 @@ class Shop_category(db.Model):
         
 class Shop(db.Model):
     """shop database table definition"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=True)
@@ -176,6 +200,37 @@ class Shop(db.Model):
         self.city = ci
         self.providence = pr
         self.zip_4 = zi
+        
+    def request_shop_info(self, database):
+        """produces a dictionary of all relevant shop information"""
+        
+        if self.category != None:
+            shop_category_info = (database.session.query(Shop_category).filter(
+                Shop_category.id == self.category).all())[0].request_category_info()
+        else:
+            shop_category_info = None
+            
+        shop_zone_query = database.session.query(Shop_zone).filter(
+                Shop_zone.shop == self.id).all()
+                
+        zones = []
+        
+        for zone in shop_zone_query:
+            zones.append(zone.request_zone_info(database))
+        
+        return \
+        {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "phone_number": self.phone_number,
+            "category": shop_category_info,
+            "zones": zones,
+            "street": self.street,
+            "city": self.city,
+            "providence": self.providence,
+            "zip_4": self.zip_4
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -214,12 +269,25 @@ class Shop(db.Model):
         
 class Shop_zone(db.Model):
     """shop_zone database table definition"""
+    
     shop = db.Column(db.Integer, db.ForeignKey('shop.id'), primary_key=True, nullable=False)
     zone = db.Column(db.Integer, db.ForeignKey('zone.id'), primary_key=True, nullable=False)
     
     def __init__(self, sh, zo):
         self.shop = sh
         self.zone = zo
+        
+    def request_zone_info(self, database):
+        """produces a dictionary of all relevant zone information"""
+        
+        zone_name = (database.session.query(Zone).filter(
+            Zone.id == self.zone).all())[0].name
+            
+        return \
+        {
+            "id": self.zone,
+            "name": zone_name
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -254,11 +322,30 @@ class Shop_zone(db.Model):
         
 class Company(db.Model):
     """company database table definition"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     
     def __init__(self, na):
         self.name = na
+        
+    def request_company_info(self, database):
+        """produces a dictionary of all relevant company_product information"""
+        
+        company_zone_query = database.session.query(Company_zone).filter(
+                Company_zone.company == self.id).all()
+                
+        zones = []
+        
+        for zone in company_zone_query:
+            zones.append(zone.request_zone_info(database))
+            
+        return \
+        {
+            "id": self.id,
+            "name": self.name,
+            "zones": zones
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -274,12 +361,25 @@ class Company(db.Model):
         
 class Company_zone(db.Model):
     """company_zone database table definition"""
+    
     company = db.Column(db.Integer, db.ForeignKey('company.id'), primary_key=True, nullable=False)
     zone = db.Column(db.Integer, db.ForeignKey('zone.id'), primary_key=True, nullable=False)
     
     def __init__(self, co, zo):
         self.company = co
         self.zone = zo
+        
+    def request_zone_info(self, database):
+        """produces a dictionary of all relevant zone information"""
+        
+        zone_name = (database.session.query(Zone).filter(
+            Zone.id == self.zone).all())[0].name
+            
+        return \
+        {
+            "id": self.zone,
+            "name": zone_name
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -304,6 +404,7 @@ class Company_zone(db.Model):
         
 class Company_product(db.Model):
     """company_product database table definition"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     company = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
@@ -320,20 +421,22 @@ class Company_product(db.Model):
         self.units_per_price = upp
         self.description = de
         
-    def request_company_product_response(self, database):
-        company_name = (database.session.query(Company).filter(
-            Company.id == self.company).all())[0].name
+    def request_company_product_info(self, database):
+        """produces a dictionary of all relevant company_product information"""
         
-        return {
-            "id": str(self.id),
-            "company": str(self.company),
-            "company_name": str(company_name),
-            "name": str(self.name),
-            "price_buy": str(self.price_buy),
-            "sell_price": str(self.price_sell),
-            "units_per_price": str(self.units_per_price),
-            "price_sell_per_unit": str(self.price_sell / self.units_per_price),
-            "description": str(self.description)
+        company = (database.session.query(Company).filter(
+            Company.id == self.company).all())[0].request_company_info(database)
+        
+        return \
+        {
+            "id": self.id,
+            "company": company,
+            "name": self.name,
+            "price_buy": format(float(self.price_buy), '.2f'),
+            "price_sell": format(float(self.price_sell), '.2f'),
+            "units_per_price": self.units_per_price,
+            "price_sell_per_unit": format(float(self.price_sell / self.units_per_price), '.2f'),
+            "description": self.description
         }
         
     @staticmethod
@@ -403,6 +506,7 @@ class Company_product(db.Model):
         
 class Shop_order(db.Model):
     """shop_order database table definition"""
+    
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     shop = db.Column(db.Integer, db.ForeignKey('shop.id'), nullable=False)
     price_due = db.Column(db.Numeric(10, 2), nullable=False)
@@ -425,9 +529,48 @@ class Shop_order(db.Model):
         self.order_fulfiller = of
         self.completed = co
         
+    def request_shop_order(self, database):
+        """produces a dictionary of all relevant shop_order information"""
+        
+        shop_entry = (database.session.query(Shop).filter(
+            Shop.id == self.shop).all())[0]
+            
+        order_taker = (database.session.query(Sys_user).filter(
+            Sys_user.id == self.order_taker).all())[0].request_sys_user_info(database)
+            
+        if self.order_fulfiller != None:
+            order_fulfiller = (database.session.query(Sys_user).filter(
+            Sys_user.id == self.order_fulfiller).all())[0].request_sys_user_info(database)
+        else:
+            order_fulfiller = None
+            
+        shop_order_items_query = database.session.query(Shop_order_item).filter(
+            Shop_order_item.shop_order == self.id).all()
+            
+        shop_order_items = []
+        
+        for entry in shop_order_items_query:
+            shop_order_items.append(entry.request_shop_order_item_info(database))
+        
+        return \
+        {
+            "id": self.id,
+            "shop": shop_entry.request_shop_info(database),
+            "price_due": format(float(self.price_due), '.2f'),
+            "price_paid": self.price_paid,
+            "date_ordered": str(self.date_ordered),
+            "date_delivered_projected": str(self.date_delivered_projected),
+            "date_delivered": self.date_delivered,
+            "order_taker": order_taker,
+            "order_fulfiller": order_fulfiller,
+            "completed": self.completed,
+            "shop_order_items": shop_order_items
+        }
+        
     @staticmethod
     def bootstrap_populate(database):
         """database bootstrap function for shop_order"""
+        
         current_time_utc = datetime.datetime.now(datetime.timezone.utc)
         # one week ahead for projected delivery date
         week_forward = current_time_utc + datetime.timedelta(days=7)
@@ -471,6 +614,7 @@ class Shop_order(db.Model):
         
 class Shop_order_item(db.Model):
     """shop_order_item database table definition"""
+    
     shop_order = db.Column(db.Integer, db.ForeignKey('shop_order.id'), primary_key=True, nullable=False)
     company_product = db.Column(db.Integer, db.ForeignKey('company_product.id'), primary_key=True, nullable=False)
     quantity_units = db.Column(db.Integer, nullable=False)
@@ -479,6 +623,18 @@ class Shop_order_item(db.Model):
         self.shop_order = so
         self.company_product = cp
         self.quantity_units = qu
+        
+    def request_shop_order_item_info(self, database):
+        """produces a dictionary of all relevant shop_order_item information"""
+        
+        company_product = shop_order_items_query = database.session.query(Company_product).filter(
+            Company_product.id == self.company_product).all()[0].request_company_product_info(database)
+        
+        return \
+        {
+            "company_product": company_product,
+            "quantity_units": self.quantity_units
+        }
         
     @staticmethod
     def bootstrap_populate(database):
@@ -548,31 +704,19 @@ def authenticate_default(database, data):
     """this function authenticates a user based upon sys_username 
     and password by checking passed parameters against the database"""
     
-    try:
-        data_loaded = json.loads(data)
+    data_loaded = json.loads(data)
         
-        if "authenticate_default" in data_loaded:
-            if "username" in data_loaded["authenticate_default"]:
-                if "password" in data_loaded["authenticate_default"]:
-                    username_login = data_loaded["authenticate_default"]["username"]
-                    password_login = data_loaded["authenticate_default"]["password"]
-                    
-                    query_result = database.session.query(Sys_user).filter(
-                        Sys_user.sys_username == username_login, Sys_user.password \
-                        == password_login).all()
-                    
-                    if query_result:
-                        response_inner = query_result[0].authenticate_response(database)
-                    else:
-                        response_inner = "invalid login credentials"
-                else:
-                    response_inner = "404: No password in request"
-            else:
-                response_inner = "404: No username in request"
-        else:
-            response_inner = "404: No authenticate_default in request"
-    except ValueError:
-        response_inner = "404: No JSON object in request"
+    username_login = data_loaded["authenticate_default"]["username"]
+    password_login = data_loaded["authenticate_default"]["password"]
+    
+    query_result = database.session.query(Sys_user).filter(
+        Sys_user.sys_username == username_login, Sys_user.password \
+        == password_login).all()
+    
+    if query_result:
+        response_inner = query_result[0].request_sys_user_info(database)
+    else:
+        response_inner = "invalid login credentials"
         
     response = {
             "authenticate_default_response": response_inner
@@ -585,30 +729,21 @@ def authenticate_email(database, data, google):
     if google = True, this is a google login
     if google = False, this is a Facebook login"""
     
-    try:
-        data_loaded = json.loads(data)
-        
-        if "authenticate_email" in data_loaded:
-            if "email" in data_loaded["authenticate_email"]:
-                email_login = data_loaded["authenticate_email"]["email"]
-                
-                if google:
-                    query_result = database.session.query(Sys_user).filter(
-                        Sys_user.email_google == email_login).all()
-                else:
-                    query_result = database.session.query(Sys_user).filter(
-                        Sys_user.email_fb == email_login).all()
-                
-                if query_result:
-                    response_inner = query_result[0].authenticate_response(database)
-                else:
-                    response_inner = "invalid login credentials"
-            else:
-                response_inner = "404: No email in request"
-        else:
-            response_inner = "404: No authenticate_email in request"
-    except ValueError:
-        response_inner = "404: No JSON object in request"
+    data_loaded = json.loads(data)
+    
+    email_login = data_loaded["authenticate_email"]["email"]
+    
+    if google:
+        query_result = database.session.query(Sys_user).filter(
+            Sys_user.email_google == email_login).all()
+    else:
+        query_result = database.session.query(Sys_user).filter(
+            Sys_user.email_fb == email_login).all()
+    
+    if query_result:
+        response_inner = query_result[0].request_sys_user_info(database)
+    else:
+        response_inner = "invalid login credentials"
         
     response = {
             "authenticate_email_response": response_inner
@@ -622,10 +757,25 @@ def request_company_product(database):
     result = []
     
     for item in query_result:
-        result.append(item.request_company_product_response(database))
+        result.append(item.request_company_product_info(database))
         
     response = {
             "request_company_product_response": result
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def request_shop_order_not_delivered(database):
+    query_result = database.session.query(Shop_order).filter(
+        Shop_order.completed == False).all()
+    
+    result = []
+    
+    for item in query_result:
+        result.append(item.request_shop_order(database))
+        
+    response = {
+            "request_shop_order_not_delivered_response": result
         }
         
     return json.dumps(response, indent = 4)
