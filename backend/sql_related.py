@@ -825,3 +825,82 @@ def request_zone(database):
         }
         
     return json.dumps(response, indent = 4)
+    
+def request_shop_category(database):
+    """Returns a JSON of all shop categories in the database"""
+    
+    query_result = database.session.query(Shop_category).all()
+    
+    result = []
+    
+    for item in query_result:
+        result.append(item.request_category_info())
+        
+    response = {
+            "request_shop_category_response": result
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def create_shop(database, data):
+    """Adds a new entry to the shop table based on JSON data"""
+    
+    data_loaded = json.loads(data)["create_shop"]
+    
+    # validate relational data fields
+    shop_category_valid = True
+    zones_valid = True
+    
+    if database.session.query(Shop_category).filter(Shop_category.id \
+        == data_loaded["category"]).count() == 0:
+            
+        shop_category_valid = False
+        
+    for zone in data_loaded["zones"]:
+        if database.session.query(Zone).filter(Zone.id == zone["id"]).count() == 0:
+            zones_valid = False
+            break
+    
+    # handle response    
+    if shop_category_valid:
+        if zones_valid:
+            # new Shop object
+            new_shop = Shop(
+                data_loaded["name"],
+                data_loaded["email"],
+                data_loaded["phone_number"],
+                data_loaded["category"],
+                data_loaded["street"],
+                data_loaded["city"],
+                data_loaded["providence"],
+                data_loaded["zip_4"])
+            
+            # add, commit, then refresh Shop object to update with commit    
+            database.session.add(new_shop)
+            database.session.commit()
+            database.session.refresh(new_shop)
+            
+            # add new shop_zone entries to session
+            for zone in data_loaded["zones"]:
+                # account for possible duplicate zone entries in request
+                if database.session.query(Shop_zone).filter(Shop_zone.shop == new_shop.id, 
+                    Shop_zone.zone == zone["id"]).count() != 0:
+                    
+                    continue
+                    
+                database.session.add(Shop_zone(new_shop.id, zone["id"]))
+            
+            # commit new shop_zone entries 
+            database.session.commit()
+            
+            response_inner = new_shop.request_shop_info(database)
+        else:
+            response_inner = "404: Invalid zone id"
+    else:
+        response_inner = "404: Invalid category id"
+        
+    response = {
+            "create_shop_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)

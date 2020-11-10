@@ -28,3 +28,32 @@ def authenticate_email_facebook():
         }
         
     return json.dumps(jsonmock, indent = 4)
+    
+def create_shop():
+    jsonmock = {
+            "create_shop": {
+                "name": "Test Created Shop",
+                "email": None,
+                "phone_number": None,
+                "category": 2,
+                "zones": [
+                    {
+                        "id": 4
+                    },
+                    {
+                        "id": 4
+                    },
+                    {
+                        "id": 4
+                    },
+                    {
+                        "id": 4
+                    }],
+                "street": "Some Street",
+                "city": "Some City",
+                "providence": "Some Providence",
+                "zip_4": "01234-5678"
+            }
+        }
+        
+    return json.dumps(jsonmock, indent = 4)
