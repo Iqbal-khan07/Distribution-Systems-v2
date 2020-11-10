@@ -15,7 +15,7 @@ class Sys_user_role(db.Model):
     3 = Administrator"""
     
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), nullable=False, unique=True)
     
     def __init__(self, na):
         self.name = na
@@ -127,7 +127,7 @@ class Zone(db.Model):
     Zones are assigned to companyies and shops"""
     
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
     
     def __init__(self, na):
         self.name = na
@@ -161,7 +161,7 @@ class Shop_category(db.Model):
     """shop category database table definition"""
     
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    type = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.String(100), nullable=False, unique=True)
     
     def __init__(self, ty):
         self.type = ty
@@ -901,6 +901,38 @@ def create_shop(database, data):
         
     response = {
             "create_shop_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def create_zone(database, data):
+    """Adds a new entry to the zone table based on JSON data"""
+    
+    data_loaded = json.loads(data)["create_zone"]
+    
+    # validate relational data fields
+    zone_name_valid = True
+    
+    if database.session.query(Zone).filter(
+        Zone.name == data_loaded["name"]).count() != 0:
+            
+        zone_name_valid = False
+        
+    if zone_name_valid:
+        # create new Zone object
+        new_zone = Zone(data_loaded["name"])
+        
+        # add, commit, then refresh Zone object to update with commit    
+        database.session.add(new_zone)
+        database.session.commit()
+        database.session.refresh(new_zone)
+        
+        response_inner = new_zone.request_zone_info()
+    else:
+        response_inner = "404: zone already exists"
+    
+    response = {
+            "create_zone_response": response_inner
         }
         
     return json.dumps(response, indent = 4)

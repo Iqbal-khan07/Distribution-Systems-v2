@@ -57,3 +57,12 @@ def create_shop():
         }
         
     return json.dumps(jsonmock, indent = 4)
+    
+def create_zone():
+    jsonmock = {
+            "create_zone": {
+                "name": "Test Created Zone"
+            }
+        }
+        
+    return json.dumps(jsonmock, indent = 4)
