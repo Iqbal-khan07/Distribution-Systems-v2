@@ -1,10 +1,10 @@
 import React from "react";
 import { AppBar, Toolbar, Button} from '@material-ui/core';
-import styles from './MenuBar.module.css';
+import styles from './MainMenuBar.module.css';
 import { StylesProvider } from '@material-ui/core/styles';
 
 
-const MenuBar = () => {
+const MainMenuBar = () => {
     return (
         <StylesProvider injectFirst>
             <AppBar position='static' className={styles.menu}>
@@ -29,4 +29,4 @@ const MenuBar = () => {
     );
 }
 
-export default MenuBar;
+export default MainMenuBar;
