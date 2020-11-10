@@ -132,6 +132,15 @@ class Zone(db.Model):
     def __init__(self, na):
         self.name = na
         
+    def request_zone_info(self):
+        """produces a dictionary of all relevant zone information"""
+            
+        return \
+        {
+            "id": self.id,
+            "name": self.name
+        }
+        
     @staticmethod
     def bootstrap_populate(database):
         """database bootstrap function for zone"""
@@ -432,10 +441,10 @@ class Company_product(db.Model):
             "id": self.id,
             "company": company,
             "name": self.name,
-            "price_buy": format(float(self.price_buy), '.2f'),
-            "price_sell": format(float(self.price_sell), '.2f'),
+            "price_buy": float(self.price_buy),
+            "price_sell": float(self.price_sell),
             "units_per_price": self.units_per_price,
-            "price_sell_per_unit": format(float(self.price_sell / self.units_per_price), '.2f'),
+            "price_sell_per_unit": float(self.price_sell / self.units_per_price),
             "description": self.description
         }
         
@@ -556,7 +565,7 @@ class Shop_order(db.Model):
         {
             "id": self.id,
             "shop": shop_entry.request_shop_info(database),
-            "price_due": format(float(self.price_due), '.2f'),
+            "price_due": float(self.price_due),
             "price_paid": self.price_paid,
             "date_ordered": str(self.date_ordered),
             "date_delivered_projected": str(self.date_delivered_projected),
@@ -752,6 +761,8 @@ def authenticate_email(database, data, google):
     return json.dumps(response, indent = 4)
     
 def request_company_product(database):
+    """Returns a JSON of all company_product entries in the database"""
+    
     query_result = database.session.query(Company_product).all()
     
     result = []
@@ -766,6 +777,9 @@ def request_company_product(database):
     return json.dumps(response, indent = 4)
     
 def request_shop_order_not_delivered(database):
+    """Returns a JSON of all shop_order entries in the database 
+    that have not been delivered"""
+    
     query_result = database.session.query(Shop_order).filter(
         Shop_order.completed == False).all()
     
@@ -776,6 +790,38 @@ def request_shop_order_not_delivered(database):
         
     response = {
             "request_shop_order_not_delivered_response": result
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def request_shop(database):
+    """Returns a JSON of all shop entries in the database"""
+    
+    query_result = database.session.query(Shop).all()
+    
+    result = []
+    
+    for item in query_result:
+        result.append(item.request_shop_info(database))
+        
+    response = {
+            "request_shop_response": result
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def request_zone(database):
+    """Returns a JSON of all zone entries in the database"""
+    
+    query_result = database.session.query(Zone).all()
+    
+    result = []
+    
+    for item in query_result:
+        result.append(item.request_zone_info())
+        
+    response = {
+            "request_zone_response": result
         }
         
     return json.dumps(response, indent = 4)

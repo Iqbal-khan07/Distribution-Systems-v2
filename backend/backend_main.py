@@ -37,6 +37,8 @@ if __name__ == '__main__':
     # print(sql_related.authenticate_email(db, json_mock.authenticate_email_google(), True))
     # print(sql_related.authenticate_email(db, json_mock.authenticate_email_facebook(), False))
     # print(sql_related.request_company_product(db))
-    print(sql_related.request_shop_order_not_delivered(db))
+    # print(sql_related.request_shop_order_not_delivered(db))
+    # print(sql_related.request_shop(db))
+    print(sql_related.request_zone(db))
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"))
