@@ -29,4 +29,8 @@ def deploy_index():
     return flask.render_template('index.html')
 
 if __name__ == '__main__':
+    # database bootstrap function
+    # comment this out after running once to prevent data redundancy
+    sql_related.database_bootstrap(db)
+    
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"))

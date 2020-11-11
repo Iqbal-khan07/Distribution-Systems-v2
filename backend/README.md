@@ -54,7 +54,7 @@
     2. in the psql terminal, enter the following command: DROP TABLE IF EXISTS shop_order_item, shop_order, company_product, company_zone, company, shop_zone, shop, shop_category, zone, sys_user, sys_user_role;
 2. Enter the following command: python backend_main.python
 3. Now press control+c to stop the python file from running
-4. comment out line 32 in backend_main.py "sql_related.database_bootstrap(db)"
+4. comment out line 34 in backend_main.py "sql_related.database_bootstrap(db)"
 
 # Run the Project
 1. make sure you are in the "Distribution-System-CS490/backend" directory
