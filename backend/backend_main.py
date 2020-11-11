@@ -8,6 +8,8 @@ import flask_sqlalchemy
 import json
 import connexion
 from flask_cors import CORS
+import json_mock
+
 
 
 dotenv_path = join(dirname(__file__), 'sql.env')
@@ -27,6 +29,7 @@ db.init_app(apps)
 db.app = apps
 
 import sql_related
+
 
 
 def db_bootstrap():
@@ -60,7 +63,7 @@ def init_db(app_i):
     db.session.commit()
 
 
-@apps.route('/')
+@app.route('/')
 def deploy_index():
     """launches index.html through flask"""
     return flask.render_template('index.html')
@@ -76,4 +79,5 @@ if __name__ == '__main__':
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"), debug = True)
     
+    # comment this out after running once to prevent data redundancy
     
