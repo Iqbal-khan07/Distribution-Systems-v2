@@ -1,10 +1,56 @@
-.content {
-    height: 100%;
+.contentContainer {
+    background: linear-gradient(to bottom right, #232E33, #284b38);
+    background-size: cover;
 }
 
-.background {
-    background: url('../../assests/images/Warehouse.jpg') no-repeat center center fixed;
-    background-size: 100% 100%;
-    opacity: 0.5;
+.top {
     height: 100vh;
+    display: flex;
+}
+.topImage {
+    display: block;
+    position: absolute;
+    object-fit: cover;
+    height: 100vh;
+    top:0;
+    right:left;
+    width: 100%;
+}
+.title {
+    position: absolute;
+    text-align: center;
+    align-self: center;
+    color: white;
+    font-weight: 100;
+    font-size: 60px;
+    text-shadow: 2px 2px 8px #000000;
+}
+
+.content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.infoSection {
+    max-width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.sectionTitle {
+    font-size: 35px;
+    text-transform: uppercase;
+    font-weight: 100;
+    color: rgb(255, 255, 255, 0.8);
+}
+
+.sectionBody {
+    font-size: 20px;
+    text-align: justify;
+    line-height: 1.5;
+    color: rgb(255, 255, 255, 0.6);
 }

@@ -4,11 +4,10 @@ import styles from './MainMenuBar.module.css';
 import { StylesProvider } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
 
-
 const MainMenuBar = () => {
     return (
         <StylesProvider injectFirst>
-            <AppBar position='static' className={styles.menu}>
+            <AppBar position='sticky' className={styles.menu}>
                 <Toolbar className={styles.menu}>
                     <Button className={styles.logo} component={Link} to="/">
                         Commercial Distribution Solutions
