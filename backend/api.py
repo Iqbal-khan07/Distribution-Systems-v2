@@ -7,6 +7,8 @@ import requests
 import os
 from backend_main import db, apps
 from backend_main import sql_related
+import sql_related
+import json
 
 # 3rd party modules
 from flask import make_response, abort
@@ -16,27 +18,8 @@ def get_timestamp():
     tz = timezone('EST')
     return datetime.now(tz).strftime(("%Y-%m-%d %H:%M:%S"))
 
-# Data to serve with our API s
+# Data to serve with our APIs
 """
-USER JSON FORMAT 
-PEOPLE = {
-    "Farrell": {
-        "fname": "Doug",
-        "lname": "Farrell",
-        "timestamp": get_timestamp()
-    },
-    "Brockman": {
-        "fname": "Kent",
-        "lname": "Brockman",
-        "timestamp": get_timestamp()
-    },
-    "Easter": {
-        "fname": "Bunny",
-        "lname": "Easter",
-        "timestamp": get_timestamp()
-    }
-}
-
 try:
     db.session.query(sql_related.UserTable).all()
 except:
@@ -46,10 +29,6 @@ except:
     -----------------------------------------> MAKE TRY BLOCK AFTER
 """    
 
-USER = {}
-SHOP = {}
-COMPANY = {}
-
 
 
 
@@ -58,85 +37,34 @@ COMPANY = {}
 """
 USER RELATED ENDPOINT FUNCTIONS
 
-self.name_first = nf
-self.name_last = nl
-self.email = em
-self.password = pw
-self.phone_number = pn
-self.role = ro
-
 """
 
-def user_populate():
-     # Create the list of people from our data
-    users = db.session.query(sql_related.Sys_user).all()
-    userFirsts = [ db_first.name_first for db_first in users ]
-    userLasts = [ db_last.name_last for db_last in users ]
-    userEmails = [ db_email.email for db_email in users ]
-    userNumbers = [ db_phone.phone_number for db_phone in users ]
-    userRoles = [  db_role.role for db_role in users ]
-    
-    for userIndex in range(len(users)):
-        first = userFirsts[userIndex]
-        last = userLasts[userIndex]
-        email = userEmails[userIndex]
-        phone = userNumbers[userIndex]
-        role = userRoles[userIndex]
-        
-        
-        USER[email] = {
-                "first": first,
-                "last": last,
-                "email": email,
-                "number": phone,
-                "role": role,
-                "timestamp": get_timestamp(),
-            }
-    
-    print([USER[key] for key in USER.keys()]) #--------------------------------------------------------------> Test Print
 
-
-
-
-
-# Create a handler for our read (GET) people
-def user_read():
+# Create a handler for our  (POST) people
+def user_authenticate_default(auth_user_default):
     """
     This function responds to a request for /api/people
     with the complete lists of people
 
     :return:        sorted list of people
     """
-    user_populate()
-    return [USER[key] for key in USER.keys()]
+    return json.loads(sql_related.authenticate_default(db, auth_user_default))
     
-def user_create(new_user):
+def user_authenticate_gmail(auth_user_gmail):
     """
-        self.name_first = nf
-        self.name_last = nl
-        self.email = em
-        self.password = pw
-        self.phone_number = pn
-        self.role = ro
     
     This function creates a new person in the people structure
     based on the passed in person data
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    fName = new_user.get("first", None)
-    lName = new_user.get("last", None)
-    email = new_user.get("email", None)
-    password = new_user.get("password", None)
-    phone = new_user.get("number", None)
-    role = new_user.get("role", None)
     
+    return json.loads(sql_related.authenticate_email(db, auth_user_gmail, True))
     
-    user_populate()
+    """
     # Does the person exist already?
     if email not in USER and email is not None:
         
-        db.session.add(sql_related.Sys_user(fName, lName, email, password, phone, role))
         db.session.commit()
         
         return make_response(
@@ -149,16 +77,50 @@ def user_create(new_user):
             406,
             "Person with last name {email} already exists".format(email=email),
         )
+     
+    """   
+    
+def user_authenticate_fb(auth_user_fb):
+    """
+    
+    This function creates a new person in the people structure
+    based on the passed in person data
+    :param person:  person to create in people structure
+    :return:        201 on success, 406 on person exists
+    """
+    
+    return json.loads(sql_related.authenticate_email(db, auth_user_fb, False))
+    
+    """
+    # Does the person exist already?
+    if email not in USER and email is not None:
         
-def user_read_one(user_email):
+        db.session.commit()
+        
+        return make_response(
+            "{email} successfully created".format(email=email), 201
+        )
+
+    # Otherwise, they exist, that's an error
+    else:
+        abort(
+            406,
+            "Person with last name {email} already exists".format(email=email),
+        )
+     
+    """  
+
+def get_company_product():
     """
     This function responds to a request for /api/people/{lname}
     with one matching person from people
     :param lname:   last name of person to find
     :return:        person matching last name
     """
-    user_populate()
+    return json.loads(sql_related.request_company_product(db))["request_company_product_response"]
+    
     # Does the person exist in people?
+    """
     if user_email in USER:
         sys_user = USER.get(user_email)
 
@@ -169,97 +131,40 @@ def user_read_one(user_email):
         )
 
     return sys_user
+    """
 
 """
 SHOP RELATED ENDPOINT FUNCITONS
 
-self.name = na
-self.email = em
-self.phone_number = pn
-self.category = cat
-self.street = st
-self.city = ci
-self.providence = pr
-self.zip_4 = zi
-
 """
-def shop_populate():
-     # Create the list of people from our data name city street providence
-    shops = db.session.query(sql_related.Shop).all()
-    shopNames = [ db_name.name for db_name in shops ]
-    shopEmails = [ db_email.email for db_email in shops ]
-    shopNumbers = [ db_phone.phone_number for db_phone in shops ]
-    shopCatagories = [ db_category.category for db_category in shops ]
-    shopStreets = [ db_street.street for db_street in shops ]
-    shopCities = [  db_city.city for db_city in shops ]
-    shopProvidences = [ db_providence.providence for db_providence in shops ]
-    shopZips = [ db_zip.zip_4 for db_zip in shops ]
-    
-    for shopIndex in range(len(shops)):
-        name = shopNames[shopIndex]
-        email = shopEmails[shopIndex]
-        number = shopNumbers[shopIndex]
-        catagory = shopCatagories[shopIndex]
-        street = shopStreets[shopIndex]
-        city = shopCities[shopIndex]
-        providence = shopProvidences[shopIndex]
-        zip_4 = shopZips[shopIndex]
-        
-        SHOP[name] = {
-                "name": name,
-                "email": email,
-                "number": number,
-                "catagory": catagory,
-                "street": street,
-                "city": city,
-                "providence": providence,
-                "zip": zip_4,
-                "timestamp": get_timestamp(),
-            }
-    
-    print([SHOP[key] for key in SHOP.keys()]) #--------------------------------------------------------------> Test Print
+def get_order_not_delivered():
+    # Create the list of people from our data name city street providence
+    return json.loads(sql_related.request_shop_order_not_delivered(db))["request_shop_order_not_delivered_response"]
 
 
 
 
 
 # Create a handler for our read (GET) people
-def shop_read():
+def get_all_shops():
     """
     This function responds to a request for /api/people
     with the complete lists of people
 
     :return:        sorted list of people
     """
-    shop_populate()
-    return [SHOP[key] for key in SHOP.keys()]
+    return json.loads(sql_related.request_shop(db))["request_shop_response"]
     
-def shop_create(new_shop):
+def get_all_zones():
     """
-    self.name = na
-    self.email = em
-    self.phone_number = pn
-    self.category = cat
-    self.street = st
-    self.city = ci
-    self.providence = pr
-    self.zip_4 = zi
-    
     This function creates a new person in the people structure
     based on the passed in person data
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    name = new_shop.get("name", None)
-    email = new_shop.get("email", None)
-    phone = new_shop.get("number", None)
-    category = new_shop.get("category", None)
-    street = new_shop.get("street", None)
-    city = new_shop.get("city", None)
-    providence = new_shop.get("providence", None)
-    zip_4 = new_shop.get("zip", None)
+    return json.loads(sql_related.request_zone(db))["request_zone_response"]
     
-    shop_populate()
+    """
     # Does the person exist already?
     if name not in SHOP and name is not None:
         
@@ -276,16 +181,18 @@ def shop_create(new_shop):
             406,
             "Shop with name {name} already exists".format(name=name),
         )
+    """
         
-def shop_read_one(shop_name):
+def get_all_shop_category():
     """
     This function responds to a request for /api/people/{lname}
     with one matching person from people
     :param lname:   last name of person to find
     :return:        person matching last name
     """
-    shop_populate()
+    return json.loads(sql_related.request_shop_category(db))["request_shop_category_response"]
     # Does the person exist in people?
+    """
     if shop_name in SHOP:
         shop = SHOP.get(shop_name)
 
@@ -296,7 +203,7 @@ def shop_read_one(shop_name):
         )
 
     return shop
-
+    """
 
 
 
@@ -304,48 +211,17 @@ def shop_read_one(shop_name):
 COMPANY RELATED ENDPOINT FUNCTIONS  --> Finish Company
 
 """
-
-def company_populate():
-     # Create the list of people from our data name city street providence
-    companies = db.session.query(sql_related.Company).all()
-    companyNames = [ db_name.name for db_name in companies ]
     
-    for companyIndex in range(len(companies)):
-        name = companyNames[companyIndex]
-        
-        
-        COMPANY[name] = {
-                "name": name,
-                "timestamp": get_timestamp()
-            }
-    
-    print([COMPANY[key] for key in COMPANY.keys()]) #--------------------------------------------------------------> Test Print
-
-
-
-
-
-# Create a handler for our read (GET) people
-def company_read():
-    """
-    This function responds to a request for /api/people
-    with the complete lists of people
-
-    :return:        sorted list of people
-    """
-    company_populate()
-    return [COMPANY[key] for key in COMPANY.keys()]
-    
-def company_create(new_company):
+def shop_create(new_shop):
     """
     This function creates a new person in the people structure
     based on the passed in person data
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    name = new_company.get("name", None)
+    return json.loads(sql_related.create_shop(db, new_shop))["create_shop_response"]
     
-    company_populate()
+    """
     # Does the person exist already?
     if name not in COMPANY and name is not None:
         
@@ -363,26 +239,126 @@ def company_create(new_company):
             "Company with name {name} already exists".format(name=name),
         )
         
-def company_read_one(company_name):
     """
-    This function responds to a request for /api/people/{lname}
-    with one matching person from people
-    :param lname:   last name of person to find
-    :return:        person matching last name
+ 
+def zone_create(new_zone):
     """
-    company_populate()
-    # Does the person exist in people?
-    if company_name in COMPANY:
-        company = COMPANY.get(company_name)
-
-    # otherwise, nope, not found
-    else:
-        abort(
-            404, "Company with name {company_name} not found".format(company_name=company_name)
+    This function creates a new person in the people structure
+    based on the passed in person data
+    :param person:  person to create in people structure
+    :return:        201 on success, 406 on person exists
+    """
+    return json.loads(sql_related.create_zone(db, new_zone))["create_zone_response"]
+    
+    """
+    # Does the person exist already?
+    if name not in COMPANY and name is not None:
+        
+        db.session.add(sql_related.Company(name))
+        db.session.commit()
+        
+        return make_response(
+            "{name} successfully created".format(name=name), 201
         )
 
-    return company
+    # Otherwise, they exist, that's an error
+    else:
+        abort(
+            406,
+            "Company with name {name} already exists".format(name=name),
+        )
+        
+    """ 
+ 
+ 
+def shop_category_create(new_shop_category):
+    """
+    This function creates a new person in the people structure
+    based on the passed in person data
+    :param person:  person to create in people structure
+    :return:        201 on success, 406 on person exists
+    """
+    return json.loads(sql_related.create_shop_category(db, new_shop_category))["create_shop_category_response"]
+    
+    """
+    # Does the person exist already?
+    if name not in COMPANY and name is not None:
+        
+        db.session.add(sql_related.Company(name))
+        db.session.commit()
+        
+        return make_response(
+            "{name} successfully created".format(name=name), 201
+        )
 
+    # Otherwise, they exist, that's an error
+    else:
+        abort(
+            406,
+            "Company with name {name} already exists".format(name=name),
+        )
+        
+    """ 
+
+def shop_order_create(new_shop_order):
+    """
+    This function creates a new person in the people structure
+    based on the passed in person data
+    :param person:  person to create in people structure
+    :return:        201 on success, 406 on person exists
+    """
+    return json.loads(sql_related.create_shop_order(db, new_shop_order))["create_shop_response"]
+    
+    """
+    # Does the person exist already?
+    if name not in COMPANY and name is not None:
+        
+        db.session.add(sql_related.Company(name))
+        db.session.commit()
+        
+        return make_response(
+            "{name} successfully created".format(name=name), 201
+        )
+
+    # Otherwise, they exist, that's an error
+    else:
+        abort(
+            406,
+            "Company with name {name} already exists".format(name=name),
+        )
+        
+    """ 
+ 
+ 
+def shop_order_update(update_shop_order):
+    """
+    This function creates a new person in the people structure
+    based on the passed in person data
+    :param person:  person to create in people structure
+    :return:        201 on success, 406 on person exists
+    """
+    return json.loads(sql_related.update_shop_order_delivered(db, update_shop_order))["update_shop_order_delivered_response"]
+    
+    """
+    # Does the person exist already?
+    if name not in COMPANY and name is not None:
+        
+        db.session.add(sql_related.Company(name))
+        db.session.commit()
+        
+        return make_response(
+            "{name} successfully created".format(name=name), 201
+        )
+
+    # Otherwise, they exist, that's an error
+    else:
+        abort(
+            406,
+            "Company with name {name} already exists".format(name=name),
+        )
+        
+    """ 
+ 
 
 
 

@@ -39,7 +39,7 @@ def db_bootstrap():
         print("Error in Database")
         return
     users = db.session.query(sql_related.Sys_user).all()
-    dataCheck = [ db_name.email for db_name in users]
+    dataCheck = [ db_name.name_first for db_name in users]
     
     
     if(dataCheck != []):

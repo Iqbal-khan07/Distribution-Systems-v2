@@ -10,139 +10,403 @@ produces:
 
 basePath: "/api"
 
+
 #Global API Key Security
 #security:
 #  - APIKeyHeader: []
 
+#Change definitions soon
 # Paths supported by the server application
 paths:
-  /user:
-    get:
-      operationId: "api.user_read"
-      tags:
-        - "Users"
-      summary: "The user data structure supported by the server application"
-      description: "Read the list of users"
-      responses:
-        200:
-          description: "Successful read user list operation"
-          schema:
-            type: "array"
-            items:
-              properties:
-                first:
-                  type: "string"
-                last:
-                  type: "string"
-                email:
-                  type: "string"
-                number:
-                  type: "string"
-                role:
-                  type: "string"
-                timestamp:
-                  type: "string"
-                  
+  /user/authenticate/default:
     post:
-      operationId: api.user_create
+      operationId: api.user_authenticate_default
       tags:
         - Users
       summary: Create a user and add it to the user list
       description: Create a new user in the user list
       parameters:
-        - name: new_user
+        - name: auth_user_default
           in: body
           description: User to create
           required: True
           schema:
             type: object
             properties:
-              first:
-                type: string
-                description: Email of user to create
-              last:
-                type: string
-                description: Email of user to create    
-              email:
-                type: string
-                description: Email of user to create
-              password:
-                type: string
-                description: Password of user to create
-              number:
-                type: string
-                description: Password of user to create
-              role:
-                type: string
-                description: Role of user to create
-
+              authenticate_default:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: Email of user to create
+                  password:
+                    type: string
+                    description: Email of user to create    
       responses:
-        201:
-          description: Successfully created user in list
-  
-  /user/{user_email}:
-    get:
-      operationId: api.user_read_one
+        200:
+          description: Successful read user list operation
+          schema:
+            type: object
+            properties:
+              authenticate_default_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name_first:
+                    type: string
+                  name_last:
+                    type: string
+                  sys_username:
+                    type: string
+                  email_google:
+                    type: string
+                  email_fb:
+                    type: string
+                  phone_number:
+                    type: string
+                  sys_user_role:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+  /user/authenticate/google:
+    post:
+      operationId: api.user_authenticate_gmail
       tags:
         - Users
-      summary: Read one user from the users list
-      description: Read one user from the users list
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
       parameters:
-        - name: user_email
-          in: path
-          description: Email of the user to get from the list
-          type: string
+        - name: auth_user_default
+          in: body
+          description: User to create
           required: True
-      responses:
-        200:
-          description: Successfully read email from user list operation
           schema:
+            type: object
             properties:
-              first:
-                type: string
-              last:
-                type: string
-              email:
-                type: string
-              number:
-                type: string
-              role:
-                type: string
-              timestamp:
-                type: string
-  /shop:
-    get:
-      operationId: "api.shop_read"
-      tags:
-        - "Shops"
-      summary: "The user data structure supported by the server application"
-      description: "Read the list of users"
+              authenticate_default:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: Email of user to create
+                  password:
+                    type: string
+                    description: Email of user to create    
       responses:
         200:
-          description: "Successful read user list operation"
+          description: Successful read user list operation
           schema:
-            type: "array"
-            items:
-              properties:
-                name:
-                  type: "string"
-                email:
-                  type: "string"
-                number:
-                  type: "string"
-                catagory:
-                  type: "string"
-                street:
-                  type: "string"
-                city:
-                  type: "string"
-                providence:
-                  type: "string"
-                zip:
-                  type: "string"
-                timestamp:
-                  type: "string"
-                  
+            type: object
+            properties:
+              authenticate_default_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name_first:
+                    type: string
+                  name_last:
+                    type: string
+                  sys_username:
+                    type: string
+                  email_google:
+                    type: string
+                  email_fb:
+                    type: string
+                  phone_number:
+                    type: string
+                  sys_user_role:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+  /user/authenticate/facebook:
+    post:
+      operationId: api.user_authenticate_fb
+      tags:
+        - Users
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
+      parameters:
+        - name: auth_user_default
+          in: body
+          description: User to create
+          required: True
+          schema:
+            type: object
+            properties:
+              authenticate_default:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    description: Email of user to create
+                  password:
+                    type: string
+                    description: Email of user to create    
+      responses:
+        200:
+          description: Successful read user list operat
+          schema:
+            type: object
+            properties:
+              authenticate_default_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name_first:
+                    type: string
+                  name_last:
+                    type: string
+                  sys_username:
+                    type: string
+                  email_google:
+                    type: string
+                  email_fb:
+                    type: string
+                  phone_number:
+                    type: string
+                  sys_user_role:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+  /company_product/request/all:
+    get:
+      operationId: api.get_company_product
+      tags:
+        - Shops
+      summary: The user data structure supported by the server application
+      description: Read the list of users
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              request_company_product_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  company:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      zones:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                      name:
+                        type: string
+                      price_buy:
+                        type: string
+                      price_sell:
+                        type: string
+                      units_per_price:
+                        type: string
+                      price_sell_per_unit:
+                        type: string
+                      description:
+                        type: string
+                        
+  /shop/request/not_delivered:
+    get:
+      operationId: api.get_order_not_delivered
+      tags:
+        - Shops
+      summary: The user data structure supported by the server application
+      description: Read the list of users
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              request_shop_order_not_delivered_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  shop:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      phone_number:
+                        type: string
+                      category:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          type:
+                            type: string
+                      zones:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                      street:
+                        type: string
+                      city:
+                        type: string
+                      providence:
+                        type: string
+                      zip_4:
+                        type: string
+                  price_due:
+                    type: string
+                  price_paid:
+                    type: string
+                  date_ordered:
+                    type: string
+                  date_delivered_projected:
+                    type: string
+                  date_delivered:
+                    type: string
+                  order_taker:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name_first:
+                        type: string
+                      name_last:
+                        type: string
+                      sys_username:
+                        type: string
+                      email_google:
+                        type: string
+                      email_fb:
+                        type: string
+                      phone_number:
+                        type: string
+                      sys_user_role:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                  order_fulfiller:
+                    type: string
+                  completed:
+                    type: string
+                  shop_order_items:
+                    type: object
+                    properties:
+                      company_product:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          company:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              name:
+                                type: string
+                              zones:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                              name:
+                                type: string
+                              price_buy:
+                                type: string
+                              price_sell:
+                                type: string
+                              price_sell_per_unit:
+                                type: string
+                              description:
+                                type: string
+                          quantity_units:
+                            type: string
+                            
+  /shop/request/all:
+    get:
+      operationId: api.get_all_shops
+      tags:
+        - Shops
+      summary: The user data structure supported by the server application
+      description: Read the list of users
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              request_shop_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+  
+  /zone/request/all:
+    get:
+      operationId: api.get_all_zones
+      tags:
+        - Shops
+      summary: The user data structure supported by the server application
+      description: Read the list of users
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              request_zone_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                
+  /shop_category/request/all:
+    get:
+      operationId: api.get_all_shop_category
+      tags:
+        - Shops
+      summary: The user data structure supported by the server application
+      description: Read the list of users
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              request_shop_category_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+  
+  /shop/create:
     post:
       operationId: api.shop_create
       tags:
@@ -163,129 +427,192 @@ paths:
               email:
                 type: string
                 description: Email of user to create
-              number:
+              phone_number:
                 type: string
                 description: Email of user to create
-              catagory:
+              category:
                 type: string
                 description: Email of user to create
+              zone:
+                type: object
+                description: Email of user to create
+                properties:
+                  id:
+                    type: string
               street:
                 type: string
-                description: Email of user to create
               city:
                 type: string
-                description: Role of user to create
               providence:
                 type: string
-                description: Password of user to create
-              zip:
+              zip_4:
                 type: string
-                description: Email of user to create
-      responses:
-        201:
-          description: Successfully created user in list
-  
-  /shop/{shop_name}:
-    get:
-      operationId: api.shop_read_one
-      tags:
-        - Users
-      summary: Read one user from the users list
-      description: Read one user from the users list
-      parameters:
-        - name: shop_name
-          in: path
-          description: Email of the user to get from the list
-          type: string
-          required: True
       responses:
         200:
-          description: Successfully read email from user list operation
+          description: Successful read user list 
           schema:
+            type: object
             properties:
-              name:
-                type: string
-              email:
-                type: string
-              number:
-                type: string
-              catagory:
-                type: string
-              street:
-                type: string
-              city:
-                type: string
-              providence:
-                type: string
-              zip:
-                type: string
-              timestamp:
-                type: string
-  /company:
-    get:
-      operationId: "api.company_read"
-      tags:
-        - "Users"
-      summary: "The user data structure supported by the server application"
-      description: "Read the list of users"
-      responses:
-        200:
-          description: "Successful read user list operation"
-          schema:
-            type: "array"
-            items:
-              properties:
-                name:
-                  type: "string"
-                timestamp:
-                  type: "string"
-                  
+              create_shop_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    
+  /zone/create:
     post:
-      operationId: api.company_create
+      operationId: api.zone_create
       tags:
         - Users
       summary: Create a user and add it to the user list
       description: Create a new user in the user list
       parameters:
-        - name: new_company
+        - name: new_zone
           in: body
           description: User to create
           required: True
           schema:
             type: object
             properties:
-              name:
-                type: string
+              create_zone:
+                type: object
                 description: Email of user to create
-      responses:
-        201:
-          description: Successfully created user in list
-  
-  /user/{company_name}:
-    get:
-      operationId: api.company_read_one
-      tags:
-        - Users
-      summary: Read one user from the users list
-      description: Read one user from the users list
-      parameters:
-        - name: company_name
-          in: path
-          description: Email of the user to get from the list
-          type: string
-          required: True
+                properties:
+                  name:
+                    type: string
+                
       responses:
         200:
-          description: Successfully read email from user list operation
+          description: Successful read user list 
           schema:
+            type: object
             properties:
-              name:
-                type: string
-              timestamp:
-                type: string
+              create_zone_response:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    
+  /shop_category/create:
+    post:
+      operationId: api.shop_category_create
+      tags:
+        - Users
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
+      parameters:
+        - name: new_shop_category
+          in: body
+          description: User to create
+          required: True
+          schema:
+            type: object
+            properties:
+              create_shop_category:
+                type: object
+                description: Email of user to create
+                properties:
+                  type:
+                    type: string
                 
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              create_shop_category_response:
+                type: object
+                properties:
+                  id:
+                    type: string 
+                  type:
+                    type: string
+                    
+  /shop_order/create:
+    post:
+      operationId: api.shop_order_create
+      tags:
+        - Users
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
+      parameters:
+        - name: new_shop_order
+          in: body
+          description: User to create
+          required: True
+          schema:
+            type: object
+            properties:
+              create_shop_order:
+                type: object
+                description: Email of user to create
+                properties:
+                  shop_id:
+                    type: string
+                  price_paid:
+                    type: string
+                  order_taker_id:
+                    type: string
+                  order_items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      quantity_units:
+                        type: string
                 
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              create_shop_response:
+                type: object
+                properties:
+                  id:
+                    type: string 
+                    
+  /shop_order/update/delivered:
+    put:
+      operationId: api.shop_order_update
+      tags:
+        - Users
+      summary: Create a user and add it to the user list
+      description: Create a new user in the user list
+      parameters:
+        - name: update_shop_order
+          in: body
+          description: User to create
+          required: True
+          schema:
+            type: object
+            properties:
+              update_shop_order_delivered:
+                type: object
+                description: Email of user to create
+                properties:
+                  shop_order_id:
+                    type: string
+                  order_fulfiller_id:
+                    type: string
+                 
                 
+      responses:
+        200:
+          description: Successful read user list 
+          schema:
+            type: object
+            properties:
+              update_shop_order_delivered_response:
+                type: object
+                properties:
+                  request_payment:
+                    type: string 
+  
+
+  
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
