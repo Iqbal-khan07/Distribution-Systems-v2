@@ -4,6 +4,8 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Home from './pages/Home/Home'
 import ShopTracker from "./pages/ShopTracker/ShopTracker";
 import Orders from "./pages/Orders/Orders";
+import About from "./pages/About/About";
+
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './App.css';
@@ -22,6 +24,7 @@ function App() {
             <Switch>
             <ThemeProvider theme={theme}>
                 <Route path={'/'} render={() => <Home />} exact />
+                <Route path={'/about'} render={() => <About />} exact />
                 <Route path={'/shoptracker'} render={() => <ShopTracker />} exact />
                 <Route path={'/orders'} render={() => <Orders />} exact />
                 </ThemeProvider>
