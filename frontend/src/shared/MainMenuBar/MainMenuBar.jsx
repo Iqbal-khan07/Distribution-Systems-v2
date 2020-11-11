@@ -2,19 +2,19 @@ import React from "react";
 import { AppBar, Toolbar, Button} from '@material-ui/core';
 import styles from './MainMenuBar.module.css';
 import { StylesProvider } from '@material-ui/core/styles';
-
+import { Link } from "react-router-dom";
 
 const MainMenuBar = () => {
     return (
         <StylesProvider injectFirst>
-            <AppBar position='static' className={styles.menu}>
+            <AppBar position='sticky' className={styles.menu}>
                 <Toolbar className={styles.menu}>
-                    <div className={styles.logo}>
+                    <Button className={styles.logo} component={Link} to="/">
                         Commercial Distribution Solutions
                         <img src='../CDSLogo.png' alt='CDS Logo' height='50'/>
-                    </div>
+                    </Button>
                     <div className={styles.grow}/>
-                    <Button className={styles.button}>
+                    <Button className={styles.button} component={Link} to="/about">
                         About Us
                     </Button>
                     <Button className={styles.button}>

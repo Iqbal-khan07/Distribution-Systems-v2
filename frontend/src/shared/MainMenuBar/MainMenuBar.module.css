@@ -8,13 +8,12 @@
 }
 
 .logo {
-    display: flex;
     align-items: center;
     font-size: 28px;
+    color: rgb(255, 255, 255, 0.9);
 }
 
 .button {
-    font-family: Montserrat;
     color: rgb(255, 255, 255, 0.7);
     margin-left: 20px
 }
