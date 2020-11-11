@@ -3,8 +3,19 @@ import { AppBar, Toolbar, Button} from '@material-ui/core';
 import styles from './MainMenuBar.module.css';
 import { StylesProvider } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
+import SignInDialogue from "./components/SignInDialogue";
 
 const MainMenuBar = () => {
+    const [open, setOpen] = React.useState(false);
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+
     return (
         <StylesProvider injectFirst>
             <AppBar position='sticky' className={styles.menu}>
@@ -20,9 +31,10 @@ const MainMenuBar = () => {
                     <Button className={styles.button}>
                         Pricing
                     </Button>
-                    <Button className={styles.login_button}>
+                    <Button className={styles.login_button} onClick={handleClickOpen}>
                         Log In
                     </Button>
+                    <SignInDialogue open={open} onClose={handleClose} />
                 </Toolbar>
             </AppBar>
         </StylesProvider>
