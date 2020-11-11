@@ -17,10 +17,10 @@ const About = () => {
                     <h2 className={styles.sectionTitle}>Our Team</h2>
                     <p className={styles.sectionBody}>
                         <ul>
-                            <li>{Team.frontend[0].name}</li>
-                            <li>{Team.frontend[1].name}</li>
                             <li>{Team.backend[0].name}</li>
                             <li>{Team.backend[1].name}</li>
+                            <li>{Team.frontend[0].name}</li>
+                            <li>{Team.frontend[1].name}</li>
                         </ul>
                     </p>
                 </div>

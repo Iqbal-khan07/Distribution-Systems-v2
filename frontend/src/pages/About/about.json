@@ -1,7 +1,7 @@
 {
     "Team": {
         "frontend": [{"name": "Denisse Mendoza"}, {"name": "Zoraiz Naeem"}],
-        "backend": [{"name": "Tylor Autore"}, {"name": "Abdul-Quddus Adeniji"}]
+        "backend": [{"name": "Abdul-Quddus Adeniji"},{"name": "Tylor Autore"}]
     },
     "Intro": "Commercial Distribution Solutions (CDS) is a distribution management system that can be accessed from the browser over the internet.  It aims to automate several features Distribution Centers need to function.  CDS provides a platform which aims to automate several of the functionalities Distributions Centers need to operate.  Some of these functionalities include the ability to take orders, have live updates on inventory, and mange order fulfillment.  Furthermore, CDS provides advance data analytics which is powered by the app’s ability to track the progress of the Distribution Center.",
     "Technologies": "This application has basically been divided into the frontend and backend projects.  The frontend relies heavily on react and utilized several libraries, namely Material UI.  For the backend FlaskAlchemy was used to manage the database.  Also REST API was used for communication between the two.  For real-time data updates Socket.io is used.  Both the frontend and backend mechanisms were deployed using Heroku.",

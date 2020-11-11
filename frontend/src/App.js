@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import Home from './pages/Home/Home'
 import ShopTracker from "./pages/ShopTracker/ShopTracker";
-import About from "./pages/About/About";
+import About from "./pages/About/About.jsx";
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
