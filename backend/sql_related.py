@@ -696,6 +696,7 @@ class Shop_order_item(db.Model):
     
         
 def database_bootstrap(database):
+    """this function populates all tables with mock testing data"""
     Sys_user_role.bootstrap_populate(database)
     Sys_user.bootstrap_populate(database)
     Zone.bootstrap_populate(database)
@@ -711,7 +712,7 @@ def database_bootstrap(database):
 # database queries for HTTP requests    
 def authenticate_default(database, data):
     """this function authenticates a user based upon sys_username 
-    and password by checking passed parameters against the database"""
+        and password by checking passed parameters against the database"""
     
     data_loaded = json.loads(data)
         
@@ -735,8 +736,8 @@ def authenticate_default(database, data):
     
 def authenticate_email(database, data, google):
     """this function authenticates a user based upon an email address 
-    if google = True, this is a google login
-    if google = False, this is a Facebook login"""
+        if google = True, this is a google login
+        if google = False, this is a Facebook login"""
     
     data_loaded = json.loads(data)
     
@@ -778,7 +779,7 @@ def request_company_product(database):
     
 def request_shop_order_not_delivered(database):
     """Returns a JSON of all shop_order entries in the database 
-    that have not been delivered"""
+        that have not been delivered"""
     
     query_result = database.session.query(Shop_order).filter(
         Shop_order.completed == False).all()
@@ -1054,6 +1055,64 @@ def create_shop_order(database, data):
     
     response = {
             "create_shop_response": response_inner
+        }
+        
+    return json.dumps(response, indent = 4)
+    
+def update_shop_order_delivered(database, data):
+    """Updates a shop_order table entry as delivered based on JSON data"""
+    
+    data_loaded = json.loads(data)["update_shop_order_delivered"]
+    
+    # validate relational data fields
+    shop_order_id_valid = True
+    shop_order_not_completed = True
+    order_fulfiller_id_valid = True
+    
+    shop_order_match_query = database.session.query(Shop_order).filter(
+        Shop_order.id == data_loaded["shop_order_id"])
+    
+    if shop_order_match_query.count() == 0:    
+        shop_order_id_valid = False
+    elif shop_order_match_query[0].completed == True:
+        shop_order_not_completed = False
+    else:
+        order_paid = shop_order_match_query[0].price_paid
+        
+    if database.session.query(Sys_user).filter(
+        Sys_user.id == data_loaded["order_fulfiller_id"]).count() == 0:
+            
+        order_fulfiller_id_valid = False
+        
+    if shop_order_id_valid:
+        if shop_order_not_completed:
+            if order_fulfiller_id_valid:
+                current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+                
+                shop_order_match_query[0].price_paid = True
+                shop_order_match_query[0].date_delivered = current_time_utc
+                shop_order_match_query[0].order_fulfiller = data_loaded["order_fulfiller_id"]
+                shop_order_match_query[0].completed = True;
+                
+                database.session.commit()
+                
+                if order_paid:
+                    response_inner = {
+                            "request_payment": False
+                        }
+                else:
+                    response_inner = {
+                            "request_payment": True
+                        }
+            else:
+                response_inner = "404: Invalid order fulfiller id"
+        else:
+            response_inner = "404: Shop order already completed"
+    else:
+        response_inner = "404: Invalid shop order id"
+    
+    response = {
+            "update_shop_order_delivered_response": response_inner
         }
         
     return json.dumps(response, indent = 4)

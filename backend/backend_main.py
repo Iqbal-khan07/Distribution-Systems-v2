@@ -29,37 +29,4 @@ def deploy_index():
     return flask.render_template('index.html')
 
 if __name__ == '__main__':
-    # database bootstrap function
-    # remove / comment out this line after running once to prevent data redundancy
-    # sql_related.database_bootstrap(db)
-    
-    # print(sql_related.authenticate_default(db, json_mock.authenticate_default()))
-    # print(sql_related.authenticate_email(db, json_mock.authenticate_email_google(), True))
-    # print(sql_related.authenticate_email(db, json_mock.authenticate_email_facebook(), False))
-    # print(sql_related.request_company_product(db))
-    # print(sql_related.request_shop_order_not_delivered(db))
-    # print(sql_related.request_shop(db))
-    # print(sql_related.request_zone(db))
-    # print(sql_related.request_shop_category(db))
-    
-    # print(sql_related.request_shop(db))
-    # print("______________________________________________________")
-    # print(sql_related.create_shop(db, json_mock.create_shop()))
-    # print("______________________________________________________")
-    # print(sql_related.request_shop(db))
-    
-    # print(sql_related.request_zone(db))
-    # print("______________________________________________________")
-    # print(sql_related.create_zone(db, json_mock.create_zone()))
-    # print("______________________________________________________")
-    # print(sql_related.request_zone(db))
-    
-    # print(sql_related.request_shop_category(db))
-    # print("______________________________________________________")
-    # print(sql_related.create_shop_category(db, json_mock.create_shop_category()))
-    # print("______________________________________________________")
-    # print(sql_related.request_shop_category(db))
-    
-    # print(sql_related.create_shop_order(db, json_mock.create_shop_order()))
-    
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"))

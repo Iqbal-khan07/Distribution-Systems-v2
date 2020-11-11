@@ -119,3 +119,13 @@ def create_shop_order():
         }
         
     return json.dumps(jsonmock, indent = 4)
+    
+def update_shop_order_delivered():
+    jsonmock = {
+            "update_shop_order_delivered": {
+                "shop_order_id": 4,
+                "order_fulfiller_id": 2
+            }
+        }
+        
+    return json.dumps(jsonmock, indent = 4)
