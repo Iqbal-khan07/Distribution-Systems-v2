@@ -6,8 +6,6 @@ const Home = () => {
     return (
         <div id="home-page" className={styles.content}>
             <MainMenuBar />
-            <div className={styles.background}>
-            </div>
         </div>
     );
 }
