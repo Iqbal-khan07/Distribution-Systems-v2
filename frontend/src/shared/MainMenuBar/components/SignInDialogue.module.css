@@ -1,0 +1,45 @@
+.dialogue {
+    text-align: center;
+    color: #5DB285;
+    font-size: 25px;
+}
+
+.container {
+    padding-top:24px;
+    padding-bottom:24px;
+    align-items: center;
+    display:flex;
+    flex-direction: column;
+}
+
+.center{
+    width:100%;
+    align-items: center;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.oauthButton{
+    margin-bottom: 20px;
+}
+
+.loginButton {
+    color: rgb(255, 255, 255, 0.7);
+    background: #5DB285;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-radius: 15px;
+    margin: 10px;
+}
+
+.loginButton:hover {
+    background: #427C5D;
+}
+
+.link {
+    color: #5DB285;
+}
+.link:hover {
+    color: #427C5D;
+}

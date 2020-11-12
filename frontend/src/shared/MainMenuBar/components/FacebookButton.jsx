@@ -2,6 +2,15 @@ import FacebookLogin from 'react-facebook-login';
  
 const responseFacebook = (response) => {
   console.log(response);
+  let email = response.email;
+
+  var xhr = new XMLHttpRequest()
+  xhr.addEventListener('load', () => {
+    console.log(xhr.responseText)
+  })
+  //xhr.open('POST', 'https://')
+  //xhr.send(JSON.stringify({"authenticate_email":{"email":email}}))
+
 }
 
 export default function FacebookButton() {
@@ -11,6 +20,7 @@ export default function FacebookButton() {
           autoLoad={false}
           fields="name,email,picture"
           onClick=""
-          callback={responseFacebook} />
+          callback={responseFacebook}
+          isSignedIn={false} />
       );
 }
