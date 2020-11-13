@@ -38,13 +38,13 @@ def create_shop():
                 "category": 2,
                 "zones": [
                     {
-                        "id": 4
+                        "id": 1
                     },
                     {
-                        "id": 4
+                        "id": 2
                     },
                     {
-                        "id": 4
+                        "id": 3
                     },
                     {
                         "id": 4
@@ -56,7 +56,7 @@ def create_shop():
             }
         }
         
-    return json.dumps(jsonmock, indent = 4)
+    return json.dumps(jsonmock)
     
 def create_zone():
     jsonmock = {

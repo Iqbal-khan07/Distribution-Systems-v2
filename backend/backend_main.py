@@ -75,7 +75,7 @@ if __name__ == '__main__':
     # remove / comment out this line after running once to prevent data redundancy
     init_db(apps)
     restEndpoint()
-    db_bootstrap()
+    # db_bootstrap()
     
     app.run(port = int(os.getenv("PORT", 8080)), host = os.getenv("IP", "0.0.0.0"), debug = True)
     

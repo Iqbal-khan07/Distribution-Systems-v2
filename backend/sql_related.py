@@ -846,7 +846,8 @@ def create_shop(database, data):
     """Adds a new entry to the shop table and populates shop_zone 
         entries for itbased on JSON data"""
     
-    data_loaded = json.loads(data)["create_shop"]
+    #data_loaded = json.loads(data)["create_shop"]
+    data_loaded = data["create_shop"]
     
     # validate relational data fields
     shop_category_valid = True

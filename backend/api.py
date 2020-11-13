@@ -219,7 +219,7 @@ def shop_create(new_shop):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    return json.loads(sql_related.create_shop(db, new_shop))["create_shop_response"]
+    return json.loads(sql_related.create_shop(db, new_shop))
     
     """
     # Does the person exist already?
