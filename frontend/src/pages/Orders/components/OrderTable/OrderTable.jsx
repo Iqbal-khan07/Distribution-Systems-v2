@@ -9,12 +9,25 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import InfoIcon from '@material-ui/icons/Info';
 import styles from './OrderTable.module.css';
+import clsx from "clsx";
 
 const useStyles1 = makeStyles((theme) => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5),
-  },
+    root: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
+    },
+    delivered: {
+        backgroundColor: "#5DB285"
+    },
+    pending: {
+        backgroundColor: "#FB7373"
+    },
+    paid: {
+        backgroundColor: "#F6E337"
+    },
+    credit: {
+        backgroundColor: "#BFD7DC"
+    },
 }));
   
   function TablePaginationActions(props) {
@@ -76,6 +89,7 @@ TablePaginationActions.propTypes = {
 };
 
 export default function OrderTable({rows}) {
+  const classes = useStyles1()
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   rows = rows.sort((a, b) => (a.id < b.id ? -1 : 1))
@@ -140,7 +154,14 @@ export default function OrderTable({rows}) {
                 {row.memo}
               </TableCell>
               <TableCell>
-                {row.status}
+                  <span
+                    className={clsx({
+                        [classes.delivered]: row.status.toLowerCase() === 'delivered',
+                        [classes.paid]: row.status.toLowerCase() === 'paid',
+                        [classes.pending]: row.status.toLowerCase() === 'pending',
+                        [classes.credit]: row.status.toLowerCase() === 'credit',
+                    })}
+                  >{row.status}</span>
               </TableCell>
               <TableCell align="center">
                 <IconButton aria-label="get info">
