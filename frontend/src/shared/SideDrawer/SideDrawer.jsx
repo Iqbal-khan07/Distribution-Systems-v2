@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: "#BFDCCD",
         },
         "&:focus":{
-            backgroundColor: "#5DB285",
+            backgroundColor: "#5db285",
         }
     },
 }));
