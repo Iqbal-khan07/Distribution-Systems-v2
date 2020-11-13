@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 
-import ShopInfoPaper from "./components/ShopInfoPaper";
+import ShopInfoPaper from "./components/ShopInfoPaper/ShopInfoPaper";
 import ShopTable from "./components/ShopTable/ShopTable";
 import TotalShopsCard from "./components/TotalShopsCard/TotalShopsCard";
 import {Grid} from "@material-ui/core";
