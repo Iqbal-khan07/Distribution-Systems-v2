@@ -17,7 +17,7 @@ const useStyles1 = makeStyles((theme) => ({
   },
 }));
   
-  function TablePaginationActions(props) {
+function TablePaginationActions(props) {
   const classes = useStyles1();
   const theme = useTheme();
   const { count, page, rowsPerPage, onChangePage } = props;
@@ -75,30 +75,10 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(id, name, address) {
-  return { id, name, address };
-}
-
-const rows = [
-  createData(111111, 'ABC General Store', '123 Main Street Anytown, USA'),
-  createData(111112, 'Super Super Market', '123 Main Street Anytown, USA'),
-  createData(111113, 'Corner Central', '123 Main Street Anytown, USA'),
-  createData(111114, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111115, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111116, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111117, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111118, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111119, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111120, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111121, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111122, 'Store Name', '123 Main Street Anytown, USA'),
-  createData(111123, 'Store Name', '123 Main Street Anytown, USA'),
-].sort((a, b) => (a.id < b.id ? -1 : 1));
-
-export default function ShopTable() {
+export default function ShopTable({rows}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  rows = rows.sort((a, b) => (a.id < b.id ? -1 : 1))
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
@@ -120,7 +100,7 @@ export default function ShopTable() {
   
   return (
       <StylesProvider injectFirst>
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style={{maxWidth: "90%"}}>
         <Toolbar>
             <Typography variant="h6" className={styles.title}>
                 Shops

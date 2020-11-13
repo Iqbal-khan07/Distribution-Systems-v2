@@ -7,6 +7,7 @@ import OrderInfoPage from "./components/OrderInfoPage/OrderInfoPage";
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import OrderStatus from "./components/OrderStatus/OrderStatus";
 
 
 
@@ -70,8 +71,8 @@ const orderDetails = {
 };
 
 const Orders = () => {
-    const classes = useStyles();
-    const [showOrderForm, setOrderForm] = useState(true)
+    const classes =useStyles();
+    const [showOrderForm, setOrderForm] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const onFormShowHandler = () => {
@@ -93,12 +94,21 @@ const Orders = () => {
                                     rows={shopRows}
                                 />
                             </Grid>
-                            <Grid item lg={3}>
+                            <Grid item lg={3} container direction={"column"} spacing={2}>
                                 <div>
                                     <ShowAddOrderFormButton
                                         disable={showOrderForm}
                                         onClickHandler={onFormShowHandler}
                                         title={"Add New Order"}
+                                    />
+                                </div>
+                                <div>
+                                    <OrderStatus
+                                        delivered={10}
+                                        paid={0}
+                                        pending={0}
+                                        credit={1}
+
                                     />
                                 </div>
                             </Grid>

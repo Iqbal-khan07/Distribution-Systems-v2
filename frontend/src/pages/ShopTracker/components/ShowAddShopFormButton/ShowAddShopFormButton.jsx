@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const ShowAddOrderFormButton = ({onClickHandler, title, disable}) => {
+const ShowAddShopFormButton = ({onClickHandler, title, disable}) => {
     const classes = useStyles();
     return (
         <Button
@@ -39,4 +39,4 @@ const ShowAddOrderFormButton = ({onClickHandler, title, disable}) => {
     )
 }
 
-export default ShowAddOrderFormButton;
+export default ShowAddShopFormButton;
