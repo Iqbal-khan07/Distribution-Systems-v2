@@ -80,7 +80,7 @@ paths:
       summary: Create a user and add it to the user list
       description: Create a new user in the user list
       parameters:
-        - name: auth_user_default
+        - name: auth_user_gmail
           in: body
           description: User to create
           required: True
@@ -134,7 +134,7 @@ paths:
       summary: Create a user and add it to the user list
       description: Create a new user in the user list
       parameters:
-        - name: auth_user_default
+        - name: auth_user_fb
           in: body
           description: User to create
           required: True
@@ -549,18 +549,19 @@ paths:
                 description: Email of user to create
                 properties:
                   shop_id:
-                    type: string
+                    type: integer
                   price_paid:
-                    type: string
+                    type: boolean
                   order_taker_id:
-                    type: string
+                    type: integer
                   order_items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      quantity_units:
-                        type: string
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        quantity_units:
+                          type: integer
                 
       responses:
         200:
@@ -575,7 +576,7 @@ paths:
                     type: string 
                     
   /shop_order/update/delivered:
-    put:
+    post:
       operationId: api.shop_order_update
       tags:
         - Users
@@ -594,9 +595,9 @@ paths:
                 description: Email of user to create
                 properties:
                   shop_order_id:
-                    type: string
+                    type: integer
                   order_fulfiller_id:
-                    type: string
+                    type: integer
                  
                 
       responses:
