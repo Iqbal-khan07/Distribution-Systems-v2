@@ -10,8 +10,13 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        marginTop: 40,
+        minWidth: "500px",
+        maxWidth: "90%",
+        minHeight: "250px",
+
         backgroundColor: '#BFDCCD',
-        padding: theme.spacing(2),
+        // padding: theme.spacing(2),
     },
     pic: {
         margin: theme.spacing(2),
@@ -28,7 +33,7 @@ export default function (props) {
         <Paper className={classes.root} elevate>
             <Grid container spacing={2}>
                 <Grid item xs={11}>
-                    <Typography variant="h5">Shop Info</Typography>
+                    <Typography variant="h5" style={{marginLeft: 10}}>Shop Info</Typography>
                 </Grid>
                 <Grid item xs={1}>
                     <ToolTip title="Edit Shop" aria-label="Edit Shop">
@@ -41,7 +46,7 @@ export default function (props) {
             <Divider />
             <Grid container spacing={2}>
                 <Grid item xs={3}>
-                    <Avatar alt="Shop Photo" src={props.pic} variant="square" className={classes.pic}></Avatar>
+                    <Avatar alt="Shop Photo" src={props.pic} variant="square" className={classes.pic}/>
                 </Grid>
                 <Grid item className={classes.content} xs={5}>
                     <Grid container spacing={1}>
@@ -82,7 +87,6 @@ export default function (props) {
                     </Grid>
                 </Grid>
             </Grid>
-
         </Paper>
     );
 }
