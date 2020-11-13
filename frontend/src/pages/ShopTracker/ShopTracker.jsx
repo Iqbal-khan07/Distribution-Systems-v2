@@ -43,18 +43,6 @@ const ShopTracker = () => {
 
     return (
         <WithSignedInSkeleton title={'Shop Tracker'}>
-
-        <ShopInfoPaper 
-            name="ABC General Store"
-            street="123 Main Street"
-            city="Anytown"
-            providence="NJ"
-            zip="07011"
-            id={114000}
-            zoneName="Zone 1"
-        >
-
-        </ShopInfoPaper>
             {!loading ? (
                 <>
                     <div className={classes.rootContainer}>
@@ -62,6 +50,15 @@ const ShopTracker = () => {
                             <Grid item lg={9}>
                                 <ShopTable
                                     rows={rows}
+                                />
+                                <ShopInfoPaper
+                                    name="ABC General Store"
+                                    street="123 Main Street"
+                                    city="Anytown"
+                                    providence="NJ"
+                                    zip="07011"
+                                    id={114000}
+                                    zoneName="Zone 1"
                                 />
                             </Grid>
                             <Grid item lg={3} container direction={"column"} spacing={2}>
