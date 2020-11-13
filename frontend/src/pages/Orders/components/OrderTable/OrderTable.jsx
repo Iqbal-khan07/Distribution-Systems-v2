@@ -75,31 +75,10 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(invoice, customer, date, amount, memo, status) {
-  return { invoice, customer, date, amount, memo, status };
-}
-
-const rows = [
-  createData(1001, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1002, 'Super Mart', '01/02/2020', '$150.00', '', 'Paid'),
-  createData(1003, 'Corner Central', '01/13/2020', '$400.00', '', 'Pending'),
-  createData(1004, 'General Plus', '03/01/2020', '$350.00', 'Leave with Manager', 'Paid'),
-  createData(1005, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1006, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1007, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1008, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1009, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1010, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1011, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1012, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1013, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-  createData(1014, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-].sort((a, b) => (a.id < b.id ? -1 : 1));
-
-export default function OrderTable() {
+export default function OrderTable({rows}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+  rows = rows.sort((a, b) => (a.id < b.id ? -1 : 1))
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
@@ -121,13 +100,13 @@ export default function OrderTable() {
   
   return (
       <StylesProvider injectFirst>
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} className={styles.tableContainer}>
         <Toolbar>
             <Typography variant="h6" className={styles.title}>
                 Order List
             </Typography>
         </Toolbar>
-        <Table className={styles.table} size="small" aria-label="custom pagination table">
+        <Table className={styles.table} size="small">
         <TableHead>
           <TableRow>
             <TableCell className={styles.tableHeader}>Invoice No.</TableCell>
@@ -181,7 +160,7 @@ export default function OrderTable() {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[5, 10]}
-              colSpan={4}
+              colSpan={10}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}

@@ -31,8 +31,7 @@ const UserContextProvider = ({children}) => {
             "icon": <StorageIcon style={{fontSize: 30}} />,
             "text": 'Inventory Manager',
             "to": '/inventory'
-        },
-        {
+        }, {
             "icon": <PeopleAltIcon style={{fontSize: 30}} />,
             "text": 'Employers',
             "to": '/employers'
