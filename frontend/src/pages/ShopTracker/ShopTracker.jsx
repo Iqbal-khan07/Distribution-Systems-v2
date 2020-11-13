@@ -7,7 +7,17 @@ const ShopTracker = () => {
     return (
         <WithSignedInSkeleton title={'Shop Tracker'}>
         <ShopTable></ShopTable>
-        <ShopInfoPaper></ShopInfoPaper>
+        <ShopInfoPaper 
+            name="ABC General Store"
+            street="123 Main Street"
+            city="Anytown"
+            providence="NJ"
+            zip="07011"
+            id={114000}
+            zoneName="Zone 1"
+        >
+
+        </ShopInfoPaper>
 
         </WithSignedInSkeleton>
     )
