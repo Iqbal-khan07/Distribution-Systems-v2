@@ -219,6 +219,9 @@ def shop_create(new_shop):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
+    new_shop = json.dumps(new_shop)
+    print(new_shop)
+    print(type(new_shop))
     return json.loads(sql_related.create_shop(db, new_shop))["create_shop_response"]
     
     """
