@@ -7,18 +7,14 @@ const theme = createMuiTheme({
         }
     },
 
+
     typography: {
-        fontFamily: ["open sans", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"]
+        fontFamily: ['Montserrat'].join(',')
     },
 
     template: {
         sideDrawerOpenWidth: 240,
         sideDrawerClosedWidth: 73,
-    },
-
-    brandLogo: {
-        name: "fa fa-graduation-cap",
-        title: "Participatory Learning"
     },
 
     table: {
