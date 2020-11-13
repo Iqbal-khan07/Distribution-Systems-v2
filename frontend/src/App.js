@@ -5,18 +5,16 @@ import Home from './pages/Home/Home'
 import ShopTracker from "./pages/ShopTracker/ShopTracker";
 import About from "./pages/About/About.jsx";
 
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from "./theme/theme";
 
 import './App.css';
 import Orders from "./pages/Orders/Orders";
 
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: [
-      'Montserrat',
-    ].join(','),
-  },
-});
+import axios from "axios"
+
+axios.defaults.baseURL = "https://immense-retreat-89767.herokuapp.com/";
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function App() {
   return (
