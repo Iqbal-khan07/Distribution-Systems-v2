@@ -713,8 +713,8 @@ def authenticate_default(database, data):
     """this function authenticates a user based upon sys_username 
         and password by checking passed parameters against the database"""
     
-    data_loaded = json.loads(data)
-        
+    data_loaded = data
+    
     username_login = data_loaded["authenticate_default"]["username"]
     password_login = data_loaded["authenticate_default"]["password"]
     
@@ -738,7 +738,7 @@ def authenticate_email(database, data, google):
         if google = True, this is a google login
         if google = False, this is a Facebook login"""
     
-    data_loaded = json.loads(data)
+    data_loaded = data
     
     email_login = data_loaded["authenticate_email"]["email"]
     
@@ -910,7 +910,7 @@ def create_shop(database, data):
 def create_zone(database, data):
     """Adds a new entry to the Zone table based on JSON data"""
     
-    data_loaded = json.loads(data)["create_zone"]
+    data_loaded = data["create_zone"]
     
     # validate relational data fields
     zone_name_valid = True
@@ -942,7 +942,7 @@ def create_zone(database, data):
 def create_shop_category(database, data):
     """Adds a new entry to the Shop_category table based on JSON data"""
     
-    data_loaded = json.loads(data)["create_shop_category"]
+    data_loaded = data["create_shop_category"]
     
     # validate relational data fields
     shop_category_type_valid = True
@@ -975,7 +975,7 @@ def create_shop_order(database, data):
     """Adds a new entry to the Shop_order table and
         populates Shop_order_item entries for it based on JSON data"""
     
-    data_loaded = json.loads(data)["create_shop_order"]
+    data_loaded = data["create_shop_order"]
     
     # validate relational data fields
     shop_id_valid = True
@@ -1062,7 +1062,7 @@ def create_shop_order(database, data):
 def update_shop_order_delivered(database, data):
     """Updates a shop_order table entry as delivered based on JSON data"""
     
-    data_loaded = json.loads(data)["update_shop_order_delivered"]
+    data_loaded = data["update_shop_order_delivered"]
     
     # validate relational data fields
     shop_order_id_valid = True
