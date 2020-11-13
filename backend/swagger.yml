@@ -10,7 +10,6 @@ produces:
 
 basePath: "/api"
 
-
 #Global API Key Security
 #security:
 #  - APIKeyHeader: []
@@ -72,6 +71,7 @@ paths:
                         type: string
                       name:
                         type: string
+
   /user/authenticate/google:
     post:
       operationId: api.user_authenticate_gmail
@@ -80,7 +80,7 @@ paths:
       summary: Create a user and add it to the user list
       description: Create a new user in the user list
       parameters:
-        - name: auth_user_default
+        - name: auth_user_gmail
           in: body
           description: User to create
           required: True
@@ -126,6 +126,7 @@ paths:
                         type: string
                       name:
                         type: string
+
   /user/authenticate/facebook:
     post:
       operationId: api.user_authenticate_fb
@@ -134,7 +135,7 @@ paths:
       summary: Create a user and add it to the user list
       description: Create a new user in the user list
       parameters:
-        - name: auth_user_default
+        - name: auth_user_fb
           in: body
           description: User to create
           required: True
@@ -180,6 +181,7 @@ paths:
                         type: string
                       name:
                         type: string
+  
   /company_product/request/all:
     get:
       operationId: api.get_company_product
@@ -224,7 +226,7 @@ paths:
                         type: string
                       description:
                         type: string
-                        
+  
   /shop/request/not_delivered:
     get:
       operationId: api.get_order_not_delivered
@@ -348,7 +350,7 @@ paths:
                                 type: string
                           quantity_units:
                             type: string
-                            
+   
   /shop/request/all:
     get:
       operationId: api.get_all_shops
@@ -386,7 +388,7 @@ paths:
                 properties:
                   id:
                     type: string
-                
+  
   /shop_category/request/all:
     get:
       operationId: api.get_all_shop_category
@@ -459,7 +461,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    
+  
   /zone/create:
     post:
       operationId: api.zone_create
@@ -493,7 +495,7 @@ paths:
                 properties:
                   id:
                     type: string
-                    
+  
   /shop_category/create:
     post:
       operationId: api.shop_category_create
@@ -529,7 +531,7 @@ paths:
                     type: string 
                   type:
                     type: string
-                    
+  
   /shop_order/create:
     post:
       operationId: api.shop_order_create
@@ -550,18 +552,19 @@ paths:
                 description: Email of user to create
                 properties:
                   shop_id:
-                    type: string
+                    type: integer
                   price_paid:
-                    type: string
+                    type: boolean
                   order_taker_id:
-                    type: string
+                    type: integer
                   order_items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      quantity_units:
-                        type: string
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                        quantity_units:
+                          type: integer
                 
       responses:
         200:
@@ -574,9 +577,9 @@ paths:
                 properties:
                   id:
                     type: string 
-                    
+  
   /shop_order/update/delivered:
-    put:
+    post:
       operationId: api.shop_order_update
       tags:
         - Users
@@ -595,11 +598,10 @@ paths:
                 description: Email of user to create
                 properties:
                   shop_order_id:
-                    type: string
+                    type: integer
                   order_fulfiller_id:
-                    type: string
-                 
-                
+                    type: integer
+
       responses:
         200:
           description: Successful read user list 
@@ -611,9 +613,7 @@ paths:
                 properties:
                   request_payment:
                     type: string 
-  
 
-  
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
