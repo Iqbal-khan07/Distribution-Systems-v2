@@ -1,5 +1,5 @@
 import React from "react";
-import MainMenuBar from '../../shared/MainMenuBar/MainMenuBar';
+import MainMenuBar from "../../shared/MainMenuBar/MainMenuBar";
 import styles from './Home.module.css';
 
 const Home = () => {
