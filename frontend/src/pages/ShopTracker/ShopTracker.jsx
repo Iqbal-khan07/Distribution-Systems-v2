@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
+
+import ShopInfoPaper from "./components/ShopInfoPaper";
 import ShopTable from "./components/ShopTable/ShopTable";
 import TotalShopsCard from "./components/TotalShopsCard/TotalShopsCard";
 import {Grid} from "@material-ui/core";
@@ -41,6 +43,18 @@ const ShopTracker = () => {
 
     return (
         <WithSignedInSkeleton title={'Shop Tracker'}>
+
+        <ShopInfoPaper 
+            name="ABC General Store"
+            street="123 Main Street"
+            city="Anytown"
+            providence="NJ"
+            zip="07011"
+            id={114000}
+            zoneName="Zone 1"
+        >
+
+        </ShopInfoPaper>
             {!loading ? (
                 <>
                     <div className={classes.rootContainer}>
