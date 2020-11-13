@@ -4,8 +4,8 @@ import json
 def authenticate_default():
     jsonmock = {
             "authenticate_default": {
-                "username": "order_taker",
-                "password": "ot1234"
+                "username": "denisse",
+                "password": "dm123"
             }
         }
         
