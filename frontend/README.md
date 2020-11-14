@@ -34,15 +34,13 @@ inside your repository. `node_modules` folder **does not** need to be pushed
 to Heroku or GitHub.
 
 - `npm install` 
-- `npm install -g webpack`  
-- `npm install --save-dev webpack`  
     **Note: This command MUST be run from the folder that contains package.json!**
     **You will get an error if you are in a different folder!**
-- `npm install socket.io-client --save` 
-- `npm install html-react-parser` 
-- `npm install interweave react` 
 - `npm install react-facebook-login`
-- `npm install react-google-login` 
+- `npm install react-google-login`
+- `npm install formik --save` 
+- `npm install @material-ui/core`
+- 
 
 :warning: :warning: :warning: If you see any error messages, make sure you use `sudo pip` or `sudo npm`.
 If it says "pip cannot be found", run `which pip` and use `sudo [path to pip from which pip] install` :warning: :warning: :warning:
