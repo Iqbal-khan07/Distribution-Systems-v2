@@ -428,6 +428,7 @@ paths:
                 description: Email of user to create
               email:
                 type: string
+                x-nullable: true
                 description: Email of user to create
               phone_number:
                 type: string
