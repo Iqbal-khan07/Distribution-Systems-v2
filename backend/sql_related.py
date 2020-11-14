@@ -118,6 +118,33 @@ class Sys_user(db.Model):
             "administrator@other.com",
             "1234567890",
             3))
+        database.session.add(Sys_user(
+            "Denisse",
+            "Mendoza",
+            "denisse",
+            "dm1234",
+            "dm464@njit.edu",
+            "idislexiaheart@aol.com",
+            "1234567890",
+            1))
+        database.session.add(Sys_user(
+            "Tylor",
+            "Autore",
+            "tylor",
+            "ta1234",
+            "tma26@njit.edu",
+            "hellfrost@embarqmail.com",
+            "9739199865",
+            2))
+        database.session.add(Sys_user(
+            "Abdul-Quddus",
+            "Adeniji",
+            "abdul",
+            "aq1234",
+            "aqadeniji@gmail.com",
+            "abdul83@ymail.com",
+            "1234567890",
+            2))
             
         database.session.commit()
         
