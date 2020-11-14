@@ -1,0 +1,12 @@
+.title {
+    font-size: 25px;
+}
+
+.tableHeader {
+    font-size: 18px;
+}
+
+.tableContainer {
+    min-width: 500px;
+    max-width: 90%;
+}
