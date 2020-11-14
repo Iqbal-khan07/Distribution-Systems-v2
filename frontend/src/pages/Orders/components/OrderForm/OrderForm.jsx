@@ -165,7 +165,7 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                 <em>None</em>
             </MenuItem>
             {shops.map((shop) => (
-                <MenuItem key={shop.id} value={shop.id}>{`${shop.name} [${shop.zone}]`}</MenuItem>
+                <MenuItem key={shop.id} value={shop.id}>{`${shop.name} ${shop.zone}`}</MenuItem>
             ))}
         </Field>
     )

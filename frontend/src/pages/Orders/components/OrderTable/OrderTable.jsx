@@ -10,6 +10,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import InfoIcon from '@material-ui/icons/Info';
 import styles from './OrderTable.module.css';
 import clsx from "clsx";
+import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
 
 const useStyles1 = makeStyles((theme) => ({
     root: {
@@ -88,7 +89,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-export default function OrderTable({rows}) {
+export default function OrderTable({rows, orderShowDetailHandler}) {
   const classes = useStyles1()
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -139,7 +140,7 @@ export default function OrderTable({rows}) {
           ).map((row) => (
             <StyledTableRow key={row.id}>
               <TableCell>
-                {row.invoice}
+                {row.id}
               </TableCell>
               <TableCell>
                 {row.customer}
@@ -148,7 +149,7 @@ export default function OrderTable({rows}) {
                 {row.date}
               </TableCell>
               <TableCell>
-                {row.amount}
+                {DataDisplayUtils.displayMoneyValue(row.amount)}
               </TableCell>
               <TableCell>
                 {row.memo}
@@ -164,7 +165,7 @@ export default function OrderTable({rows}) {
                   >{row.status}</span>
               </TableCell>
               <TableCell align="center">
-                <IconButton aria-label="get info">
+                <IconButton aria-label="get info" onClick={() => orderShowDetailHandler(row.id)}>
                     <InfoIcon />
                 </IconButton>
               </TableCell>

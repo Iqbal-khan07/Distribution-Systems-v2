@@ -1,3 +1,4 @@
+import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -12,8 +13,11 @@ import InvoiceTable from '../InvoiceTable/InvoiceTable';
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: '#BFD7DC',
-        padding: theme.spacing(2),
+        // padding: theme.spacing(2),
         paddingBottom: theme.spacing(5),
+        minWidth: 500,
+        maxWidth: '90%',
+        marginTop: 30
     },
     pic: {
         margin: theme.spacing(2),
@@ -32,86 +36,88 @@ export default function OrderInfoPage({ details }) {
     const classes = useStyles();
 
     return (
-        <Paper className={classes.root} elevate>
-            <Grid container spacing={2}>
-                <Grid item lg={11}>
-                    <Typography variant="h5">Invoice</Typography>
+        <Paper className={classes.root} elevation={3}>
+            <div style={{margin: 20}}>
+                <Grid container spacing={2}>
+                    <Grid item lg={11}>
+                        <Typography variant="h5">Invoice</Typography>
+                    </Grid>
+                    <Grid item lg={1}>
+                        <ToolTip title="Edit Shop" aria-label="Edit Shop">
+                            <IconButton size="small">
+                                <EditIcon />
+                            </IconButton>
+                        </ToolTip>
+                    </Grid>
                 </Grid>
-                <Grid item lg={1}>
-                    <ToolTip title="Edit Shop" aria-label="Edit Shop">
-                        <IconButton size="small">
-                            <EditIcon />
-                        </IconButton>
-                    </ToolTip>
-                </Grid>
-            </Grid>
-            <Divider />
-            <Grid container spacing={2}>
-                <Grid item lg={8} xs={8}>
-                    <Grid container spacing={1}>
-                        <Grid item lg>
-                            <Avatar alt="Shop Photo" src={details.pic} variant="square" className={classes.pic}></Avatar>
+                <Divider />
+                <Grid container spacing={2}>
+                    <Grid item lg={8} xs={8}>
+                        <Grid container spacing={1}>
+                            <Grid item lg>
+                                <Avatar alt="Shop Photo" src={details.pic} variant="square" className={classes.pic}/>
+                            </Grid>
+                            <Grid item lg className={classes.top}>
+                                <Typography>
+                                    INSERT LOGO HERE
+                                </Typography>
+                            </Grid>
                         </Grid>
-                        <Grid item lg className={classes.top}>
-                            <Typography>
-                                INSERT LOGO HERE
-                            </Typography>
+                    </Grid>
+                    <Grid item lg={4} className={classes.top}>
+                        <Grid container spacing={0}>
+                            <Grid item lg={12} xs={12}>
+                                <Typography>
+                                    <b>Date: </b>{details.date}
+                                </Typography>
+                            </Grid>
+                            <Grid item lg={12} xs={12}>
+                                <Typography>
+                                    <b>Invoice #: </b>{details.id}
+                                </Typography>
+                            </Grid>
+                            <Grid item lg={12} xs={12}>
+                                <Typography>
+                                    <b>Customer Id: </b>{details.shopId}
+                                </Typography>
+                            </Grid>
+                            <Grid item lg={12} xs={12} className={classes.top}>
+                                <Typography>
+                                    <b>To: </b>{details.shopName}
+                                </Typography>
+                            </Grid>
+                            <Grid item lg={12} xs={12}>
+                                <Typography>
+                                    {details.street}
+                                </Typography>
+                            </Grid>
+                            <Grid item lg={12} xs={12}>
+                                <Typography>
+                                    {details.city}, {details.providence} {details.zip}
+                                </Typography>
+                            </Grid>
+                            {details.phone != null &&
+                                <Grid item lg={12} xs={12}>
+                                    <Typography>
+                                        Phone:  {details.phone}
+                                    </Typography>
+                                </Grid>
+                            }
+                            {details.email != null &&
+                                <Grid item lg={12} xs={12}>
+                                    <Typography>
+                                        Email:  {details.email}
+                                    </Typography>
+                                </Grid>
+                            }
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item lg={4} className={classes.top}>
-                    <Grid container spacing={0}>
-                        <Grid item lg={12} xs={12}>
-                            <Typography>
-                                <b>Date: </b>{details.date}
-                            </Typography>
-                        </Grid>
-                        <Grid item lg={12} xs={12}>
-                            <Typography>
-                                <b>Invoice #: </b>{details.id}
-                            </Typography>
-                        </Grid>
-                        <Grid item lg={12} xs={12}>
-                            <Typography>
-                                <b>Customer Id: </b>{details.shopId}
-                            </Typography>
-                        </Grid>
-                        <Grid item lg={12} xs={12} className={classes.top}>
-                            <Typography>
-                                <b>To: </b>{details.shopName}
-                            </Typography>
-                        </Grid>
-                        <Grid item lg={12} xs={12}>
-                            <Typography>
-                                {details.street}
-                            </Typography>
-                        </Grid>
-                        <Grid item lg={12} xs={12}>
-                            <Typography>
-                                {details.city}, {details.providence} {details.zip}
-                            </Typography>
-                        </Grid>
-                        {details.phone != null &&
-                            <Grid item lg={12} xs={12}>
-                                <Typography>
-                                    Phone:  {details.phone}
-                                </Typography>
-                            </Grid>
-                        }
-                        {details.email != null &&
-                            <Grid item lg={12} xs={12}>
-                                <Typography>
-                                    Phone:  {details.email}
-                                </Typography>
-                            </Grid>
-                        }
-                    </Grid>
+                <Grid container className={classes.sectionSpacing}>
+                    <InvoiceTable orderItems={details.orderItems}></InvoiceTable>
                 </Grid>
-            </Grid>
-            <Grid container className={classes.sectionSpacing}>
-                <InvoiceTable orderItems={details.orderItems}></InvoiceTable>
-            </Grid>
 
+            </div>
         </Paper>
     );
 }

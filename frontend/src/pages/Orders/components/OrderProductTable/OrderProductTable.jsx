@@ -13,6 +13,7 @@ import {
 import { useFormikContext } from 'formik';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
 
 const useStyles = makeStyles(() => ({
     table: {
@@ -67,12 +68,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 const calculateCurrentTotalValue = (unitPrice, quantity) => {
-    return displayCost(unitPrice * quantity);
+    return DataDisplayUtils.displayMoneyValue(unitPrice * quantity);
 }
 
-const displayCost = (cost) => {
-    return cost.toFixed(2)
-}
 
 const displayQuantity = (quantity) => {
     if(quantity < 10){
@@ -88,7 +86,7 @@ const calculateSubTotal = (products, values) => {
         const quantity = values[products[i].id];
         totalCost += (unitCost * quantity);
     }
-    return displayCost(totalCost);
+    return DataDisplayUtils.displayMoneyValue(totalCost);
 }
 
 export default function OrderProductTable({products, value}) {
@@ -164,7 +162,7 @@ export default function OrderProductTable({products, value}) {
                         {row.name}
                       </TableCell>
                       <TableCell className={classes.tableCell} align="right">
-                          {displayCost(row.unitPrice)}
+                          {DataDisplayUtils.displayMoneyValue(row.unitPrice)}
                       </TableCell>
                       <TableCell className={classes.tableCell} align="right">
                           {makeQuantityField(value[row.id], row.id)}
@@ -182,7 +180,7 @@ export default function OrderProductTable({products, value}) {
                   <TableRow>
                       <TableCell className={classes.noUnderLine} colSpan={2} />
                       <TableCell className={classes.tableCell} colSpan={1}>Delivery Fee</TableCell>
-                      <TableCell className={classes.tableCell} align="right">{displayCost(0)}</TableCell>
+                      <TableCell className={classes.tableCell} align="right">{DataDisplayUtils.displayMoneyValue(0)}</TableCell>
                   </TableRow>
                   <TableRow>
                       <TableCell className={classes.noUnderLine} colSpan={2} />
