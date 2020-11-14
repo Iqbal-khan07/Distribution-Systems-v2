@@ -734,6 +734,7 @@ def database_bootstrap(database):
     Company_product.bootstrap_populate(database)
     Shop_order.bootstrap_populate(database)
     Shop_order_item.bootstrap_populate(database)
+    database.session.close()
 
 # database queries for HTTP requests    
 def authenticate_default(database, data):
@@ -757,7 +758,8 @@ def authenticate_default(database, data):
     response = {
             "authenticate_default_response": response_inner
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def authenticate_email(database, data, google):
@@ -784,7 +786,8 @@ def authenticate_email(database, data, google):
     response = {
             "authenticate_email_response": response_inner
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def request_company_product(database):
@@ -800,7 +803,8 @@ def request_company_product(database):
     response = {
             "request_company_product_response": result
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def request_shop_order_not_delivered(database):
@@ -818,7 +822,8 @@ def request_shop_order_not_delivered(database):
     response = {
             "request_shop_order_not_delivered_response": result
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def request_shop(database):
@@ -834,7 +839,8 @@ def request_shop(database):
     response = {
             "request_shop_response": result
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def request_zone(database):
@@ -850,7 +856,8 @@ def request_zone(database):
     response = {
             "request_zone_response": result
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def request_shop_category(database):
@@ -866,7 +873,8 @@ def request_shop_category(database):
     response = {
             "request_shop_category_response": result
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def create_shop(database, data):
@@ -931,7 +939,8 @@ def create_shop(database, data):
     response = {
             "create_shop_response": response_inner
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def create_zone(database, data):
@@ -963,7 +972,8 @@ def create_zone(database, data):
     response = {
             "create_zone_response": response_inner
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def create_shop_category(database, data):
@@ -995,7 +1005,8 @@ def create_shop_category(database, data):
     response = {
             "create_shop_category_response": response_inner
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def create_shop_order(database, data):
@@ -1083,7 +1094,8 @@ def create_shop_order(database, data):
     response = {
             "create_shop_response": response_inner
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)
     
 def update_shop_order_delivered(database, data):
@@ -1141,5 +1153,6 @@ def update_shop_order_delivered(database, data):
     response = {
             "update_shop_order_delivered_response": response_inner
         }
-        
+    
+    database.session.close()    
     return json.dumps(response, indent = 4)

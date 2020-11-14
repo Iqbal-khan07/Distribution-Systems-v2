@@ -2,7 +2,7 @@ import json_mock
 import requests
 import json
 
-base_url = "https://immense-retreat-89767.herokuapp.com/api"
+base_url = "http://localhost:8080/api"
 
 authenticate_default = "/user/authenticate/default"
 authenticate_gmail = "/user/authenticate/google"
@@ -69,14 +69,14 @@ def update_sod():
 
 if __name__ == '__main__':
     auth_default()
-    #auth_gmail()
-    #auth_fb()
-    #get_sond()
-    #get_sh()
-    #get_z()
-    #get_s_c()
-    #create_s()
-    #create_z()
-    #create_s_c()
-    #create_s_o()
-    #update_sod()
+    auth_gmail()
+    auth_fb()
+    get_sond()
+    get_sh()
+    get_z()
+    get_s_c()
+    create_s()
+    create_z()
+    create_s_c()
+    create_s_o()
+    update_sod()
