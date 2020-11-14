@@ -17,7 +17,7 @@ In order to achieve this, the project was separated into two halfs, backend and 
 teams responsible for the development of each respectively.
 
 # Backend Project Description
-The backend team was tasked with creating a Server that hosted a database and responds to HTTP 
+The backend team was tasked with creating a Server that hosts a database and responds to HTTP 
 requests.
 
 The purpose for this server is to act as a medium for the frontend project to access a database 
