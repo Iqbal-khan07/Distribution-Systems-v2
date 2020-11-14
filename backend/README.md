@@ -63,6 +63,41 @@
 1. make sure you are in the "Distribution-System-CS490/backend" directory
 2. Enter the following command: python backend_main.python
 
-# Note About Unit Testing
-Unit testing was only conducted on every function in sql_related.py as all actual functionality resides there. Backend_main.py 
-functions are inherantly un-mockable / untestable as they set up exclusively the connexion and flask framework for the backend project to run on.
+# Project Database Information:
+All database architecture information can be seen in the cds_backend_database_architecture.png file
+
+# Project Endpoint Information:
+All available HTTP request directories, request types, and JSON formatting can be seen in the cds_backend_endpoint.pdf file
+
+# Notes About Unit Tests
+Unit testing was only conducted on every function in sql_related.py as all actual functionality resides there. 
+
+Backend_main.py and api.py functions are inherantly un-mockable / untestable as they set up exclusively the connexion 
+and flask framework for the backend project to run on.
+
+json_mock.py and html_request_test.py are files that are exlusively related to tesing HTTP request responses locally 
+and on a Heroku deployment and as such have no need to have unit tests made for them as they are not a part of the main project.
+
+# Work Done by Team Members
+
+The team that made this project is composed of two members:
+1. Tylor Autore
+2. Abdul-Quddus Adeniji
+
+# Work Done by Tylor Autore:
+1. Created backend_main.py skeleton for database hosting
+2. Designed relational database architecture and shared with all team members
+3. Coded Database models in sql_related.py
+4. Coded SQL bootstrap function in sql_related.py to populate a database with test data
+5. Coded Basic database query functions to return data needed for frontend functions
+6. Modified database query functions to work with mocked JSON passed from connexion HTTP interface
+7. Designed REST endpoint naming and HTTP response JSON structures and shared with all team members
+8. Pushed backend project to Heroku
+9. Created unit tests for sql_related.py
+
+# Work Done by Abdul:
+1. Implemented and tested basic REST functionality for backend_main.py locally
+2. Pushed test environment to Heroku to ensure that endpoint access from a remote environment works properly
+3. Merged connexion endpoints with database query functions to serve frontend HTTP requests
+4. Pushed backend project to Heroku
+5. Linted all python files
