@@ -388,11 +388,7 @@ class Company(db.Model):
 
         database.session.commit()
 
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 class Company_zone(db.Model):
     """company_zone database table definition"""
 
@@ -693,7 +689,6 @@ def authenticate_default(database, data):
         response_inner = query_result[0].request_sys_user_info(database)
     else:
         response_inner = "invalid login credentials"
-<<<<<<< HEAD
         
     response = {
             "authenticate_default_response": response_inner
@@ -701,15 +696,8 @@ def authenticate_default(database, data):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"authenticate_default_response": response_inner}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def authenticate_email(database, data, google):
     """this function authenticates a user based upon an email address
     if google = True, this is a google login
@@ -736,7 +724,6 @@ def authenticate_email(database, data, google):
         response_inner = query_result[0].request_sys_user_info(database)
     else:
         response_inner = "invalid login credentials"
-<<<<<<< HEAD
         
     response = {
             "authenticate_email_response": response_inner
@@ -744,15 +731,8 @@ def authenticate_email(database, data, google):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"authenticate_email_response": response_inner}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def request_company_product(database):
     """Returns a JSON of all company_product entries in the database"""
 
@@ -762,7 +742,6 @@ def request_company_product(database):
 
     for item in query_result:
         result.append(item.request_company_product_info(database))
-<<<<<<< HEAD
         
     response = {
             "request_company_product_response": result
@@ -770,15 +749,8 @@ def request_company_product(database):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"request_company_product_response": result}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def request_shop_order_not_delivered(database):
     """Returns a JSON of all shop_order entries in the database
     that have not been delivered"""
@@ -791,7 +763,6 @@ def request_shop_order_not_delivered(database):
 
     for item in query_result:
         result.append(item.request_shop_order(database))
-<<<<<<< HEAD
         
     response = {
             "request_shop_order_not_delivered_response": result
@@ -799,15 +770,8 @@ def request_shop_order_not_delivered(database):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"request_shop_order_not_delivered_response": result}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def request_shop(database):
     """Returns a JSON of all shop entries in the database"""
 
@@ -817,7 +781,6 @@ def request_shop(database):
 
     for item in query_result:
         result.append(item.request_shop_info(database))
-<<<<<<< HEAD
         
     response = {
             "request_shop_response": result
@@ -825,15 +788,8 @@ def request_shop(database):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"request_shop_response": result}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def request_zone(database):
     """Returns a JSON of all zone entries in the database"""
 
@@ -843,7 +799,6 @@ def request_zone(database):
 
     for item in query_result:
         result.append(item.request_zone_info())
-<<<<<<< HEAD
         
     response = {
             "request_zone_response": result
@@ -851,15 +806,8 @@ def request_zone(database):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"request_zone_response": result}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def request_shop_category(database):
     """Returns a JSON of all shop categories in the database"""
 
@@ -869,7 +817,6 @@ def request_shop_category(database):
 
     for item in query_result:
         result.append(item.request_category_info())
-<<<<<<< HEAD
         
     response = {
             "request_shop_category_response": result
@@ -877,15 +824,8 @@ def request_shop_category(database):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"request_shop_category_response": result}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def create_shop(database, data):
     """Adds a new entry to the shop table and populates shop_zone
     entries for itbased on JSON data"""
@@ -953,7 +893,6 @@ def create_shop(database, data):
             response_inner = "404: Invalid zone id"
     else:
         response_inner = "404: Invalid category id"
-<<<<<<< HEAD
         
     response = {
             "create_shop_response": response_inner
@@ -961,15 +900,8 @@ def create_shop(database, data):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"create_shop_response": response_inner}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def create_zone(database, data):
     """Adds a new entry to the Zone table based on JSON data"""
 
@@ -997,7 +929,6 @@ def create_zone(database, data):
         response_inner = new_zone.request_zone_info()
     else:
         response_inner = "404: zone already exists"
-<<<<<<< HEAD
     
     response = {
             "create_zone_response": response_inner
@@ -1005,15 +936,8 @@ def create_zone(database, data):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"create_zone_response": response_inner}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def create_shop_category(database, data):
     """Adds a new entry to the Shop_category table based on JSON data"""
 
@@ -1043,7 +967,6 @@ def create_shop_category(database, data):
         response_inner = new_shop_category.request_category_info()
     else:
         response_inner = "404: shop category already exists"
-<<<<<<< HEAD
     
     response = {
             "create_shop_category_response": response_inner
@@ -1051,15 +974,8 @@ def create_shop_category(database, data):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"create_shop_category_response": response_inner}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def create_shop_order(database, data):
     """Adds a new entry to the Shop_order table and
     populates Shop_order_item entries for it based on JSON data"""
@@ -1160,7 +1076,6 @@ def create_shop_order(database, data):
             response_inner = "404: Invalid order taker id"
     else:
         response_inner = "404: Invalid shop id"
-<<<<<<< HEAD
                 
     
     response = {
@@ -1169,15 +1084,8 @@ def create_shop_order(database, data):
     
     database.session.close()    
     return response
-    
-=======
-
-    response = {"create_shop_response": response_inner}
-
-    return json.dumps(response, indent=4)
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def update_shop_order_delivered(database, data):
     """Updates a shop_order table entry as delivered based on JSON data"""
 
@@ -1232,7 +1140,6 @@ def update_shop_order_delivered(database, data):
             response_inner = "404: Shop order already completed"
     else:
         response_inner = "404: Invalid shop order id"
-<<<<<<< HEAD
     
     response = {
             "update_shop_order_delivered_response": response_inner
@@ -1240,9 +1147,3 @@ def update_shop_order_delivered(database, data):
     
     database.session.close()    
     return response
-=======
-
-    response = {"update_shop_order_delivered_response": response_inner}
-
-    return json.dumps(response, indent=4)
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea

@@ -7,7 +7,6 @@ import requests
 import os
 from backend_main import db, app_flask
 from backend_main import sql_related
-import sql_related
 import json
 
 # 3rd party modules
@@ -46,14 +45,9 @@ def user_authenticate_default(auth_user_default):
 
     :return:        sorted list of people
     """
-<<<<<<< HEAD
     return sql_related.authenticate_default(db, auth_user_default)
-    
-=======
-    return json.loads(sql_related.authenticate_default(db, auth_user_default))
 
 
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
 def user_authenticate_gmail(auth_user_gmail):
     """
 
@@ -62,17 +56,8 @@ def user_authenticate_gmail(auth_user_gmail):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-<<<<<<< HEAD
-    
     return sql_related.authenticate_email(db, auth_user_gmail, True)
     
-=======
-
-    return json.loads(
-        sql_related.authenticate_email(
-            db, auth_user_gmail, True))
-
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
     """
     # Does the person exist already?
     if email not in USER and email is not None:
@@ -101,15 +86,7 @@ def user_authenticate_fb(auth_user_fb):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-<<<<<<< HEAD
-    
     return sql_related.authenticate_email(db, auth_user_fb, False)
-    
-=======
-
-    return json.loads(sql_related.authenticate_email(db, auth_user_fb, False))
-
->>>>>>> 375257b594c9f4cf720ed42aba9adc2fc44871ea
     """
     # Does the person exist already?
     if email not in USER and email is not None:
@@ -174,7 +151,8 @@ def get_all_shops():
     :return:        sorted list of people
     """
     return sql_related.request_shop(db)
-    
+
+
 def get_all_zones():
     """
     This function creates a new person in the people structure
