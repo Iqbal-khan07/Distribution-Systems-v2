@@ -75,7 +75,7 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-export default function ShopTable({rows}) {
+export default function ShopTable({rows, shopShowDetailHandler}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   rows = rows.sort((a, b) => (a.id < b.id ? -1 : 1))
@@ -131,7 +131,7 @@ export default function ShopTable({rows}) {
                 {row.address}
               </TableCell>
               <TableCell align="center">
-                <IconButton aria-label="get info">
+                <IconButton aria-label="get info" onClick={() => shopShowDetailHandler(row.id)}>
                     <InfoIcon />
                 </IconButton>
               </TableCell>

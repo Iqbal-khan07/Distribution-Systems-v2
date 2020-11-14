@@ -12,13 +12,12 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 
 ReactDOM.render(
-    <React.StrictMode>
         <ThemeProvider theme={theme}>
             <UserContextProvider>
                 <App />
             </UserContextProvider>
         </ThemeProvider>
-    </React.StrictMode>,
+    ,
     document.getElementById('root')
 );
 
