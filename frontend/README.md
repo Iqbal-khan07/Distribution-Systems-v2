@@ -145,14 +145,25 @@ that parses the string and returns html tags.
 
 ## Information on Individual Progress/Contributions
 ### Zoraiz Naeem
+1. Set up the Frontend React Project Template/directory structure to follow.
+2. Implemented the Signed In template for the pages. It includes a closable side bar, and navbar
+3. Set up user context, and axios default end point.
+4. Implemented the new order form.
+       - Used Formik for the state management of the form.
+5. Implemented the order status component
+6. Set up the react routing for the project.
+7. Implemented a few other smaller components.
+8. Implemented the layouts of the shoptracker and orders page. Basically where and how the components will be placed relative to each other.
 
 ### Denisse Mendoza
 
 ## Work Left Incomplete
-1. 
+1. The login form is not connected to the backend. Basically, the OAuth for Google and Facebook is setup but we could not relay that information to the backend via a Post Request(Lacking a minor Post call)
+2. Form the order taking form, all the data is collected, but the data is not sent back to the backend via a Post Request(Lacking a minor Post call)
 
 ## Frontend Team
 Zoraiz Naeem
+(Note implementation includes styling the components, writing the html, wiring the various components together, making api calls to backend etc etc)
 Denisse Mendoza
 
 
