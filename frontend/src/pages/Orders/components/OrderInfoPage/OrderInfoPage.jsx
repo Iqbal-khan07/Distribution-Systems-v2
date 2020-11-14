@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import ToolTip from '@material-ui/core/ToolTip';
+import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
 import InvoiceTable from '../InvoiceTable/InvoiceTable';
@@ -43,11 +43,11 @@ export default function OrderInfoPage({ details }) {
                         <Typography variant="h5">Invoice</Typography>
                     </Grid>
                     <Grid item lg={1}>
-                        <ToolTip title="Edit Shop" aria-label="Edit Shop">
+                        <Tooltip title="Edit Shop" aria-label="Edit Shop">
                             <IconButton size="small">
                                 <EditIcon />
                             </IconButton>
-                        </ToolTip>
+                        </Tooltip>
                     </Grid>
                 </Grid>
                 <Divider />
