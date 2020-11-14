@@ -58,8 +58,8 @@ const ShopTracker = () => {
                     zoneName: ""
                 }
             });
+            setSelectedShop(shopOptions[0])
             setShops(shopOptions)
-            setSelectedShop(shops[0])
             setLoading(false)
         }
         fetchData().then()
