@@ -7,11 +7,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
 
 
 const useStyles = makeStyles((theme) => ({
     table: {
         minWidth: 700,
+
     },
     head: {
         backgroundColor: "#232E33",
@@ -30,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function InvoiceTable({ orderItems }) {
-    const ccyFormat = (num) => (num.toFixed(2));
     const priceRow = (qty, unit) => (qty * unit);
 
     function createRow(desc, qty, unit) {
@@ -52,7 +53,7 @@ export default function InvoiceTable({ orderItems }) {
     const classes = useStyles();
 
     return (
-        <TableContainer component={Paper} elevation="non">
+        <TableContainer component={Paper}>
             <Table className={classes.table} size="small" aria-label="Invoice table">
                 <TableHead className={classes.head}>
                     <TableRow>
@@ -66,24 +67,24 @@ export default function InvoiceTable({ orderItems }) {
                     {rows.map((row) => (
                         <TableRow key={row.desc}>
                             <TableCell>{row.desc}</TableCell>
-                            <TableCell align="right">{row.unit}</TableCell>
+                            <TableCell align="right">{DataDisplayUtils.displayMoneyValue(row.unit)}</TableCell>
                             <TableCell align="right">{row.qty}</TableCell>
-                            <TableCell align="right">{ccyFormat(row.price)}</TableCell>
+                            <TableCell align="right">{DataDisplayUtils.displayMoneyValue(row.price)}</TableCell>
                         </TableRow>
                     ))}
 
                     <TableRow>
                         <TableCell rowSpan={3} colSpan={2} />
                         <TableCell>Subtotal</TableCell>
-                        <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
+                        <TableCell align="right">{DataDisplayUtils.displayMoneyValue(invoiceSubtotal)}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell>Delivery Fee</TableCell>
-                        <TableCell align="right">{ccyFormat(deliveryFee)}</TableCell>
+                        <TableCell align="right">{DataDisplayUtils.displayMoneyValue(deliveryFee)}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell className={classes.total}>Grand Total</TableCell>
-                        <TableCell align="right" className={classes.total}>{ccyFormat(invoiceTotal)}</TableCell>
+                        <TableCell align="right" className={classes.total}>{DataDisplayUtils.displayMoneyValue(invoiceTotal)}</TableCell>
                     </TableRow>
                     <TableRow>
                         <TableCell colSpan={4} className={classes.memo}>
