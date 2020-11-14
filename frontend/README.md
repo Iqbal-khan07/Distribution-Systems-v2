@@ -1,3 +1,163 @@
+
+# Commercial Distribution Solutions - Backend Team
+
+## Description
+This frontend project currently uses React, Facebook and Google OAuth, and several react modules
+like Materials UI along with Heroku to deploy this web application.
+This web application is a distribution center management system that allows authorized users to
+sign in and perform their appropriate tasks, like viewing invoices, placing and order, and viewing
+registered shops (customers) in the system.
+
+## What Works for the MVP
+Currently, our application features l
+
+## Setup
+To use this repository, you must follow these steps:
+### 0. Clone this repo
+1. Run `git clone https://github.com/Zoraiz-Naeem/Distribution-System-CS490`
+2. Go to github and make a new personal repository.
+3. To make your own personal repository and have your git point to it, run the following:
+    - `git remote rm origin`
+    - `git remote add origin http://www.github.com/<your-username>/<your-repo-name>`
+4. Run `git remote -v` and make sure this points to your newly created Github repo
+5. Now run `git push origin master`
+
+### 1. Upgrade Node version
+
+`$ nvm install`
+
+### 6. Install initial `npm` dependencies from `package.json`
+
+This command runs `npm`, which looks inside our `package.json` file, 
+retrieves a list of packages, and installs them to the `node_modules` folder
+inside your repository. `node_modules` folder **does not** need to be pushed
+to Heroku or GitHub.
+
+- `npm install` 
+- `npm install -g webpack`  
+- `npm install --save-dev webpack`  
+    **Note: This command MUST be run from the folder that contains package.json!**
+    **You will get an error if you are in a different folder!**
+- `npm install socket.io-client --save` 
+- `npm install html-react-parser` 
+- `npm install interweave react` 
+- `npm install react-facebook-login`
+- `npm install react-google-login` 
+
+:warning: :warning: :warning: If you see any error messages, make sure you use `sudo pip` or `sudo npm`.
+If it says "pip cannot be found", run `which pip` and use `sudo [path to pip from which pip] install` :warning: :warning: :warning:
+
+### 2. Create React App
+
+
+### 3. Setup OAuths
+#### Google OAuth
+1. Go to <https://console.developers.google.com/> and login using your personal google account (if you don't already have one, just sign up)
+2. Click "CREATE PROJECT" or in the dropdown menu called "Select a Project" in the top, click "NEW PROJECT".   
+3. Make a new project named ChatApp. "No organization" is fine.  
+4. Click "Credentials" in the left hand bar, then click "+ CREATE CREDENTIALS" and then click "OAuth client ID".  
+4.5. If you see a warning that says "To create an OAuth client ID, you must first set a 
+product name on the consent screen", do the following steps:  
+	a. Click the "CONFIGURE CONSENT SCREEN" button.
+	b. Choose "External"
+	c. For "Application name," specify "ChatApp" or something similar.
+	d. Press save.
+5. Go back to Credentials -> Create Credentials -> OAuth client ID. Click "web application".  
+6. Make name the "ChatApp" and under both Authorized JavaScript origins & Authorized redirect URIs you're going to click "Add URI" and paste the
+link for you website (once we deploy on heroku, we will have to add our heroku app link onto here too)
+7. Click "Create" and copy your Client ID. This ID will be pasted into your scripts/GoogleButton.jsx file.  Towards the bottom of the file, where
+it says `clientId="<some-id>"``, you're going to replace <some-id> with the Client ID you just copied.
+
+#### Facebook OAuth
+1. Go to <https://developers.facebook.com/> and login using your personal account (if you don't already have one, just sign up)
+2. Create an App. Select “for everything else” and specify Project Name (i.e. "ChatApp")
+3. Create App ID
+4. Under add a Product select “Facebook Login” Setup
+5. Enable Client OAuth login and Web OAuth login
+6. Under Valid OAuth Redirect URIs inser the link for your website (same as with the Facebook one).  Keep in mind we will need to add a new URI when
+we get our heroku app up.
+7. Save Changes
+8. Now you have your App ID that you can copy to make this work.  Include this key in your scripts/FacebookButton.jsx file towards the bottom of
+the file where if says `appId="<some-id>"``, you're going to replace <some-id> with the AppD you just copied.
+
+
+
+
+  
+### 7. Compile Javascript using Webpack
+
+This line starts up Webpack, which looks inside `webpack.config.js`, loads
+configuration options, and starts transpiling your JS code into 
+`static/script.js`. You may be asked to also install webpack-cli. Type **yes**.
+
+```$ npm run watch```
+
+***The program should not stop running. Leave it running!***
+
+If this step fails for whatever reason, please close your terminal and restart it,
+and re-run the command.
+
+### 8. Run the web app
+
+Simultaneously, while the Webpack is running, open a new terminal and run with `python app.py` 
+(from the same folder, but new terminal), then preview the running application,
+and verify that the React renders. You should the chat app.
+
+**Do not manually edit `static/script.js`! It will update when you make changes.**
+**You do need to push this file to Heroku and GitHub, which is why we put it in**
+**our .gitignore files**
+
+### 9. Deploying onto Heroku
+1. Sign up for heroku at <https://www.heroku.com/> 
+2. Install heroku by running `npm install -g heroku`
+
+
+#### Pushing files into Heroku
+1. On Heroku console, configure variables by adding your secret keys (from ipstack.env). Go to <https://dashboard.heroku.com/apps>
+    and click into your app. Click on Settings, then scroll to "Config Vars." Click
+    "Reveal Config Vars" and add the key value pairs for each variable used.
+    Your config var key names should be:
+    DATABASE_URL ***This is automatically configured***
+    IPSTACK_KEY
+2. Create and push heroku files
+    a. Configure Procfile with the command needed to run your app:
+    `web: python app.py`
+    b. Configure requirements.txt with all requirements needed to run your app:
+        i. Automatically load all requirements onto requirements.txt with `pip freeze > requirements.txt` command
+3.	Commit and push changes to git
+4.	Push onto heroku with `git push heroku master`
+5.	After the app builds, navigate to your newly-created heroku site!
+6.	If the app is not working then restart all dynos from heroku app console
+7. If you are still having issues, you may use heroku logs --tail to see what's wrong.
+
+
+
+## Troubleshoot
+1. I had difficulty understanding how to use sockets.  In particular, I was having a hard time trying to figure out how to
+prevent users who weren’t logged in yet from sending messages to the chat.  Also, I was having a hard time understanding
+how to display the messages that were saved on the database to a user only upon logging in.  To solve this problem, I 
+spent a long time reading the flask-socketio documentation.  I realized later that I could make use of the rooms feature 
+on sockets.  In doing this, I can make the main chat in the room, that the user can join only upon successful login.  
+Upon joining the room, the user was then emitted the chat history from the server
+2. I had a hard time rendering the messages that the user sent that were meant to be links/images.  The reason for this is 
+because the messages were being passed from the server to the client as strings so tags within the string were not being
+rendered and were being shown on the webpage.  As I did research, I found there exists a React component called Interweave 
+that parses the string and returns html tags.
+
+
+## Information on Individual Progress/Contributions
+### Zoraiz Naeem
+
+### Denisse Mendoza
+
+## Work Left Incomplete
+1. 
+
+## Frontend Team
+Zoraiz Naeem
+Denisse Mendoza
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -13,58 +173,3 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
