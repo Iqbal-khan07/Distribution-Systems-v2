@@ -62,3 +62,7 @@
 # Run the Project
 1. make sure you are in the "Distribution-System-CS490/backend" directory
 2. Enter the following command: python backend_main.python
+
+# Note About Unit Testing
+Unit testing was only conducted on every function in sql_related.py as all actual functionality resides there. Backend_main.py 
+functions are inherantly un-mockable / untestable as they set up exclusively the connexion and flask framework for the backend project to run on.

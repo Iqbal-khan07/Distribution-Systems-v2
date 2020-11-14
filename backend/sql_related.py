@@ -393,6 +393,7 @@ class Company(db.Model):
             "Company 2"))
             
         database.session.commit()
+
         
 class Company_zone(db.Model):
     """company_zone database table definition"""
@@ -537,8 +538,8 @@ class Company_product(db.Model):
             None))
             
         database.session.commit()
-      
-        
+
+
 class Shop_order(db.Model):
     """shop_order database table definition"""
     
@@ -760,7 +761,7 @@ def authenticate_default(database, data):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def authenticate_email(database, data, google):
     """this function authenticates a user based upon an email address 
@@ -788,7 +789,7 @@ def authenticate_email(database, data, google):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def request_company_product(database):
     """Returns a JSON of all company_product entries in the database"""
@@ -805,7 +806,7 @@ def request_company_product(database):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def request_shop_order_not_delivered(database):
     """Returns a JSON of all shop_order entries in the database 
@@ -824,7 +825,7 @@ def request_shop_order_not_delivered(database):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def request_shop(database):
     """Returns a JSON of all shop entries in the database"""
@@ -841,7 +842,7 @@ def request_shop(database):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def request_zone(database):
     """Returns a JSON of all zone entries in the database"""
@@ -858,7 +859,7 @@ def request_zone(database):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def request_shop_category(database):
     """Returns a JSON of all shop categories in the database"""
@@ -875,7 +876,7 @@ def request_shop_category(database):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def create_shop(database, data):
     """Adds a new entry to the shop table and populates shop_zone 
@@ -941,7 +942,7 @@ def create_shop(database, data):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def create_zone(database, data):
     """Adds a new entry to the Zone table based on JSON data"""
@@ -974,7 +975,7 @@ def create_zone(database, data):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def create_shop_category(database, data):
     """Adds a new entry to the Shop_category table based on JSON data"""
@@ -1007,7 +1008,7 @@ def create_shop_category(database, data):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def create_shop_order(database, data):
     """Adds a new entry to the Shop_order table and
@@ -1096,7 +1097,7 @@ def create_shop_order(database, data):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response
     
 def update_shop_order_delivered(database, data):
     """Updates a shop_order table entry as delivered based on JSON data"""
@@ -1155,4 +1156,4 @@ def update_shop_order_delivered(database, data):
         }
     
     database.session.close()    
-    return json.dumps(response, indent = 4)
+    return response

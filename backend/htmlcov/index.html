@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Coverage report</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.ba-throttle-debounce.min.js"></script>
+    <script type="text/javascript" src="jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="jquery.hotkeys.js"></script>
+    <script type="text/javascript" src="coverage_html.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(coverage.index_ready);
+    </script>
+</head>
+<body class="indexfile">
+<div id="header">
+    <div class="content">
+        <h1>Coverage report:
+            <span class="pc_cov">84%</span>
+        </h1>
+        <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
+        <form id="filter_container">
+            <input id="filter" type="text" value="" placeholder="filter..." />
+        </form>
+    </div>
+</div>
+<div class="help_panel">
+    <img id="panel_icon" src="keybd_open.png" alt="Hide keyboard shortcuts" />
+    <p class="legend">Hot-keys on this page</p>
+    <div>
+    <p class="keyhelp">
+        <span class="key">n</span>
+        <span class="key">s</span>
+        <span class="key">m</span>
+        <span class="key">x</span>
+        <span class="key">c</span> &nbsp; change column sorting
+    </p>
+    </div>
+</div>
+<div id="index">
+    <table class="index">
+        <thead>
+            <tr class="tablehead" title="Click to sort">
+                <th class="name left headerSortDown shortkey_n">Module</th>
+                <th class="shortkey_s">statements</th>
+                <th class="shortkey_m">missing</th>
+                <th class="shortkey_x">excluded</th>
+                <th class="right shortkey_c">coverage</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>759</td>
+                <td>119</td>
+                <td>0</td>
+                <td class="right" data-ratio="640 759">84%</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr class="file">
+                <td class="name left"><a href="api_py.html">api.py</a></td>
+                <td>47</td>
+                <td>20</td>
+                <td>0</td>
+                <td class="right" data-ratio="27 47">57%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="backend_main_py.html">backend_main.py</a></td>
+                <td>41</td>
+                <td>17</td>
+                <td>0</td>
+                <td class="right" data-ratio="24 41">59%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="html_request_test_py.html">html_request_test.py</a></td>
+                <td>71</td>
+                <td>39</td>
+                <td>0</td>
+                <td class="right" data-ratio="32 71">45%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="json_mock_py.html">json_mock.py</a></td>
+                <td>25</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="25 25">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="sql_related_py.html">sql_related.py</a></td>
+                <td>444</td>
+                <td>42</td>
+                <td>0</td>
+                <td class="right" data-ratio="402 444">91%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="test_sql_related_py.html">test_sql_related.py</a></td>
+                <td>131</td>
+                <td>1</td>
+                <td>0</td>
+                <td class="right" data-ratio="130 131">99%</td>
+            </tr>
+        </tbody>
+    </table>
+    <p id="no_rows">
+        No items found using the specified filter.
+    </p>
+</div>
+<div id="footer">
+    <div class="content">
+        <p>
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.3</a>,
+            created at 2020-11-14 04:44 +0000
+        </p>
+    </div>
+</div>
+</body>
+</html>

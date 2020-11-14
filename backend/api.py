@@ -47,7 +47,7 @@ def user_authenticate_default(auth_user_default):
 
     :return:        sorted list of people
     """
-    return json.loads(sql_related.authenticate_default(db, auth_user_default))
+    return sql_related.authenticate_default(db, auth_user_default)
     
 def user_authenticate_gmail(auth_user_gmail):
     """
@@ -58,7 +58,7 @@ def user_authenticate_gmail(auth_user_gmail):
     :return:        201 on success, 406 on person exists
     """
     
-    return json.loads(sql_related.authenticate_email(db, auth_user_gmail, True))
+    return sql_related.authenticate_email(db, auth_user_gmail, True)
     
     """
     # Does the person exist already?
@@ -88,7 +88,7 @@ def user_authenticate_fb(auth_user_fb):
     :return:        201 on success, 406 on person exists
     """
     
-    return json.loads(sql_related.authenticate_email(db, auth_user_fb, False))
+    return sql_related.authenticate_email(db, auth_user_fb, False)
     
     """
     # Does the person exist already?
@@ -116,7 +116,7 @@ def get_company_product():
     :param lname:   last name of person to find
     :return:        person matching last name
     """
-    return json.loads(sql_related.request_company_product(db))
+    return sql_related.request_company_product(db)
     
     # Does the person exist in people?
     """
@@ -139,7 +139,7 @@ SHOP RELATED ENDPOINT FUNCITONS
 
 def get_order_not_delivered():
     # Create the list of people from our data name city street providence
-    return json.loads(sql_related.request_shop_order_not_delivered(db))
+    return sql_related.request_shop_order_not_delivered(db)
 
 # Create a handler for our read (GET) people
 def get_all_shops():
@@ -149,7 +149,7 @@ def get_all_shops():
 
     :return:        sorted list of people
     """
-    return json.loads(sql_related.request_shop(db))
+    return sql_related.request_shop(db)
     
 def get_all_zones():
     """
@@ -158,7 +158,7 @@ def get_all_zones():
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    return json.loads(sql_related.request_zone(db))
+    return sql_related.request_zone(db)
     
     """
     # Does the person exist already?
@@ -186,7 +186,7 @@ def get_all_shop_category():
     :param lname:   last name of person to find
     :return:        person matching last name
     """
-    return json.loads(sql_related.request_shop_category(db))
+    return sql_related.request_shop_category(db)
     # Does the person exist in people?
     """
     if shop_name in SHOP:
@@ -215,7 +215,7 @@ def shop_create(new_shop):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    return json.loads(sql_related.create_shop(db, new_shop))
+    return sql_related.create_shop(db, new_shop)
     
     """
     # Does the person exist already?
@@ -244,7 +244,7 @@ def zone_create(new_zone):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    return json.loads(sql_related.create_zone(db, new_zone))
+    return sql_related.create_zone(db, new_zone)
     
     """
     # Does the person exist already?
@@ -273,7 +273,7 @@ def shop_category_create(new_shop_category):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    return json.loads(sql_related.create_shop_category(db, new_shop_category))
+    return sql_related.create_shop_category(db, new_shop_category)
     
     """
     # Does the person exist already?
@@ -302,7 +302,7 @@ def shop_order_create(new_shop_order):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    return json.loads(sql_related.create_shop_order(db, new_shop_order))
+    return sql_related.create_shop_order(db, new_shop_order)
     
     """
     # Does the person exist already?
@@ -331,7 +331,7 @@ def shop_order_update(update_shop_order):
     :param person:  person to create in people structure
     :return:        201 on success, 406 on person exists
     """
-    return json.loads(sql_related.update_shop_order_delivered(db, update_shop_order))
+    return sql_related.update_shop_order_delivered(db, update_shop_order)
     
     """
     # Does the person exist already?
