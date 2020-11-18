@@ -691,7 +691,7 @@ def authenticate_default(database, data):
         response_inner = "invalid login credentials"
         
     response = {
-            "authenticate_default_response": response_inner
+            "data": response_inner
         }
     
     database.session.close()    
@@ -726,7 +726,7 @@ def authenticate_email(database, data, google):
         response_inner = "invalid login credentials"
         
     response = {
-            "authenticate_email_response": response_inner
+            "data": response_inner
         }
     
     database.session.close()    
@@ -744,7 +744,7 @@ def request_company_product(database):
         result.append(item.request_company_product_info(database))
         
     response = {
-            "request_company_product_response": result
+            "data": result
         }
     
     database.session.close()    
@@ -765,7 +765,7 @@ def request_shop_order_not_delivered(database):
         result.append(item.request_shop_order(database))
         
     response = {
-            "request_shop_order_not_delivered_response": result
+            "data": result
         }
     
     database.session.close()    
@@ -783,7 +783,7 @@ def request_shop(database):
         result.append(item.request_shop_info(database))
         
     response = {
-            "request_shop_response": result
+            "data": result
         }
     
     database.session.close()    
@@ -801,7 +801,7 @@ def request_zone(database):
         result.append(item.request_zone_info())
         
     response = {
-            "request_zone_response": result
+            "data": result
         }
     
     database.session.close()    
@@ -819,7 +819,7 @@ def request_shop_category(database):
         result.append(item.request_category_info())
         
     response = {
-            "request_shop_category_response": result
+            "data": result
         }
     
     database.session.close()    
@@ -895,7 +895,7 @@ def create_shop(database, data):
         response_inner = "404: Invalid category id"
         
     response = {
-            "create_shop_response": response_inner
+            "data": response_inner
         }
     
     database.session.close()    
@@ -931,7 +931,7 @@ def create_zone(database, data):
         response_inner = "404: zone already exists"
     
     response = {
-            "create_zone_response": response_inner
+            "data": response_inner
         }
     
     database.session.close()    
@@ -969,7 +969,7 @@ def create_shop_category(database, data):
         response_inner = "404: shop category already exists"
     
     response = {
-            "create_shop_category_response": response_inner
+            "data": response_inner
         }
     
     database.session.close()    
@@ -1079,7 +1079,7 @@ def create_shop_order(database, data):
                 
     
     response = {
-            "create_shop_response": response_inner
+            "data": response_inner
         }
     
     database.session.close()    
@@ -1142,7 +1142,7 @@ def update_shop_order_delivered(database, data):
         response_inner = "404: Invalid shop order id"
     
     response = {
-            "update_shop_order_delivered_response": response_inner
+            "data": response_inner
         }
     
     database.session.close()    
