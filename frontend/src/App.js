@@ -12,6 +12,7 @@ import './App.css';
 import Orders from "./pages/Orders/Orders";
 
 import axios from "axios"
+import OrderFulfillerDashboard from "./pages/OrderFulfillerDashboard/OrderFulfillerDashboard";
 
 axios.defaults.baseURL = "https://immense-retreat-89767.herokuapp.com/api/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -24,6 +25,7 @@ function App() {
                 <ThemeProvider theme={theme}>
                     <Route path={'/'} render={() => <Home />} exact />
                     <Route path={'/about'} render={() => <About />} exact />
+                    <Route path={'/dashboard'} render={() => <OrderFulfillerDashboard />} exact />
                     <Route path={'/orders'} render={() => <Orders />} exact />
                     <Route path={'/shoptracker'} render={() => <ShopTracker />} exact />
                 </ThemeProvider>
