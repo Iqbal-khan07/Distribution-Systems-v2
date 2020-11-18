@@ -1,5 +1,7 @@
-import FacebookLogin from 'react-facebook-login';
+import React from "react";
+import FacebookLogin from 'react-facebook-login'
 import { useHistory } from "react-router-dom";
+
 
 
 export default function FacebookButton() {
@@ -26,6 +28,8 @@ export default function FacebookButton() {
       fields="name,email,picture"
       onClick=""
       callback={responseFacebook}
-      isSignedIn={false} />
+      isSignedIn={false}
+    />
+
   );
 }
