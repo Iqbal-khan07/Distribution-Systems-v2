@@ -27,9 +27,9 @@ import axios from 'axios';
 //     createData(1014, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
 // ];
 
-function createData(id, customer, date, amount, memo, status) {
-    return { id, customer, date, amount, memo, status };
-}
+// function createData(id, customer, date, amount, memo, status) {
+//     return { id, customer, date, amount, memo, status };
+// }
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
@@ -110,7 +110,7 @@ const Orders = () => {
                     name: p.name,
                     unitPrice: p.price_sell_per_unit
                 }
-            }).filter((p) => p.id < 5)
+            })
             setProductOptions(productsList)
 
             response = await axios.get("/shop/request/not_delivered");

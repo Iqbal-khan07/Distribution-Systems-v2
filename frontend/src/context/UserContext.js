@@ -10,6 +10,7 @@ export const UserContext = createContext();
 
 const UserContextProvider = ({children}) => {
     const [user, setUser] = useState({
+        id: 100,
         email: undefined,
         name: "Zoraiz Naeem",
         role: undefined,
@@ -49,6 +50,10 @@ const UserContextProvider = ({children}) => {
         setUser({name: name, ...user})
     }
 
+    const setId = (id) => {
+        setUser({id: id, ...user})
+    }
+
     const setDisplayId = (displayId) => {
         setUser({displayId: displayId, ...user})
     }
@@ -66,7 +71,7 @@ const UserContextProvider = ({children}) => {
     }
 
     return (
-        <UserContext.Provider value={{user, setName, setDisplayId, setImageUrl, setUserObject, setUserEmail}}>
+        <UserContext.Provider value={{user, setName, setDisplayId, setImageUrl, setUserObject, setUserEmail, setId}}>
             {children}
         </UserContext.Provider>
     )

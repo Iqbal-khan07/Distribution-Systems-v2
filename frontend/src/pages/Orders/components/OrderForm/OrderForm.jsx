@@ -1,10 +1,9 @@
-import React from "react";
+import React, {useContext} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Backdrop from "@material-ui/core/Backdrop";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
-
 
 import OrderProductTable from "../OrderProductTable/OrderProductTable";
 import {Button} from "@material-ui/core";
@@ -13,11 +12,15 @@ import * as Yup from "yup"
 import {Formik, Form, Field} from "formik"
 import { TextField, fieldToTextField } from 'formik-material-ui'
 import MenuItem from "@material-ui/core/MenuItem";
+import Grid from "@material-ui/core/Grid";
 
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from 'formik-material-ui-pickers';
 import MuiTextField from '@material-ui/core/TextField';
+
+import axios from 'axios'
+import {UserContext} from "../../../../context/UserContext";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -26,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
     paper_root: {
         padding: "15px",
-        height: "70%",
+        // height: "70%",
         margin: "100px auto",
         textAlign: "center",
         backgroundColor: "#ffffff",
@@ -54,7 +57,39 @@ const useStyles = makeStyles((theme) => ({
             color: "#e5e4e4"
         }
     },
+    title: {
+        display: "inline",
+        color: "#5DB285",
+        fontSize: '2rem',
+        fontWeight: "bold"
+    },
+    // shop select
+    formControl: {
+        margin: theme.spacing(1),
+        width: 300,
+        marginRight: '100%'
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+    // date select
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        margin: theme.spacing(1),
+        marginBottom: theme.spacing(3),
+        marginRight: '100%',
+        width: 300
+    },
+    //memo
+    memo: {
+        marginTop: theme.spacing(2),
+        width: '100%'
+    },
     submitButton: {
+        marginTop: theme.spacing(3),
         backgroundColor: "#5DB285",
         color: "#e5e4e4",
         width: 170,
@@ -67,33 +102,8 @@ const useStyles = makeStyles((theme) => ({
         }
 
     },
-    title: {
-        display: "inline",
-        color: "#5DB285",
-        fontSize: '2rem',
-        fontWeight: "bold"
-    },
-    // shop select
-    formControl: {
-        margin: theme.spacing(1),
-        maxWidth: 300,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-    // date select
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 300
-    },
 
 }));
-
 
 const DELIVERY_DATE = 'deliveryDate'
 const SELECTED_SHOP = 'shop'
@@ -101,17 +111,7 @@ const PRODUCT_QUANTITY = 'products'
 const MEMO = 'memo'
 
 const validationSchema = Yup.object({
-    // name: Yup.string("Enter a name")
-    //     .required("Name is required"),
-    // email: Yup.string("Enter your email")
-    //     .email("Enter a valid email")
-    //     .required("Email is required"),
-    // password: Yup.string("")
-    //     .min(8, "Password must contain at least 8 characters")
-    //     .required("Enter your password"),
-    // confirmPassword: Yup.string("Enter your password")
-    //     .required("Confirm your password")
-    //     .oneOf([Yup.ref("password")], "Password does not match")
+    [SELECTED_SHOP]: Yup.number().required()
 })
 
 const initializeProductQuantity = (products) => {
@@ -120,6 +120,18 @@ const initializeProductQuantity = (products) => {
         productsQuantityObject[products[i].id] = 0
     }
     return productsQuantityObject
+}
+
+const covertToAPIProductQuantity = (input) => {
+    const keys = Object.keys(input);
+    const output = []
+    for(const key in keys){
+        output.push({
+            id: key,
+            quantity_units: input[key]
+        })
+    }
+    return output;
 }
 
 function multiLine(props){
@@ -142,9 +154,9 @@ function multiLine(props){
 }
 
 
-
 export default function OrderForm({showForm, onCloseButtonHandler, products, shops}){
     const classes = useStyles();
+    const {user} = useContext(UserContext);
 
     const shopSelect = (
         <Field
@@ -185,6 +197,7 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
           name={MEMO}
           type="test"
           label="Memo"
+          className={classes.memo}
 
         />
     )
@@ -198,12 +211,19 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                 [MEMO]: ''
             }}
             validationSchema={validationSchema}
-            onSubmit={(values, {setSubmitting, resetForm}) => {
-                  setTimeout(() => {
-                    setSubmitting(false);
-                    resetForm()
-                    alert(JSON.stringify(values, null, 2));
-                  }, 500);
+            onSubmit={async (values, {setSubmitting, resetForm}) => {
+                setSubmitting(true)
+                resetForm()
+                const response = await axios.post('/shop_order/create', {
+                    create_shop_order: {
+                        shop_id: values[SELECTED_SHOP],
+                        price_paid: false,
+                        order_taker_id: user.id,
+                        order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
+                    }
+                })
+                setSubmitting(false)
+                console.log(response)
             }}
         >
             {({submitForm, isSubmitting, touched, errors, values}) => (
@@ -223,30 +243,37 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                         </div>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Form>
-                                <div className={classes.form_container}>
-                                    {shopSelect}
-                                    <br />
-                                    {dateSelect}
-                                    <br />
-                                    <br />
-                                    <OrderProductTable
-                                        products={products}
-                                        value={values[PRODUCT_QUANTITY]}
-                                        name={PRODUCT_QUANTITY}
-                                    />
-                                    <br />
-                                    {memo}
-                                    <br />
-                                </div>
-                                <div style={{position: 'absolute', width: "100%", bottom: 10}}>
-                                    <Button
-                                        className={classes.submitButton}
-                                        disabled={isSubmitting}
-                                        onClick={submitForm}
-                                    >
-                                        Place Order
-                                    </Button>
-                                </div>
+                                <Grid container direction={"column"}>
+                                    <Grid container item direction={"column"}>
+                                        <Grid>
+                                            {shopSelect}
+                                        </Grid>
+                                        <Grid>
+                                            {dateSelect}
+                                        </Grid>
+                                    </Grid>
+                                    <Grid>
+                                        <OrderProductTable
+                                            products={products}
+                                            value={values[PRODUCT_QUANTITY]}
+                                            name={PRODUCT_QUANTITY}
+                                        />
+                                    </Grid>
+                                    <Grid>
+                                        {memo}
+                                    </Grid>
+                                    <Grid>
+                                        <Grid>
+                                            <Button
+                                                className={classes.submitButton}
+                                                disabled={isSubmitting}
+                                                onClick={submitForm}
+                                            >
+                                                Place Order
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
                             </Form>
                         </MuiPickersUtilsProvider>
                     </Paper>

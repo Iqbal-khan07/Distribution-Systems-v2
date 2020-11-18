@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
         border: "1px solid",
         borderColor: "#534e4e",
         borderBottom: "0px solid",
-        borderRadius: 10
+        borderRadius: 10,
     },
     tableRowCell: {
         fontWeight: "bold",
@@ -144,7 +144,7 @@ export default function OrderProductTable({products, value}) {
 
 
     return (
-        <div style={{ height: 400}}>
+        <div>
             <TableContainer component={Paper} className={classes.table}>
               <Table size={"small"}>
                 <TableHead>

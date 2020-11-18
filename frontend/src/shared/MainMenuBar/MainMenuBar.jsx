@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Button} from '@material-ui/core';
 import styles from './MainMenuBar.module.css';
 import { StylesProvider } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
-import SignInDialogue from "./components/SignInDialogue";
+import SignInDialogue from "../../pages/SignInDialogue/SignInDialogue";
 
 const MainMenuBar = () => {
     const [open, setOpen] = React.useState(false);
