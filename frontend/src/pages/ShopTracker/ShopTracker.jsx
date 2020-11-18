@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 
 import ShopInfoPaper from "./components/ShopInfoPaper/ShopInfoPaper";
 import ShopTable from "./components/ShopTable/ShopTable";
 import TotalShopsCard from "./components/TotalShopsCard/TotalShopsCard";
-import {Grid} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import ShowAddShopFormButton from "./components/ShowAddShopFormButton/ShowAddShopFormButton";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
-  rootContainer: {
-  }
+    rootContainer: {
+    }
 }));
 
 // shop: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const mapShopsToShopOptions = (shops) => {
     return shops.map((s) => {
         return {
-            id: s.id ,
+            id: s.id,
             name: s.name,
             address: `${s.street}, ${'USA'}`,
             status: 'Pending'
@@ -41,7 +41,7 @@ const ShopTracker = () => {
     const [selectedShop, setSelectedShop] = useState(null);
 
 
-    useEffect(  () => {
+    useEffect(() => {
         async function fetchData() {
             let response = await axios.get("/shop/request/all");
             let body = response.data;
@@ -73,12 +73,16 @@ const ShopTracker = () => {
         <WithSignedInSkeleton title={'Shop Tracker'}>
             {!loading ? (
                 <>
-                        <Grid container spacing={3} className={classes.rootContainer}>
-                            <Grid item lg={10}>
+                    <Grid container lg={12} xs={12} spacing={3} className={classes.rootContainer}>
+                        <Grid item lg={9} xs={12}>
+                        <Grid container>
+                            <Grid item lg={12} xs={12}>
                                 <ShopTable
                                     rows={mapShopsToShopOptions(shops)}
                                     shopShowDetailHandler={shopShowDetailHandler}
                                 />
+                            </Grid>
+                            <Grid item lg={12} xs={12}>
                                 <ShopInfoPaper
                                     id={selectedShop.id}
                                     name={selectedShop.name}
@@ -89,21 +93,25 @@ const ShopTracker = () => {
                                     zoneName={selectedShop.zoneName}
                                 />
                             </Grid>
-                            <Grid item lg={2} container direction={"column"} spacing={2}>
-                                <Grid item>
+                        </Grid>
+                        </Grid>
+                        <Grid item lg={3} xs={12}>
+                            <Grid container spacing={2} justify="center">
+                                <Grid item lg={12} xs={6}>
                                     <ShowAddShopFormButton
                                         disable={showOrderForm}
                                         // onClickHandler={onFormShowHandler}
                                         title={"Add New Shop"}
                                     />
                                 </Grid>
-                                <Grid item>
+                                <Grid item lg={12} xs={6}>
                                     <TotalShopsCard
                                         shopnumbers={shops.length}
                                     />
                                 </Grid>
                             </Grid>
                         </Grid>
+                    </Grid>
                     {/*{showOrderForm ? (*/}
                     {/*    <OrderForm*/}
                     {/*        showForm={showOrderForm}*/}
@@ -114,7 +122,7 @@ const ShopTracker = () => {
                     {/*) : null}*/}
                 </>
 
-            ): <CircularProgress />
+            ) : <CircularProgress />
 
             }
         </WithSignedInSkeleton>

@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: 40,
         minWidth: "500px",
-        maxWidth: "90%",
         minHeight: "250px",
 
         backgroundColor: '#BFDCCD',

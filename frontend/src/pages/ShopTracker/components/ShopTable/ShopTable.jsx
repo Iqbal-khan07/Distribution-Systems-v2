@@ -100,7 +100,7 @@ export default function ShopTable({rows, shopShowDetailHandler}) {
   
   return (
       <StylesProvider injectFirst>
-    <TableContainer component={Paper} style={{maxWidth: "90%"}}>
+    <TableContainer component={Paper}>
         <Toolbar>
             <Typography variant="h6" className={styles.title}>
                 Shops
