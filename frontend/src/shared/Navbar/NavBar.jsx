@@ -52,7 +52,7 @@ const Navbar = (props) => {
     const {expanded, handleToggleOpen, userName, urlLink, pageName, handleLogout} = props;
     return (
         <AppBar
-            position="absolute"
+            position="fixed"
             className={clsx(classes.appBar, {
                 [classes.appBarShift]: expanded,
             })}

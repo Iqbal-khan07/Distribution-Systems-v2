@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 import ShowAddOrderFormButton from "./components/ShowAddOrderFormButton/ShowAddOrderFormButton";
 import OrderTable from "./components/OrderTable/OrderTable";
@@ -33,7 +33,6 @@ function createData(id, customer, date, amount, memo, status) {
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
-        margin: "20px 0"
     }
 }));
 
@@ -71,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 const calculateTotalAmountFromOrderItems = (orderItems) => {
     let cost = 0;
-    for(let i=0; i < orderItems.length; i++){
+    for (let i = 0; i < orderItems.length; i++) {
         cost += orderItems[i].productTotalCost
     }
     return cost;
@@ -80,7 +79,7 @@ const calculateTotalAmountFromOrderItems = (orderItems) => {
 const mapOrdersToOrderOptions = (orders) => {
     return orders.map((o) => {
         return {
-            id: o.id ,
+            id: o.id,
             customer: o.shopName,
             date: o.date,
             amount: calculateTotalAmountFromOrderItems(o.orderItems),
@@ -92,7 +91,7 @@ const mapOrdersToOrderOptions = (orders) => {
 }
 
 const Orders = () => {
-    const classes =useStyles();
+    const classes = useStyles();
     const [productOptions, setProductOptions] = useState([]);
     const [orders, setOrders] = useState([]);
     const [shopOptions, setShopOptions] = useState([]);
@@ -101,7 +100,7 @@ const Orders = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
 
     // TODO FIX THE ORDER FORM!
-    useEffect(  () => {
+    useEffect(() => {
         async function fetchData() {
             let response = await axios.get("company_product/request/all");
             let body = response.data;
@@ -123,7 +122,7 @@ const Orders = () => {
                         productName: item.company_product.name,
                         productUnitPrice: item.company_product.price_sell_per_unit,
                         unitsOrdered: item.quantity_units,
-                        productTotalCost: item.quantity_units*item.company_product.price_sell_per_unit
+                        productTotalCost: item.quantity_units * item.company_product.price_sell_per_unit
                     }
                 })
 
@@ -182,36 +181,42 @@ const Orders = () => {
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
                 <>
-                    <div className={classes.rootContainer}>
-                        <Grid container spacing={3}>
-                            <Grid item lg={9}>
-                                <OrderTable
-                                    rows={mapOrdersToOrderOptions(orders)}
-                                    orderShowDetailHandler={orderShowDetailHandler}
-                                />
-                                <OrderInfoPage
-                                    details={selectedOrder}
-                                />
+                    <Grid container lg={12} xs={12} spacing={3}>
+                        <Grid item lg={9} xs={12}>
+                            <Grid container>
+                                <Grid item lg={12} xs={12}>
+                                    <OrderTable
+                                        rows={mapOrdersToOrderOptions(orders)}
+                                        orderShowDetailHandler={orderShowDetailHandler}
+                                    />
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                    <OrderInfoPage
+                                        details={selectedOrder}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item lg={3} container direction={"column"} spacing={2}>
-                                <div>
+                        </Grid>
+                        <Grid item lg={3} xs={12}>
+                            <Grid container spacing={2} justify="center">
+                                <Grid item lg={12} xs={6}>
                                     <ShowAddOrderFormButton
                                         disable={showOrderForm}
                                         onClickHandler={onFormShowHandler}
                                         title={"Add New Order"}
                                     />
-                                </div>
-                                <div>
+                                </Grid>
+                                <Grid item lg={12} xs={6}>
                                     <OrderStatus
                                         delivered={0}
                                         paid={0}
                                         pending={2}
                                         credit={0}
                                     />
-                                </div>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </div>
+                    </Grid>
                     {showOrderForm ? (
                         <OrderForm
                             showForm={showOrderForm}

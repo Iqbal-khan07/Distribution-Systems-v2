@@ -8,8 +8,8 @@ import React from "react";
 
 const useStyles = makeStyles((theme) => ({
     card: {
-        minWidth: '300px',
-        maxWidth: 300
+        minWidth: '200px',
+        maxWidth: '300px',
     },
     root: {
         padding: '0px',
