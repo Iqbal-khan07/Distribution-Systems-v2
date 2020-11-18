@@ -215,18 +215,15 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                 setSubmitting(true)
                 resetForm()
                 const response = await axios.post('/shop_order/create', {
-                    shop_id: values[SELECTED_SHOP],
-                    price_paid: false,
-                    order_taker_id: user.id,
-                    order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
+                    create_shop_order: {
+                        shop_id: values[SELECTED_SHOP],
+                        price_paid: false,
+                        order_taker_id: user.id,
+                        order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
+                    }
                 })
                 setSubmitting(false)
                 console.log(response)
-                  // setTimeout(() => {
-                  //   setSubmitting(false);
-                  //   resetForm()
-                  //   alert(JSON.stringify(values, null, 2));
-                  // }, 500);
             }}
         >
             {({submitForm, isSubmitting, touched, errors, values}) => (
