@@ -33,7 +33,6 @@ function createData(id, customer, date, amount, memo, status) {
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
-        margin: "20px 0"
     }
 }));
 
@@ -182,7 +181,6 @@ const Orders = () => {
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
                 <>
-                    <div className={classes.rootContainer}>
                         <Grid container spacing={3}>
                             <Grid item lg={9}>
                                 <OrderTable
@@ -211,7 +209,6 @@ const Orders = () => {
                                 </div>
                             </Grid>
                         </Grid>
-                    </div>
                     {showOrderForm ? (
                         <OrderForm
                             showForm={showOrderForm}

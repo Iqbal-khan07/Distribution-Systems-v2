@@ -12,7 +12,6 @@ import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   rootContainer: {
-      margin: "20px 0"
   }
 }));
 
@@ -74,9 +73,8 @@ const ShopTracker = () => {
         <WithSignedInSkeleton title={'Shop Tracker'}>
             {!loading ? (
                 <>
-                    <div className={classes.rootContainer}>
-                        <Grid container spacing={3}>
-                            <Grid item lg={9}>
+                        <Grid container spacing={3} className={classes.rootContainer}>
+                            <Grid item lg={10}>
                                 <ShopTable
                                     rows={mapShopsToShopOptions(shops)}
                                     shopShowDetailHandler={shopShowDetailHandler}
@@ -91,22 +89,21 @@ const ShopTracker = () => {
                                     zoneName={selectedShop.zoneName}
                                 />
                             </Grid>
-                            <Grid item lg={3} container direction={"column"} spacing={2}>
-                                <div>
+                            <Grid item lg={2} container direction={"column"} spacing={2}>
+                                <Grid item>
                                     <ShowAddShopFormButton
                                         disable={showOrderForm}
                                         // onClickHandler={onFormShowHandler}
                                         title={"Add New Shop"}
                                     />
-                                </div>
-                                <div>
+                                </Grid>
+                                <Grid item>
                                     <TotalShopsCard
                                         shopnumbers={shops.length}
                                     />
-                                </div>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </div>
                     {/*{showOrderForm ? (*/}
                     {/*    <OrderForm*/}
                     {/*        showForm={showOrderForm}*/}

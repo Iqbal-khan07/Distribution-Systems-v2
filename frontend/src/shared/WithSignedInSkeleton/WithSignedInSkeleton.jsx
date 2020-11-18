@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+
+    contentContainer: {
+        paddingTop: theme.spacing(3),
+    },
 }));
 
 const WithSignedInSkeleton = ({children, title}) => {
@@ -58,7 +62,9 @@ const WithSignedInSkeleton = ({children, title}) => {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <Typography variant={"h4"} className={classes.title}>{title}</Typography>
+                <div className={classes.contentContainer}>
                 {children}
+                </div>
             </main>
         </div>
     )
