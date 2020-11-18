@@ -53,7 +53,7 @@ def restEndpoint():
     app_connexion = connexion.App(__name__, specification_dir="./")
     CORS(app_connexion.app)
     # Read the swagger.yml file to configure the endpoints
-    app_connexion.add_api("swagger.yml")
+    app_connexion.add_api("swagger.yml", validate_responses=True)
 
 
 if __name__ == "__main__":

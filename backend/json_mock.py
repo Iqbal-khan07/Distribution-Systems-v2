@@ -2,19 +2,19 @@ import json
 
 
 def authenticate_default():
-    jsonmock = {"authenticate_default": {"username": "denisse", "password": "dm123"}}
+    jsonmock = {"data": {"username": "denisse", "password": "dm1234"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def authenticate_email_google():
-    jsonmock = {"authenticate_email": {"email": "order_taker@gmail.com"}}
+    jsonmock = {"data": {"email": "order_taker@gmail.com"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def authenticate_email_facebook():
-    jsonmock = {"authenticate_email": {"email": "order_taker@other.com"}}
+    jsonmock = {"data": {"email": "order_taker@other.com"}}
 
     return json.dumps(jsonmock, indent=4)
 

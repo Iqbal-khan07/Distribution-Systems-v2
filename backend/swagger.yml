@@ -16,34 +16,40 @@ basePath: "/api"
 
 #Change definitions soon
 # Paths supported by the server application
+
 paths:
   /user/authenticate/default:
     post:
       operationId: api.user_authenticate_default
       tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+        - sys_user
+      summary: Authentication
+      description: Authenticate user with username and password
       parameters:
         - name: auth_user_default
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              authenticate_default:
+              data:
                 type: object
                 properties:
                   username:
                     type: string
-                    description: Email of user to create
+                    description: User username
                   password:
                     type: string
-                    description: Email of user to create    
+                    description: User password
+                required:
+                  - username
+                  - password
+            required:
+              - data
       responses:
         200:
-          description: Successful read user list operation
+          description: Successful authentication
           schema:
             type: object
             properties:
@@ -51,7 +57,7 @@ paths:
                 type: object
                 properties:
                   id:
-                    type: string
+                    type: integer
                   name_first:
                     type: string
                   name_last:
@@ -68,7 +74,7 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: string
+                        type: integer
                       name:
                         type: string
 
@@ -76,29 +82,30 @@ paths:
     post:
       operationId: api.user_authenticate_gmail
       tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+        - sys_user
+      summary: Authentication
+      description: Authenticate user with google email
       parameters:
         - name: auth_user_gmail
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              authenticate_default:
+              data:
                 type: object
                 properties:
-                  username:
+                  email:
                     type: string
-                    description: Email of user to create
-                  password:
-                    type: string
-                    description: Email of user to create    
+                    description: User gmail
+                required:
+                 - email
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list operation
+          description: Successful authentication
           schema:
             type: object
             properties:
@@ -106,7 +113,7 @@ paths:
                 type: object
                 properties:
                   id:
-                    type: string
+                    type: integer
                   name_first:
                     type: string
                   name_last:
@@ -123,7 +130,7 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: string
+                        type: integer
                       name:
                         type: string
 
@@ -131,29 +138,30 @@ paths:
     post:
       operationId: api.user_authenticate_fb
       tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+        - sys_user
+      summary: Authentication
+      description: Authenticate user with facebook email
       parameters:
         - name: auth_user_fb
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              authenticate_default:
+              data:
                 type: object
                 properties:
-                  username:
+                  email:
                     type: string
-                    description: Email of user to create
-                  password:
-                    type: string
-                    description: Email of user to create    
+                    description: User facebook email
+                required:
+                 - email
+            required:
+             - data    
       responses:
         200:
-          description: Successful read user list operat
+          description: Successful authentication
           schema:
             type: object
             properties:
@@ -161,7 +169,7 @@ paths:
                 type: object
                 properties:
                   id:
-                    type: string
+                    type: integer
                   name_first:
                     type: string
                   name_last:
@@ -178,7 +186,7 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: string
+                        type: integer
                       name:
                         type: string
   

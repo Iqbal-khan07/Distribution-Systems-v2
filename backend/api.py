@@ -40,71 +40,56 @@ USER RELATED ENDPOINT FUNCTIONS
 
 def user_authenticate_default(auth_user_default):
     """
-    This function responds to a request for /api/people
-    with the complete lists of people
-
-    :return:        sorted list of people
+    This function links with endpoint:
+    /user/authenticate/default
+    through swagger.yml
     """
-    return sql_related.authenticate_default(db, auth_user_default)
+
+    response = sql_related.authenticate_default(db, auth_user_default)
+
+    if type(response) == int:
+        if response == 0:
+            return "Unauthorized", 401
+        else:
+            return "Bad Request", 400
+    else:
+        return response
 
 
 def user_authenticate_gmail(auth_user_gmail):
     """
-
-    This function creates a new person in the people structure
-    based on the passed in person data
-    :param person:  person to create in people structure
-    :return:        201 on success, 406 on person exists
+    This function links with endpoint:
+    /user/authenticate/gmail
+    through swagger.yml
     """
-    return sql_related.authenticate_email(db, auth_user_gmail, True)
-    
-    """
-    # Does the person exist already?
-    if email not in USER and email is not None:
 
-        db.session.commit()
+    response =  sql_related.authenticate_email(db, auth_user_gmail, True)
 
-        return make_response(
-            "{email} successfully created".format(email=email), 201
-        )
-
-    # Otherwise, they exist, that's an error
+    if type(response) == int:
+        if response == 0:
+            return "Unauthorized", 401
+        else:
+            return "Bad Request", 400
     else:
-        abort(
-            406,
-            "Person with last name {email} already exists".format(email=email),
-        )
-
-    """
+        return response
 
 
 def user_authenticate_fb(auth_user_fb):
     """
-
-    This function creates a new person in the people structure
-    based on the passed in person data
-    :param person:  person to create in people structure
-    :return:        201 on success, 406 on person exists
+    This function links with endpoint:
+    /user/authenticate/facebook
+    through swagger.yml
     """
-    return sql_related.authenticate_email(db, auth_user_fb, False)
-    """
-    # Does the person exist already?
-    if email not in USER and email is not None:
+    
+    response =  sql_related.authenticate_email(db, auth_user_fb, False)
 
-        db.session.commit()
-
-        return make_response(
-            "{email} successfully created".format(email=email), 201
-        )
-
-    # Otherwise, they exist, that's an error
+    if type(response) == int:
+        if response == 0:
+            return "Unauthorized", 401
+        else:
+            return "Bad Request", 400
     else:
-        abort(
-            406,
-            "Person with last name {email} already exists".format(email=email),
-        )
-
-    """
+        return response
 
 
 def get_company_product():

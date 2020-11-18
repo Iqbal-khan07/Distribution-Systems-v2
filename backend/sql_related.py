@@ -669,13 +669,20 @@ def database_bootstrap(database):
 
 # database queries for HTTP requests
 def authenticate_default(database, data):
-    """this function authenticates a user based upon sys_username
-    and password by checking passed parameters against the database"""
+    """
+    This function authenticates a user based upon 
+    Sys_user: sys_username and password database fields
+    by checking passed parameters against the database
+
+    return values and what they mean:
+
+    0: invalid login credentials
+    """
 
     data_loaded = data
 
-    username_login = data_loaded["authenticate_default"]["username"]
-    password_login = data_loaded["authenticate_default"]["password"]
+    username_login = data_loaded["data"]["username"]
+    password_login = data_loaded["data"]["password"]
 
     query_result = (
         database.session.query(Sys_user)
@@ -688,24 +695,33 @@ def authenticate_default(database, data):
     if query_result:
         response_inner = query_result[0].request_sys_user_info(database)
     else:
-        response_inner = "invalid login credentials"
-        
+        return 0
+
     response = {
             "data": response_inner
         }
     
-    database.session.close()    
+    database.session.close()
+
     return response
 
 
 def authenticate_email(database, data, google):
-    """this function authenticates a user based upon an email address
-    if google = True, this is a google login
-    if google = False, this is a Facebook login"""
+    """
+    This function authenticates a user based upon 
+    Sys_user: email_google or email_fb database fields
+    by checking passed parameters against either
+    email_google if google = True or
+    email_fb if google = False
+
+    return values and what they mean:
+
+    0: invalid login credentials
+    """
 
     data_loaded = data
 
-    email_login = data_loaded["authenticate_email"]["email"]
+    email_login = data_loaded["data"]["email"]
 
     if google:
         query_result = (
@@ -723,13 +739,14 @@ def authenticate_email(database, data, google):
     if query_result:
         response_inner = query_result[0].request_sys_user_info(database)
     else:
-        response_inner = "invalid login credentials"
-        
+        return 0
+
     response = {
             "data": response_inner
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
