@@ -11,6 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DoneIcon from '@material-ui/icons/Done';
 import Fab from '@material-ui/core/Fab';
 import { makeStyles } from '@material-ui/core/styles';
+import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -80,7 +81,7 @@ export default function DeliveryNote({ details }) {
                             );
                         })}
                         <ListItem className={classes.top}>
-                            <b>Payment Due: ${details.paymentDue}</b>
+                            <b>Payment Due: {DataDisplayUtils.displayMoneyValue(details.paymentDue)}</b>
                         </ListItem>
                     </List>
                 </Card>

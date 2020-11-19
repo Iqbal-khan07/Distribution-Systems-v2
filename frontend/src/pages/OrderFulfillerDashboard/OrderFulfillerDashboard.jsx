@@ -5,7 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios';
 import DeliveryProductTable from "./components/DeliveryProductTable/DeliveryProductTable";
-import DeliveryNote from "./components/DeliveryNote.jsx/DeliveryNote";
+import DeliveryNote from "./components/DeliveryNote/DeliveryNote";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
