@@ -85,7 +85,7 @@ export default function DeliveryNote({ details }) {
                     </List>
                 </Card>
                 <Typography className={classes.top}>
-                    <b>Memo:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mattis mauris iaculis pharetra congue. Aliquam erat volutpat. Aliquam sit amet leo tincidunt, tincidunt lacus eu, rhoncus nibh. Nulla iaculis nunc dolor. Donec molestie, enim id sagittis pretium, enim arcu tincidunt eros, non iaculis turpis dolor condimentum erat. Suspendisse porttitor viverra tortor, ac lobortis nisi ullamcorper vel. In rhoncus massa mauris, at hendrerit sapien feugiat at. Aliquam vel consequat quam. Maecenas nibh ex, facilisis lacinia magna nec, finibus pulvinar mi. Donec hendrerit fringilla enim sit amet lacinia. In rutrum ultricies mi at ultricies. Nulla pharetra in felis id auctor. Aliquam neque leo, consectetur nec consequat eu, laoreet in nunc. Aliquam auctor porta libero. Sed sed sem consequat, ultricies lectus eget, porta diam. Nunc varius ut dui fermentum condimentum.
+                    <b>Memo:</b>
 
 
                 </Typography>
