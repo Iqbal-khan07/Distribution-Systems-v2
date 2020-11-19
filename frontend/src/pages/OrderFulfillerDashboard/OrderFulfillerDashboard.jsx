@@ -4,51 +4,64 @@ import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios';
+import DeliveryProductTable from "./components/DeliveryProductTable/DeliveryProductTable";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
     }
 }));
 
-const mapShopsToShopOptions = (shops) => {
-    return shops.map((s) => {
-        return {
-            id: s.id,
-            name: s.name,
-            address: `${s.street}, ${'USA'}`,
-        }
-    })
+const mapOrdersToOrderOptions = (orders) => {
+    return orders.map((s) => {
+        return s.orderItems.map((o) => {
+            return {
+                id: o.productNumber,
+                name: o.productName,
+                description: o.productDescription,
+                quantity: o.quantity
+            }
+        })
+    }).flat()
 }
 
 
 const OrderFulfillerDashboard = () => {
-    const classes = useStyles();
+    //const classes = useStyles();
     const [loading, setLoading] = useState(true)
-    const [shops, setShops] = useState([]);
+    const [orders, setOrders] = useState([]);
 
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("/shop/request/all");
+            let response = await axios.get("/shop/request/not_delivered");
             let body = response.data;
 
-            const shopOptions = body.request_shop_response.map((s) => {
+            const orderOptions = body.request_shop_order_not_delivered_response.map((s) => {
                 return {
                     id: s.id,
-                    name: s.name,
-                    street: s.street,
-                    city: s.city,
-                    providence: s.providence,
-                    zip: s.zip_4,
-                    zoneName: ""
+                    name: s.shop.name,
+                    street: s.shop.street,
+                    city: s.shop.city,
+                    providence: s.shop.providence,
+                    zip: s.shop.zip_4,
+                    zoneName: "",
+                    orderItems: s.shop_order_items.map((o) => {
+                        return {
+                            productName: o.company_product.name,
+                            productNumber: o.company_product.id,
+                            productDescription: o.company_product.description,
+                            quantity: o.quantity_units
+                        }
+                    }),
+                    paymentDue: s.price_due,
+                    memo: ""
                 }
             });
-            setShops(shopOptions)
+            setOrders(orderOptions)
             setLoading(false)
         }
         fetchData().then()
     }, [])
-
 
     return (
         <WithSignedInSkeleton title={'Order Fulfiller Dashboard'}>
@@ -58,9 +71,9 @@ const OrderFulfillerDashboard = () => {
                         <Grid item lg={12} xs={12}>
                             <Grid container>
                                 <Grid item lg={12} xs={12}>
-                                    {/*<ShopTable
-                                        rows={mapShopsToShopOptions(shops)}
-                                    />*/}
+                                    <DeliveryProductTable
+                                        rows={mapOrdersToOrderOptions(orders)}
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>
