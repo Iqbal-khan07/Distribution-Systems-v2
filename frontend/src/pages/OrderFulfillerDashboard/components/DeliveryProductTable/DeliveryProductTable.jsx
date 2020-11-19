@@ -152,7 +152,7 @@ export default function DeliveryProductTable({ rows }) {
                         <TableRow>
                             <TablePagination
                                 rowsPerPageOptions={[5, 10]}
-                                colSpan={4}
+                                colSpan={5}
                                 count={rows.length}
                                 rowsPerPage={rowsPerPage}
                                 page={page}
