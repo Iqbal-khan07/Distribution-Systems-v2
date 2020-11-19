@@ -85,7 +85,7 @@ const OrderFulfillerDashboard = () => {
                     <Grid container lg={12} xs={12} spacing={3}>
                         <Grid item lg={12} xs={12}>
                             <Grid container>
-                                <Grid item lg={12} xs={12}>
+                                <Grid item lg={8} xs={12}>
                                     <DeliveryProductTable
                                         rows={mapOrdersToOrderItems(orders)}
                                     />

@@ -9,3 +9,7 @@
 .tableContainer {
     min-width: 500px;
 }
+
+.checkBox {
+    padding: 3px;
+}

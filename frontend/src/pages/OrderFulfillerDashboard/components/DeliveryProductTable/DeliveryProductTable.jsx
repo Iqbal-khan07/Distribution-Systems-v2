@@ -104,7 +104,7 @@ export default function DeliveryProductTable({ rows }) {
         <StylesProvider injectFirst>
             <TableContainer component={Paper}>
                 <Toolbar>
-                    <Typography variant="h6" className={styles.title}>
+                    <Typography variant="h5" className={styles.title}>
                         Today's Deliveries
                     </Typography>
                 </Toolbar>
@@ -137,7 +137,7 @@ export default function DeliveryProductTable({ rows }) {
                                     {row.quantity}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <Checkbox color="primary"/>
+                                    <Checkbox color="primary" className={styles.checkBox}/>
                                 </TableCell>
                             </StyledTableRow>
                         ))}
