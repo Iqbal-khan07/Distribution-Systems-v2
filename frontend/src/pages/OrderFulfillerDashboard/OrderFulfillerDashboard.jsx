@@ -5,6 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios';
 import DeliveryProductTable from "./components/DeliveryProductTable/DeliveryProductTable";
+import DeliveryNote from "./components/DeliveryNote.jsx/DeliveryNote";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
@@ -93,6 +94,7 @@ const OrderFulfillerDashboard = () => {
                         </Grid>
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
+                                <DeliveryNote details={orders[0]} />
                             </Grid>
                         </Grid>
                     </Grid>
