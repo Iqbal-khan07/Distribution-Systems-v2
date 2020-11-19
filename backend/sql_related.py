@@ -751,7 +751,9 @@ def authenticate_email(database, data, google):
 
 
 def request_company_product(database):
-    """Returns a JSON of all company_product entries in the database"""
+    """
+    Returns a JSON of all company_product entries in the database
+    """
 
     query_result = database.session.query(Company_product).all()
 
@@ -759,18 +761,21 @@ def request_company_product(database):
 
     for item in query_result:
         result.append(item.request_company_product_info(database))
-        
+
     response = {
             "data": result
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def request_shop_order_not_delivered(database):
-    """Returns a JSON of all shop_order entries in the database
-    that have not been delivered"""
+    """
+    Returns a JSON of all shop_order entries in the database
+    that have not been delivered
+    """
 
     query_result = (
         database.session.query(Shop_order).filter(Shop_order.completed == False).all()
@@ -780,17 +785,20 @@ def request_shop_order_not_delivered(database):
 
     for item in query_result:
         result.append(item.request_shop_order(database))
-        
+
     response = {
             "data": result
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def request_shop(database):
-    """Returns a JSON of all shop entries in the database"""
+    """
+    Returns a JSON of all shop entries in the database
+    """
 
     query_result = database.session.query(Shop).all()
 
@@ -798,17 +806,20 @@ def request_shop(database):
 
     for item in query_result:
         result.append(item.request_shop_info(database))
-        
+
     response = {
             "data": result
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def request_zone(database):
-    """Returns a JSON of all zone entries in the database"""
+    """
+    Returns a JSON of all zone entries in the database
+    """
 
     query_result = database.session.query(Zone).all()
 
@@ -816,17 +827,20 @@ def request_zone(database):
 
     for item in query_result:
         result.append(item.request_zone_info())
-        
+
     response = {
             "data": result
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def request_shop_category(database):
-    """Returns a JSON of all shop categories in the database"""
+    """
+    Returns a JSON of all shop categories in the database
+    """
 
     query_result = database.session.query(Shop_category).all()
 
@@ -834,34 +848,43 @@ def request_shop_category(database):
 
     for item in query_result:
         result.append(item.request_category_info())
-        
+
     response = {
             "data": result
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def create_shop(database, data):
-    """Adds a new entry to the shop table and populates shop_zone
-    entries for itbased on JSON data"""
+    """
+    Adds a new entry to the shop table and populates shop_zone
+    entries for itbased on JSON data
+    
+    return values and what they mean:
+
+    0: invalid zone id
+    1: invalid shop category id
+    """
 
     # data_loaded = json.loads(data)["create_shop"]
-    data_loaded = data["create_shop"]
+    data_loaded = data["data"]
 
     # validate relational data fields
     shop_category_valid = True
     zones_valid = True
-
-    if (
-        database.session.query(Shop_category)
-        .filter(Shop_category.id == data_loaded["category"])
-        .count()
-        == 0
-    ):
-
-        shop_category_valid = False
+    
+    if data_loaded["category"] != None:
+        if (
+            database.session.query(Shop_category)
+            .filter(Shop_category.id == data_loaded["category"])
+            .count()
+            == 0
+        ):
+    
+            shop_category_valid = False
 
     for zone in data_loaded["zones"]:
         if database.session.query(Zone).filter(Zone.id == zone["id"]).count() == 0:
@@ -907,15 +930,16 @@ def create_shop(database, data):
 
             response_inner = new_shop.request_shop_info(database)
         else:
-            response_inner = "404: Invalid zone id"
+            return 0
     else:
-        response_inner = "404: Invalid category id"
-        
+        return 1
+
     response = {
             "data": response_inner
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 

@@ -53,30 +53,8 @@ paths:
           schema:
             type: object
             properties:
-              authenticate_default_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: integer
-                  name_first:
-                    type: string
-                  name_last:
-                    type: string
-                  sys_username:
-                    type: string
-                  email_google:
-                    type: string
-                  email_fb:
-                    type: string
-                  phone_number:
-                    type: string
-                  sys_user_role:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
 
   /user/authenticate/google:
     post:
@@ -109,30 +87,8 @@ paths:
           schema:
             type: object
             properties:
-              authenticate_default_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: integer
-                  name_first:
-                    type: string
-                  name_last:
-                    type: string
-                  sys_username:
-                    type: string
-                  email_google:
-                    type: string
-                  email_fb:
-                    type: string
-                  phone_number:
-                    type: string
-                  sys_user_role:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
 
   /user/authenticate/facebook:
     post:
@@ -165,311 +121,146 @@ paths:
           schema:
             type: object
             properties:
-              authenticate_default_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: integer
-                  name_first:
-                    type: string
-                  name_last:
-                    type: string
-                  sys_username:
-                    type: string
-                  email_google:
-                    type: string
-                  email_fb:
-                    type: string
-                  phone_number:
-                    type: string
-                  sys_user_role:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                      name:
-                        type: string
-  
+
   /company_product/request/all:
     get:
       operationId: api.get_company_product
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
+      description: Return all company products in the database
       responses:
         200:
-          description: Successful read user list 
+          description: List of all company products 
           schema:
             type: object
             properties:
-              request_company_product_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  company:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-                      zones:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                      name:
-                        type: string
-                      price_buy:
-                        type: string
-                      price_sell:
-                        type: string
-                      units_per_price:
-                        type: string
-                      price_sell_per_unit:
-                        type: string
-                      description:
-                        type: string
-  
+              data:
+                type: array
+
   /shop/request/not_delivered:
     get:
       operationId: api.get_order_not_delivered
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
+      description: Return all shop orders in the database that have completed = False
       responses:
         200:
-          description: Successful read user list 
+          description: List of all shop orders that are not delivered 
           schema:
             type: object
             properties:
-              request_shop_order_not_delivered_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  shop:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-                      email:
-                        type: string
-                      phone_number:
-                        type: string
-                      category:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          type:
-                            type: string
-                      zones:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                      street:
-                        type: string
-                      city:
-                        type: string
-                      providence:
-                        type: string
-                      zip_4:
-                        type: string
-                  price_due:
-                    type: string
-                  price_paid:
-                    type: string
-                  date_ordered:
-                    type: string
-                  date_delivered_projected:
-                    type: string
-                  date_delivered:
-                    type: string
-                  order_taker:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name_first:
-                        type: string
-                      name_last:
-                        type: string
-                      sys_username:
-                        type: string
-                      email_google:
-                        type: string
-                      email_fb:
-                        type: string
-                      phone_number:
-                        type: string
-                      sys_user_role:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                  order_fulfiller:
-                    type: string
-                  completed:
-                    type: string
-                  shop_order_items:
-                    type: object
-                    properties:
-                      company_product:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          company:
-                            type: object
-                            properties:
-                              id:
-                                type: string
-                              name:
-                                type: string
-                              zones:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  name:
-                                    type: string
-                              name:
-                                type: string
-                              price_buy:
-                                type: string
-                              price_sell:
-                                type: string
-                              price_sell_per_unit:
-                                type: string
-                              description:
-                                type: string
-                          quantity_units:
-                            type: string
-   
+              data:
+                type: array
+
   /shop/request/all:
     get:
       operationId: api.get_all_shops
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
+      description: Return all shops in database
       responses:
         200:
-          description: Successful read user list 
+          description: List of all shops
           schema:
             type: object
             properties:
-              request_shop_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-  
+              data:
+                type: array
+
   /zone/request/all:
     get:
       operationId: api.get_all_zones
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
+      description: Return all zones in database
       responses:
         200:
-          description: Successful read user list 
+          description: List of all zones 
           schema:
             type: object
             properties:
-              request_zone_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-  
+              data:
+                type: array
+
   /shop_category/request/all:
     get:
       operationId: api.get_all_shop_category
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
+      description: Return all shop categories in database
       responses:
         200:
-          description: Successful read user list 
+          description: List of all shop categories
           schema:
             type: object
             properties:
-              request_shop_category_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-  
+              data:
+                type: array
+
   /shop/create:
     post:
       operationId: api.shop_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+      description: Create a new shop with JSON data
       parameters:
         - name: new_shop
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              name:
-                type: string
-                description: Email of user to create
-              email:
-                type: string
-                x-nullable: true
-                description: Email of user to create
-              phone_number:
-                type: string
-                description: Email of user to create
-              category:
-                type: string
-                description: Email of user to create
-              zone:
+              data:
                 type: object
-                description: Email of user to create
                 properties:
-                  id:
+                  name:
                     type: string
-              street:
-                type: string
-              city:
-                type: string
-              providence:
-                type: string
-              zip_4:
-                type: string
+                    description: Shop name
+                  email:
+                    type: string
+                    x-nullable: true
+                    description: Shop email
+                  phone_number:
+                    type: string
+                    x-nullable: true
+                    description: Shop phone number
+                  category:
+                    type: integer
+                    x-nullable: true
+                    description: Shop category
+                  zones:
+                    type: array
+                    description: Shop zones
+                    properties:
+                      id:
+                        type: integer
+                        description: Zone database id
+                    required:
+                     - id
+                  street:
+                    type: string
+                    description: Shop street address
+                  city:
+                    type: string
+                    description: Shop city address
+                  providence:
+                    type: string
+                    description: Shop providence
+                  zip_4:
+                    type: string
+                    description: Shop zip_4 code
+                required:
+                 - name
+                 - email
+                 - phone_number
+                 - category
+                 - street
+                 - zones
+                 - city
+                 - providence
+                 - zip_4
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list 
+          description: Return data for newly created shop 
           schema:
             type: object
             properties:
-              create_shop_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string
-  
+
   /zone/create:
     post:
       operationId: api.zone_create
@@ -503,7 +294,7 @@ paths:
                 properties:
                   id:
                     type: string
-  
+
   /shop_category/create:
     post:
       operationId: api.shop_category_create
@@ -539,7 +330,7 @@ paths:
                     type: string 
                   type:
                     type: string
-  
+
   /shop_order/create:
     post:
       operationId: api.shop_order_create
@@ -585,7 +376,7 @@ paths:
                 properties:
                   id:
                     type: string 
-  
+
   /shop_order/update/delivered:
     post:
       operationId: api.shop_order_update
@@ -628,4 +419,3 @@ securityDefinitions:
     in: header
     name: X-API-Key
     x-apikeyInfoFunc: api.basic_auth
-    

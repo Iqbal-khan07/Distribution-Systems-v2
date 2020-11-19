@@ -21,11 +21,11 @@ def authenticate_email_facebook():
 
 def create_shop():
     jsonmock = {
-        "create_shop": {
+        "data": {
             "name": "Test Created Shop",
             "email": None,
             "phone_number": None,
-            "category": 2,
+            "category": None,
             "zones": [{"id": 1}, {"id": 2}, {"id": 3}, {"id": 4}],
             "street": "Some Street",
             "city": "Some City",
