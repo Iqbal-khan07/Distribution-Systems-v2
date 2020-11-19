@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const mapOrdersToOrderOptions = (orders) => {
-    return orders.map((s) => {
+const mapOrdersToOrderItems = (orders) => {
+    let allProducts= orders.map((s) => {
         return s.orderItems.map((o) => {
             return {
                 id: o.productNumber,
@@ -21,7 +21,21 @@ const mapOrdersToOrderOptions = (orders) => {
                 quantity: o.quantity
             }
         })
-    }).flat()
+    }).flat();
+    var aggregateProducts = [];
+    for (var i=0; i < allProducts.length; i++) {
+        var increased = false;
+        for (var j=0; j < aggregateProducts.length; j++) {
+            if (allProducts[i].id === aggregateProducts[j].id) {
+                aggregateProducts[j].quantity += allProducts[i].quantity;
+                increased = true;
+                break;
+            }
+        }
+        if (!increased)
+            aggregateProducts.push(allProducts[i]);
+    }
+    return aggregateProducts;
 }
 
 
@@ -72,7 +86,7 @@ const OrderFulfillerDashboard = () => {
                             <Grid container>
                                 <Grid item lg={12} xs={12}>
                                     <DeliveryProductTable
-                                        rows={mapOrdersToOrderOptions(orders)}
+                                        rows={mapOrdersToOrderItems(orders)}
                                     />
                                 </Grid>
                             </Grid>

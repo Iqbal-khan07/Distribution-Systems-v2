@@ -108,7 +108,7 @@ export default function DeliveryProductTable({ rows }) {
                         Today's Deliveries
                     </Typography>
                 </Toolbar>
-                <Table className={styles.table} size="small" aria-label="deliveries table">
+                <Table className={styles.table} size="small" padding="none" aria-label="deliveries table">
                     <TableHead>
                         <TableRow>
                             <TableCell className={styles.tableHeader} align="center">Product No.</TableCell>
@@ -124,7 +124,7 @@ export default function DeliveryProductTable({ rows }) {
                             : rows
                         ).map((row) => (
                             <StyledTableRow key={row.id}>
-                                <TableCell>
+                                <TableCell align="center">
                                     {row.id}
                                 </TableCell>
                                 <TableCell>
@@ -133,11 +133,11 @@ export default function DeliveryProductTable({ rows }) {
                                 <TableCell>
                                     {row.description}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell align="center">
                                     {row.quantity}
                                 </TableCell>
                                 <TableCell align="center">
-                                    <Checkbox />
+                                    <Checkbox color="primary"/>
                                 </TableCell>
                             </StyledTableRow>
                         ))}
