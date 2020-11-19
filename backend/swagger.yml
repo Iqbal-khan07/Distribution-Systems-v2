@@ -264,125 +264,122 @@ paths:
   /zone/create:
     post:
       operationId: api.zone_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+      description: Create a new zone with JSON data
       parameters:
         - name: new_zone
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              create_zone:
+              data:
                 type: object
-                description: Email of user to create
                 properties:
                   name:
                     type: string
-                
+                    description: Zone name
+                required:
+                 - name
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list 
+          description: Return data for newly created zone 
           schema:
             type: object
             properties:
-              create_zone_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string
 
   /shop_category/create:
     post:
       operationId: api.shop_category_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+      description: Create a new shop category with JSON data
       parameters:
         - name: new_shop_category
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              create_shop_category:
+              data:
                 type: object
-                description: Email of user to create
                 properties:
                   type:
                     type: string
-                
+                    description: Shop category type
+                required:
+                 - type
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list 
+          description: Return data for newly created shop category
           schema:
             type: object
             properties:
-              create_shop_category_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string 
-                  type:
-                    type: string
 
   /shop_order/create:
     post:
       operationId: api.shop_order_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+      description: Create a new shop order with JSON data
       parameters:
         - name: new_shop_order
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              create_shop_order:
+              data:
                 type: object
-                description: Email of user to create
                 properties:
                   shop_id:
                     type: integer
+                    description: Shop database id that the order is placed for
                   price_paid:
                     type: boolean
+                    description: True if the order was paid for when the order was taken
                   order_taker_id:
                     type: integer
+                    description: Order Taker database id
                   order_items:
                     type: array
+                    description: Array of items ordered by the shop
                     items:
                       properties:
                         id:
                           type: integer
+                          description: Company product database id
                         quantity_units:
                           type: integer
-                
+                          description: Ammount of company product ordered
+                      required:
+                       - id
+                       - quantity_units
+                required:
+                 - shop_id
+                 - price_paid
+                 - order_taker_id
+                 - order_items
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list 
+          description: Return data for newly created shop order 
           schema:
             type: object
             properties:
-              create_shop_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string 
 
   /shop_order/update/delivered:
     post:
       operationId: api.shop_order_update
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
       description: Create a new user in the user list
       parameters:
         - name: update_shop_order
@@ -392,26 +389,29 @@ paths:
           schema:
             type: object
             properties:
-              update_shop_order_delivered:
+              data:
                 type: object
                 description: Email of user to create
                 properties:
                   shop_order_id:
                     type: integer
+                    description: Email of user to create
                   order_fulfiller_id:
                     type: integer
-
+                    description: Email of user to create
+                required:
+                 - shop_order_id
+                 - order_fulfiller_id
+            required:
+             - data
       responses:
         200:
           description: Successful read user list 
           schema:
             type: object
             properties:
-              update_shop_order_delivered_response:
+              data:
                 type: object
-                properties:
-                  request_payment:
-                    type: string 
 
 securityDefinitions:
   APIKeyHeader:

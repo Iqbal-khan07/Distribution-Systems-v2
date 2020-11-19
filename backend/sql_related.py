@@ -944,9 +944,15 @@ def create_shop(database, data):
 
 
 def create_zone(database, data):
-    """Adds a new entry to the Zone table based on JSON data"""
+    """
+    Adds a new entry to the zone table based on JSON data
+    
+    return values and what they mean:
 
-    data_loaded = data["create_zone"]
+    0: zone with name already exists
+    """
+
+    data_loaded = data["data"]
 
     # validate relational data fields
     zone_name_valid = True
@@ -969,20 +975,27 @@ def create_zone(database, data):
 
         response_inner = new_zone.request_zone_info()
     else:
-        response_inner = "404: zone already exists"
-    
+        return 0
+
     response = {
             "data": response_inner
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def create_shop_category(database, data):
-    """Adds a new entry to the Shop_category table based on JSON data"""
+    """
+    Adds a new entry to the shop_category table based on JSON data
+    
+    return values and what they mean:
 
-    data_loaded = data["create_shop_category"]
+    0: shop category with name already exists
+    """
+
+    data_loaded = data["data"]
 
     # validate relational data fields
     shop_category_type_valid = True
@@ -1007,21 +1020,30 @@ def create_shop_category(database, data):
 
         response_inner = new_shop_category.request_category_info()
     else:
-        response_inner = "404: shop category already exists"
-    
+        return 0
+
     response = {
             "data": response_inner
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def create_shop_order(database, data):
-    """Adds a new entry to the Shop_order table and
-    populates Shop_order_item entries for it based on JSON data"""
+    """
+    Adds a new entry to the Shop_order table and
+    populates Shop_order_item entries for it based on JSON data
+    
+    return values and what they mean:
 
-    data_loaded = data["create_shop_order"]
+    0: invalid company product id
+    1: invalid order taker id
+    2: invalid shop id
+    """
+
+    data_loaded = data["data"]
 
     # validate relational data fields
     shop_id_valid = True
@@ -1098,8 +1120,7 @@ def create_shop_order(database, data):
 
                     if duplicate_check_query.count() != 0:
                         duplicate_check_query[0].quantity_units += item[
-                            "quantity_units"
-                        ]
+                            "quantity_units"]
                     else:
                         database.session.add(
                             Shop_order_item(
@@ -1112,25 +1133,33 @@ def create_shop_order(database, data):
 
                 response_inner = new_shop_order.request_shop_order(database)
             else:
-                response_inner = "404: Invalid company product id"
+                return 0
         else:
-            response_inner = "404: Invalid order taker id"
+            return 1
     else:
-        response_inner = "404: Invalid shop id"
-                
-    
+        return 2
+
     response = {
             "data": response_inner
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response
 
 
 def update_shop_order_delivered(database, data):
-    """Updates a shop_order table entry as delivered based on JSON data"""
+    """
+    Updates a shop_order table entry as delivered based on JSON data
+    
+    return values and what they mean:
 
-    data_loaded = data["update_shop_order_delivered"]
+    0: shop order already completed
+    1: invalid shop order id
+    2: invalid order fulfiller id
+    """
+
+    data_loaded = data["data"]
 
     # validate relational data fields
     shop_order_id_valid = True
@@ -1157,9 +1186,9 @@ def update_shop_order_delivered(database, data):
 
         order_fulfiller_id_valid = False
 
-    if shop_order_id_valid:
-        if shop_order_not_completed:
-            if order_fulfiller_id_valid:
+    if order_fulfiller_id_valid:
+        if shop_order_id_valid:
+            if shop_order_not_completed:
                 current_time_utc = datetime.datetime.now(datetime.timezone.utc)
 
                 shop_order_match_query[0].price_paid = True
@@ -1176,15 +1205,16 @@ def update_shop_order_delivered(database, data):
                 else:
                     response_inner = {"request_payment": True}
             else:
-                response_inner = "404: Invalid order fulfiller id"
+                return 0
         else:
-            response_inner = "404: Shop order already completed"
+            return 1
     else:
-        response_inner = "404: Invalid shop order id"
-    
+        return 2
+
     response = {
             "data": response_inner
         }
-    
-    database.session.close()    
+
+    database.session.close()
+
     return response

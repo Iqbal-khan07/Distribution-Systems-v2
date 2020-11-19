@@ -171,7 +171,7 @@ def shop_create(new_shop):
     /shop/create
     through swagger.yml
 
-    Response 200: Successful Authentication, returns sys_user data
+    Response 200: Shop created successfully
     Response 400: Bad Request
     """
 
@@ -181,7 +181,7 @@ def shop_create(new_shop):
         if response == 0:
             return "Zone does not exists with id provided", 400
         elif response == 1:
-            return "Shop category does not exists with id provided", 400
+            return "Shop category does not exist with id provided", 400
         else:
             return "Bad Request", 400
     else:
@@ -190,128 +190,94 @@ def shop_create(new_shop):
 
 def zone_create(new_zone):
     """
-    This function creates a new person in the people structure
-    based on the passed in person data
-    :param person:  person to create in people structure
-    :return:        201 on success, 406 on person exists
+    This function links with endpoint:
+    /zone/create
+    through swagger.yml
+
+    Response 200: Zone created successfully
+    Response 400: Bad Request
     """
-    return sql_related.create_zone(db, new_zone)
-    
-    """
-    # Does the person exist already?
-    if name not in COMPANY and name is not None:
 
-        db.session.add(sql_related.Company(name))
-        db.session.commit()
+    response = sql_related.create_zone(db, new_zone)
 
-        return make_response(
-            "{name} successfully created".format(name=name), 201
-        )
-
-    # Otherwise, they exist, that's an error
+    if type(response) == int:
+        if response == 0:
+            return "Zone already exists with that name", 400
+        else:
+            return "Bad Request", 400
     else:
-        abort(
-            406,
-            "Company with name {name} already exists".format(name=name),
-        )
-
-    """
+        return response, 200
 
 
 def shop_category_create(new_shop_category):
     """
-    This function creates a new person in the people structure
-    based on the passed in person data
-    :param person:  person to create in people structure
-    :return:        201 on success, 406 on person exists
+    This function links with endpoint:
+    /shop_category/create
+    through swagger.yml
+
+    Response 200: Shop category created successfully
+    Response 400: Bad Request
     """
-    return sql_related.create_shop_category(db, new_shop_category)
-    
-    """
-    # Does the person exist already?
-    if name not in COMPANY and name is not None:
 
-        db.session.add(sql_related.Company(name))
-        db.session.commit()
+    response = sql_related.create_shop_category(db, new_shop_category)
 
-        return make_response(
-            "{name} successfully created".format(name=name), 201
-        )
-
-    # Otherwise, they exist, that's an error
+    if type(response) == int:
+        if response == 0:
+            return "Shop category already exists with that name", 400
+        else:
+            return "Bad Request", 400
     else:
-        abort(
-            406,
-            "Company with name {name} already exists".format(name=name),
-        )
-
-    """
+        return response, 200
 
 
 def shop_order_create(new_shop_order):
     """
-    This function creates a new person in the people structure
-    based on the passed in person data
-    :param person:  person to create in people structure
-    :return:        201 on success, 406 on person exists
+    This function links with endpoint:
+    /shop_order/create
+    through swagger.yml
+
+    Response 200: Shop order created successfully
+    Response 400: Bad Request
     """
-    return sql_related.create_shop_order(db, new_shop_order)
-    
-    """
-    # Does the person exist already?
-    if name not in COMPANY and name is not None:
 
-        db.session.add(sql_related.Company(name))
-        db.session.commit()
+    response = sql_related.create_shop_order(db, new_shop_order)
 
-        return make_response(
-            "{name} successfully created".format(name=name), 201
-        )
-
-    # Otherwise, they exist, that's an error
+    if type(response) == int:
+        if response == 0:
+            return "Company product does not exist with id provided", 400
+        if response == 1:
+            return "Order Taker does not exist with id provided", 400
+        if response == 2:
+            return "Shop does not exist with id provided", 400
+        else:
+            return "Bad Request", 400
     else:
-        abort(
-            406,
-            "Company with name {name} already exists".format(name=name),
-        )
-
-    """
+        return response, 200
 
 
 def shop_order_update(update_shop_order):
     """
-    This function creates a new person in the people structure
-    based on the passed in person data
-    :param person:  person to create in people structure
-    :return:        201 on success, 406 on person exists
+    This function links with endpoint:
+    /shop_order/update/delivered
+    through swagger.yml
+
+    Response 200: Shop order updated as delivered successfully
+    Response 400: Bad Request
     """
-    return sql_related.update_shop_order_delivered(db, update_shop_order)
-    
-    """
-    # Does the person exist already?
-    if name not in COMPANY and name is not None:
 
-        db.session.add(sql_related.Company(name))
-        db.session.commit()
+    response = sql_related.update_shop_order_delivered(db, update_shop_order)
 
-        return make_response(
-            "{name} successfully created".format(name=name), 201
-        )
-
-    # Otherwise, they exist, that's an error
+    if type(response) == int:
+        if response == 0:
+            return "Shop order is already completed", 400
+        if response == 1:
+            return "Shop order does not exist with id provided", 400
+        if response == 2:
+            return "Order Fulfiller does not exist with id provided", 400
+        else:
+            return "Bad Request", 400
     else:
-        abort(
-            406,
-            "Company with name {name} already exists".format(name=name),
-        )
-
-    """
-
-
-"""
-API KEY AUTHENTICATION
-
-"""
+        return response, 200
 
 
 def basic_auth(apiKey, required_scopes=None):

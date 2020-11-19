@@ -36,15 +36,16 @@ def db_bootstrap():
     try:
         db.session.query(sql_related.Sys_user).all()
     except BaseException:
-        print("Error in Database")
+        print("Database tables not found.")
         return
+
     users = db.session.query(sql_related.Sys_user).all()
     dataCheck = [db_name.name_first for db_name in users]
 
-    if dataCheck != []:
-        print("Items exist in Database")
+    if dataCheck == []:
+        print("Database tables empty, populating.")
+        sql_related.database_bootstrap(db)
         return
-    sql_related.database_bootstrap(db)
 
 
 def restEndpoint():

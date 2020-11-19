@@ -38,21 +38,21 @@ def create_shop():
 
 
 def create_zone():
-    jsonmock = {"create_zone": {"name": "Test Created Zone"}}
+    jsonmock = {"data": {"name": "Test Created Zone 2"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def create_shop_category():
-    jsonmock = {"create_shop_category": {"type": "Temp Category 2"}}
+    jsonmock = {"data": {"type": "Temp Category 3"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def create_shop_order():
     jsonmock = {
-        "create_shop_order": {
-            "shop_id": 4,
+        "data": {
+            "shop_id": 14,
             "price_paid": True,
             "order_taker_id": 1,
             "order_items": [
@@ -73,7 +73,7 @@ def create_shop_order():
 
 def update_shop_order_delivered():
     jsonmock = {
-        "update_shop_order_delivered": {"shop_order_id": 4, "order_fulfiller_id": 2}
+        "data": {"shop_order_id": 4, "order_fulfiller_id": 2}
     }
 
     return json.dumps(jsonmock, indent=4)
