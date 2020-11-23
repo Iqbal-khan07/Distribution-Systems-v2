@@ -13,7 +13,7 @@ import Orders from "./pages/Orders/Orders";
 
 import axios from "axios"
 
-axios.defaults.baseURL = "https://immense-retreat-89767.herokuapp.com/api/";
+axios.defaults.baseURL = "https://arcane-scrubland-51912.herokuapp.com/api/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function App() {

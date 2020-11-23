@@ -104,7 +104,7 @@ const Orders = () => {
         async function fetchData() {
             let response = await axios.get("company_product/request/all");
             let body = response.data;
-            const productsList = body.request_company_product_response.map((p) => {
+            const productsList = body.data.map((p) => {
                 return {
                     id: p.id,
                     name: p.name,
@@ -116,7 +116,7 @@ const Orders = () => {
             response = await axios.get("/shop/request/not_delivered");
             body = response.data;
 
-            const orders = body.request_shop_order_not_delivered_response.map((o) => {
+            const orders = body.data.map((o) => {
                 const orderItems = o.shop_order_items.map((item) => {
                     return {
                         productName: item.company_product.name,
@@ -146,7 +146,7 @@ const Orders = () => {
             response = await axios.get("/shop/request/all");
             body = response.data;
 
-            const shopOptions = body.request_shop_response.map((s) => {
+            const shopOptions = body.data.map((s) => {
                 return {
                     id: s.id,
                     name: s.name,
