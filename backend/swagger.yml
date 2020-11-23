@@ -211,6 +211,9 @@ paths:
                     type: string
                     x-nullable: true
                     description: Shop email
+                  image_url:
+                    type: string
+                    description: Shop image url
                   phone_number:
                     type: string
                     x-nullable: true

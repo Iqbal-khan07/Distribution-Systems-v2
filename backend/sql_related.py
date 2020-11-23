@@ -49,7 +49,7 @@ class Sys_user(db.Model):
     password = db.Column(db.String(255), nullable=False)
     email_google = db.Column(db.String(100), nullable=False, unique=True)
     email_fb = db.Column(db.String(100), nullable=False, unique=True)
-    image_url = db.Column(db.String(500), nullable=False, unique=False)
+    image_url = db.Column(db.String(500), nullable=False)
     phone_number = db.Column(db.String(10), nullable=True)
     role = db.Column(db.Integer, db.ForeignKey("sys_user_role.id"), nullable=False)
 
@@ -252,6 +252,7 @@ class Shop(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=True)
+    image_url = db.Column(db.String(500), nullable=False)
     phone_number = db.Column(db.String(10), nullable=True)
     category = db.Column(db.Integer, db.ForeignKey("shop_category.id"), nullable=True)
     street = db.Column(db.String(255), nullable=False)
@@ -259,9 +260,10 @@ class Shop(db.Model):
     providence = db.Column(db.String(255), nullable=False)
     zip_4 = db.Column(db.String(10), nullable=False)
 
-    def __init__(self, na, em, pn, cat, st, ci, pr, zi):
+    def __init__(self, na, em, iu, pn, cat, st, ci, pr, zi):
         self.name = na
         self.email = em
+        self.image_url = iu
         self.phone_number = pn
         self.category = cat
         self.street = st
@@ -294,6 +296,7 @@ class Shop(db.Model):
             "id": self.id,
             "name": self.name,
             "email": self.email,
+            "image_url": self.image_url,
             "phone_number": self.phone_number,
             "category": shop_category_info,
             "zones": zones,
@@ -311,6 +314,8 @@ class Shop(db.Model):
             Shop(
                 "Temp Store 1",
                 None,
+                "https://yt3.ggpht.com/ytc/AAUvwnjLNdkBK-GXpJJQ8K9Nku_gHwS5f\
+                    WUKkq0BEoPgTA=s900-c-k-c0x00ffffff-no-rj",
                 "1234567890",
                 None,
                 "Street 1",
@@ -323,6 +328,8 @@ class Shop(db.Model):
             Shop(
                 "Temp Store 2",
                 "ts2@store.com",
+                "https://www.clker.com/cliparts/V/H/K/p/p/u/number-2-black-\
+                    hi.png",
                 "1234567890",
                 1,
                 "Street 2",
@@ -335,6 +342,7 @@ class Shop(db.Model):
             Shop(
                 "Temp Store 3",
                 None,
+                "https://blognumbers.files.wordpress.com/2010/09/3.jpg",
                 "1234567890",
                 2,
                 "Street 3",
@@ -931,6 +939,7 @@ def create_shop(database, data):
             new_shop = Shop(
                 data_loaded["name"],
                 data_loaded["email"],
+                data_loaded["image_url"],
                 data_loaded["phone_number"],
                 data_loaded["category"],
                 data_loaded["street"],
