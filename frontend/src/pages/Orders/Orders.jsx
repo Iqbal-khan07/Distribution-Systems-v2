@@ -133,7 +133,7 @@ const Orders = () => {
                     phone: o.shop.phone_number,
                     email: o.shop.email,
                     orderItems: orderItems,
-                    memo: ""
+                    memo: o.memo
                 }
             })
 
@@ -222,7 +222,6 @@ const Orders = () => {
             ) : <CircularProgress />
 
             }
-
         </WithSignedInSkeleton>
 
     )

@@ -3,11 +3,15 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import AppBar from "@material-ui/core/AppBar";
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu'
+import Alert from "@material-ui/lab/Alert";
+import Collapse from '@material-ui/core/Collapse';
+import {NotificationContext} from "../../context/NotificationContext";
+import {ERROR, SUCCESSFUL} from "../../constants/NOTIFICATION_TYPES";
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -47,9 +51,33 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
+const getSeverity = (notification) => {
+    switch (notification.type){
+        case SUCCESSFUL:
+            return 'success'
+        case ERROR:
+            return 'error'
+        default:
+            return 'success'
+    }
+}
+
 const Navbar = (props) => {
     const classes = useStyles(props);
+    const { notification, clearNotification } = useContext(NotificationContext)
     const {expanded, handleToggleOpen, userName, urlLink, pageName, handleLogout} = props;
+
+    useEffect(() => {
+        console.log(notification)
+        if(!!notification){
+            const timer = setTimeout(() => {
+                clearNotification();
+                }, 8000
+            );
+            return () => clearTimeout(timer);
+        }
+    }, [notification]);
+
     return (
         <AppBar
             position="fixed"
@@ -89,6 +117,13 @@ const Navbar = (props) => {
                     />
                 </IconButton>
             </Toolbar>
+            {!!notification ? (
+                <Collapse in={!!notification}>
+                    <Alert severity={getSeverity(notification)}>
+                        {notification.message}
+                    </Alert>
+                </Collapse>
+            ):null }
         </AppBar>
     )
 };
