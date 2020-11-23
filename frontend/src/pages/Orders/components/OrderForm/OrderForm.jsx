@@ -21,6 +21,8 @@ import MuiTextField from '@material-ui/core/TextField';
 
 import axios from 'axios'
 import {UserContext} from "../../../../context/UserContext";
+import {NotificationContext} from "../../../../context/NotificationContext";
+import {ERROR, SUCCESSFUL} from "../../../../constants/NOTIFICATION_TYPES";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -125,10 +127,10 @@ const initializeProductQuantity = (products) => {
 const covertToAPIProductQuantity = (input) => {
     const keys = Object.keys(input);
     const output = []
-    for(const key in keys){
+    for(let i=0; i < keys.length; i++){
         output.push({
-            id: key,
-            quantity_units: input[key]
+            id: Number(keys[i]),
+            quantity_units: input[keys[i]]
         })
     }
     return output;
@@ -157,6 +159,7 @@ function multiLine(props){
 export default function OrderForm({showForm, onCloseButtonHandler, products, shops}){
     const classes = useStyles();
     const {user} = useContext(UserContext);
+    const { setANotification } = useContext(NotificationContext)
 
     const shopSelect = (
         <Field
@@ -214,16 +217,23 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
             onSubmit={async (values, {setSubmitting, resetForm}) => {
                 setSubmitting(true)
                 resetForm()
-                const response = await axios.post('/shop_order/create', {
-                    create_shop_order: {
-                        shop_id: values[SELECTED_SHOP],
-                        price_paid: false,
-                        order_taker_id: user.id,
-                        order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
-                    }
-                })
-                setSubmitting(false)
-                console.log(response)
+                try {
+                    await axios.post('/create/shop_order', {
+                        data: {
+                            shop_id: values[SELECTED_SHOP],
+                            price_paid: false,
+                            memo: values[MEMO],
+                            order_taker_id: user.id,
+                            order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
+                        }
+                    })
+                    setANotification('Order Submitted Successfully', SUCCESSFUL)
+                    setSubmitting(false)
+                }catch (e){
+                    setANotification('Order Failed to submit! Please try again', ERROR)
+                }finally {
+                    onCloseButtonHandler()
+                }
             }}
         >
             {({submitForm, isSubmitting, touched, errors, values}) => (

@@ -24,10 +24,10 @@ const mapOrdersToOrderItems = (orders) => {
             }
         })
     }).flat();
-    var aggregateProducts = [];
-    for (var i = 0; i < allProducts.length; i++) {
-        var increased = false;
-        for (var j = 0; j < aggregateProducts.length; j++) {
+    let aggregateProducts = [];
+    for (let i=0; i < allProducts.length; i++) {
+        let increased = false;
+        for (let j=0; j < aggregateProducts.length; j++) {
             if (allProducts[i].id === aggregateProducts[j].id) {
                 aggregateProducts[j].quantity += allProducts[i].quantity;
                 increased = true;
@@ -49,10 +49,11 @@ const OrderFulfillerDashboard = () => {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("/shop/request/not_delivered");
+            let response = await axios.get("/orders/not_delivered");
             let body = response.data;
 
-            const orderOptions = body.request_shop_order_not_delivered_response.map((s) => {
+
+            const orderOptions = body.data.map((s) => {
                 return {
                     id: s.id,
                     name: s.shop.name,
@@ -80,7 +81,7 @@ const OrderFulfillerDashboard = () => {
     }, [])
 
     return (
-        <WithSignedInSkeleton title={'Order Fulfiller Dashboard'}>
+        <WithSignedInSkeleton title={'Dashboard'}>
             {!loading ? (
                 <>
                     <Grid container lg={12} xs={12} spacing={3} className={classes.rootContainer}>
