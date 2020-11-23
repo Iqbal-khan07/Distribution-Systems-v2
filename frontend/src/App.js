@@ -13,8 +13,10 @@ import './App.css';
 import Orders from "./pages/Orders/Orders";
 
 import axios from "axios"
+import OrderFulfillerDashboard from "./pages/OrderFulfillerDashboard/OrderFulfillerDashboard";
 import {UserContext} from "./context/UserContext";
 import {ORDER_FULFILLER, ORDER_TAKER, SUPER_USER} from "./constants/ROLES";
+
 
 axios.defaults.baseURL = "https://arcane-scrubland-51912.herokuapp.com/api/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -25,7 +27,7 @@ function App() {
     const chooseDashboard = (role) => {
         switch (role){
             case ORDER_FULFILLER:
-                break
+                return <OrderFulfillerDashboard />
             case ORDER_TAKER:
                 break
             case SUPER_USER:
