@@ -16,22 +16,6 @@ export default function DeliveriesGrid({ orders }) {
                     </div>
                 )
             })}
-            {orders.map((order) => {
-                return (
-                    <div className={styles.tile} id={order.id}>
-                        <DeliveryNote details={order} />
-                    </div>
-                )
-            })}
-            {orders.map((order) => {
-                return (
-                    <div className={styles.tile} id={order.id}>
-                        <DeliveryNote details={order} />
-                    </div>
-                )
-            })}
-
-
         </div>
         </div>
     )

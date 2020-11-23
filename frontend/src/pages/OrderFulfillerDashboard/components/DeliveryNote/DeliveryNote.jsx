@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         overflow: "auto",
-        maxHeight: 200,
+        maxHeight: 180,
     },
     button: {
         color: "white",
