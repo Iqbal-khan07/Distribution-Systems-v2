@@ -1,25 +1,36 @@
-import React from "react";
+import React, {useContext} from "react";
 import FacebookLogin from 'react-facebook-login'
 import { useHistory } from "react-router-dom";
+import axios from "axios";
+import {UserContext} from "../../../context/UserContext";
 
-
-
-export default function FacebookButton() {
+export default function FacebookButton(setError) {
   let history = useHistory();
+  const { setName, setImageUrl, setId, setRole } = useContext(UserContext);
 
-  const responseFacebook = (response) => {
-    console.log(response);
+  const responseFacebook = async (response) => {
     let email = response.email;
-
-    var xhr = new XMLHttpRequest()
-    xhr.addEventListener('load', () => {
-      console.log(xhr.responseText)
-    })
-    //xhr.open('POST', 'https://')
-    //xhr.send(JSON.stringify({"authenticate_email":{"email":email}}))
-    history.push("/shoptracker");
+    try{
+      const response = await axios.post('/user/authenticate/facebook', {
+        data: {
+          email: email
+        }
+      })
+      const body = response.data;
+      if(response.status === 200){
+          const {
+              id, name_first, name_last, sys_user_role, image_url
+          } = body.data;
+          setId(id);
+          setImageUrl(image_url)
+          setName(`${name_first} ${name_last}`)
+          setRole(sys_user_role.name)
+          history.push("/shoptracker");
+      }
+    }catch (e){
+      setError(true)
+    }
   }
-
 
   return (
     <FacebookLogin

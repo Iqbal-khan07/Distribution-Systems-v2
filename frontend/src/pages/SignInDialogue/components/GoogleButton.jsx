@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useContext} from "react";
 import { GoogleLogin } from 'react-google-login';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import {makeStyles} from "@material-ui/core/styles";
-
+import {UserContext} from "../../../context/UserContext";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,20 +20,33 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function GoogleButton() {
+export default function GoogleButton({setError}) {
   const classes = useStyles();
+  const { setName, setImageUrl, setId, setRole } = useContext(UserContext);
   let history = useHistory();
-  const responseGoogle = (response) => {
-    console.log(response);
-    let email = response.profileObj.email;
 
-    var xhr = new XMLHttpRequest()
-    xhr.addEventListener('load', () => {
-      console.log(xhr.responseText)
-    })
-    //xhr.open('POST', 'https://')
-    //xhr.send(JSON.stringify({"authenticate_email":{"email":email}}))
-    history.push("/shoptracker");
+  const responseGoogle = async (response) => {
+    let email = response.profileObj.email;
+    try{
+      const response = await axios.post('/user/authenticate/google', {
+        data: {
+          email: email
+        }
+      })
+      const body = response.data;
+      if(response.status === 200){
+          const {
+              id, name_first, name_last, sys_user_role, image_url
+          } = body.data;
+          setId(id);
+          setImageUrl(image_url)
+          setName(`${name_first} ${name_last}`)
+          setRole(sys_user_role.name)
+          history.push("/shoptracker");
+      }
+    }catch (e){
+      setError(true)
+    }
   }
 
   function GoogleOAuthFailed(response) {
