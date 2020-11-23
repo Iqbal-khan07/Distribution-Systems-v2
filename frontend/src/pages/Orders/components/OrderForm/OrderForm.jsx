@@ -125,10 +125,10 @@ const initializeProductQuantity = (products) => {
 const covertToAPIProductQuantity = (input) => {
     const keys = Object.keys(input);
     const output = []
-    for(const key in keys){
+    for(let i=0; i < keys.length; i++){
         output.push({
-            id: key,
-            quantity_units: input[key]
+            id: Number(keys[i]),
+            quantity_units: input[keys[i]]
         })
     }
     return output;
@@ -214,16 +214,21 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
             onSubmit={async (values, {setSubmitting, resetForm}) => {
                 setSubmitting(true)
                 resetForm()
-                const response = await axios.post('/shop_order/create', {
-                    create_shop_order: {
-                        shop_id: values[SELECTED_SHOP],
-                        price_paid: false,
-                        order_taker_id: user.id,
-                        order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
-                    }
-                })
-                setSubmitting(false)
-                console.log(response)
+                try {
+                    await axios.post('/create/shop_order', {
+                        data: {
+                            shop_id: values[SELECTED_SHOP],
+                            price_paid: false,
+                            memo: values[MEMO],
+                            order_taker_id: user.id,
+                            order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
+                        }
+                    })
+                    setSubmitting(false)
+                    onCloseButtonHandler()
+                }catch (e){
+                    console.log(e)
+                }
             }}
         >
             {({submitForm, isSubmitting, touched, errors, values}) => (

@@ -59,12 +59,12 @@ const getLinksBasedOnUserType = (userType) => {
 
 const UserContextProvider = ({children}) => {
     const [user, setUser] = useState({
-        id: undefined,
+        id: 1,
         email: undefined,
-        name: undefined,
-        role: undefined,
+        name: 'Zoraiz',
+        role: ORDER_FULFILLER,
         imageUrl: undefined,
-        links: []
+        links: getLinksBasedOnUserType(ORDER_FULFILLER)
     })
 
     const setName = (name) => {
