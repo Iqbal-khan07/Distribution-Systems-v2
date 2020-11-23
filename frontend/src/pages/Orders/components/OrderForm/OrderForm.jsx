@@ -21,6 +21,8 @@ import MuiTextField from '@material-ui/core/TextField';
 
 import axios from 'axios'
 import {UserContext} from "../../../../context/UserContext";
+import {NotificationContext} from "../../../../context/NotificationContext";
+import {ERROR, SUCCESSFUL} from "../../../../constants/NOTIFICATION_TYPES";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -157,6 +159,7 @@ function multiLine(props){
 export default function OrderForm({showForm, onCloseButtonHandler, products, shops}){
     const classes = useStyles();
     const {user} = useContext(UserContext);
+    const { setANotification } = useContext(NotificationContext)
 
     const shopSelect = (
         <Field
@@ -224,10 +227,12 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                             order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
                         }
                     })
+                    setANotification('Order Submitted Successfully', SUCCESSFUL)
                     setSubmitting(false)
-                    onCloseButtonHandler()
                 }catch (e){
-                    console.log(e)
+                    setANotification('Order Failed to submit! Please try again', ERROR)
+                }finally {
+                    onCloseButtonHandler()
                 }
             }}
         >
