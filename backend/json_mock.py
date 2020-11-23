@@ -24,6 +24,9 @@ def create_shop():
         "data": {
             "name": "Test Created Shop",
             "email": None,
+            "image_url": "https://images.sftcdn.net/images/t_app-cover-" +
+                "l,f_auto/p/ce2ece60-9b32-11e6-95ab-00163ed833e7/2606637" +
+                "10/the-test-fun-for-friends-screenshot.jpg",
             "phone_number": None,
             "category": None,
             "zones": [{"id": 1}, {"id": 2}, {"id": 3}, {"id": 4}],

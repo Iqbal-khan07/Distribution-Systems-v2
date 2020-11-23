@@ -97,11 +97,11 @@ class Sys_user(db.Model):
                 "ot1234",
                 "order_taker@gmail.com",
                 "order_taker@other.com",
-                "https://images.squarespace-cdn.com/content/v1/55ad5011e4b026cf25\
-                    25000a/1441740484174-PTHHQBWISMSJUC9OS1RX/ke17ZwdGBToddI8pDm4\
-                    8kP06O0_IHyRXSOOiqwgWaApZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAg\
-                    TJucoTqqXjS3CfNDSuuf31e0tVEHLRkg2cosQUGLeQ33UzXdgIxPDaVwE3LlE\
-                    pL74qP4JVW4jCyXLPvvdR287iymYt8/the-letter-t.jpg",
+                "https://images.squarespace-cdn.com/content/v1/55ad5011e4b026cf25" +
+                    "25000a/1441740484174-PTHHQBWISMSJUC9OS1RX/ke17ZwdGBToddI8pDm4" +
+                    "8kP06O0_IHyRXSOOiqwgWaApZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAg" +
+                    "TJucoTqqXjS3CfNDSuuf31e0tVEHLRkg2cosQUGLeQ33UzXdgIxPDaVwE3LlE" +
+                    "pL74qP4JVW4jCyXLPvvdR287iymYt8/the-letter-t.jpg",
                 "1234567890",
                 1,
             )
@@ -127,9 +127,9 @@ class Sys_user(db.Model):
                 "root",
                 "administrator@gmail.com",
                 "administrator@other.com",
-                "https://lh3.googleusercontent.com/proxy/RNhuhNzPCOufEUuiXAZ6R49T\
-                    4H1qAjaXoVhXv7dZ4SDkTGXzkpFm8AsNAOxgxHgsRJGWuVa_OAM2l7iZ7YJDM\
-                    rrOe2AIi1U",
+                "https://lh3.googleusercontent.com/proxy/RNhuhNzPCOufEUuiXAZ6R49T" +
+                    "4H1qAjaXoVhXv7dZ4SDkTGXzkpFm8AsNAOxgxHgsRJGWuVa_OAM2l7iZ7YJDM" +
+                    "rrOe2AIi1U",
                 "1234567890",
                 3,
             )
@@ -142,8 +142,8 @@ class Sys_user(db.Model):
                 "dm1234",
                 "dm464@njit.edu",
                 "idislexiaheart@aol.com",
-                "https://i0.wp.com/thevitpro.com/wp-content/uploads/2019/07/Lette\
-                    r-D.png?fit=551%2C640&ssl=1",
+                "https://i0.wp.com/thevitpro.com/wp-content/uploads/2019/07/Lette" +
+                    "r-D.png?fit=551%2C640&ssl=1",
                 "1234567890",
                 1,
             )
@@ -156,8 +156,8 @@ class Sys_user(db.Model):
                 "ta1234",
                 "tma26@njit.edu",
                 "hellfrost@embarqmail.com",
-                "https://pioneerinstitute.org/wp-content/uploads/MBTA-T-sign-e143\
-                    8701323593.png",
+                "https://pioneerinstitute.org/wp-content/uploads/MBTA-T-sign-e143" +
+                    "8701323593.png",
                 "9739199865",
                 2,
             )
@@ -170,9 +170,9 @@ class Sys_user(db.Model):
                 "aq1234",
                 "aqadeniji@gmail.com",
                 "abdul83@ymail.com",
-                "https://lh3.googleusercontent.com/proxy/DuGp1GYoFa1QAqNutn5Ga0eWg\
-                    B2BlYJaHU5QeQpNJtSXIPOmdmBms6yPWP7F7MpUxd8kNtAqYtqMub-byZ-LJ-R\
-                    quvoun_xfE3eobkfctl0v",
+                "https://lh3.googleusercontent.com/proxy/DuGp1GYoFa1QAqNutn5Ga0eWg" +
+                    "B2BlYJaHU5QeQpNJtSXIPOmdmBms6yPWP7F7MpUxd8kNtAqYtqMub-byZ-LJ-R" +
+                    "quvoun_xfE3eobkfctl0v",
                 "1234567890",
                 2,
             )
@@ -185,8 +185,8 @@ class Sys_user(db.Model):
                 "zn1234",
                 "zoraiznaeem9@gmail.com",
                 "zoraiznaeem9@gmail.com",
-                "https://static6.depositphotos.com/1001599/647/i/600/depositphoto\
-                    s_6477200-stock-photo-fire-letters-a-z.jpg",
+                "https://static6.depositphotos.com/1001599/647/i/600/depositphoto" +
+                    "s_6477200-stock-photo-fire-letters-a-z.jpg",
                 "1234567890",
                 1,
             )
@@ -314,8 +314,8 @@ class Shop(db.Model):
             Shop(
                 "Temp Store 1",
                 None,
-                "https://yt3.ggpht.com/ytc/AAUvwnjLNdkBK-GXpJJQ8K9Nku_gHwS5f\
-                    WUKkq0BEoPgTA=s900-c-k-c0x00ffffff-no-rj",
+                "https://yt3.ggpht.com/ytc/AAUvwnjLNdkBK-GXpJJQ8K9Nku_gHwS5f" +
+                    "WUKkq0BEoPgTA=s900-c-k-c0x00ffffff-no-rj",
                 "1234567890",
                 None,
                 "Street 1",
@@ -328,8 +328,8 @@ class Shop(db.Model):
             Shop(
                 "Temp Store 2",
                 "ts2@store.com",
-                "https://www.clker.com/cliparts/V/H/K/p/p/u/number-2-black-\
-                    hi.png",
+                "https://www.clker.com/cliparts/V/H/K/p/p/u/number-2-black-" +
+                    "hi.png",
                 "1234567890",
                 1,
                 "Street 2",
@@ -434,17 +434,17 @@ class Company(db.Model):
         database.session.add(
             Company(
                 "Company 1",
-                "https://upload.wikimedia.org/wikipedia/commons/thum\
-                    b/3/3f/NYCS-bull-trans-1.svg/1024px-NYCS-bull-tr\
-                    ans-1.svg.png"
+                "https://upload.wikimedia.org/wikipedia/commons/thum" +
+                    "b/3/3f/NYCS-bull-trans-1.svg/1024px-NYCS-bull-tr" +
+                    "ans-1.svg.png"
             )
         )
         database.session.add(
             Company(
                 "Company 2",
-                "https://upload.wikimedia.org/wikipedia/commons/thum\
-                    b/6/61/NYCS-bull-trans-2.svg/1200px-NYCS-bull-tr\
-                    ans-\2.svg.png"
+                "https://upload.wikimedia.org/wikipedia/commons/thum" +
+                    "b/6/61/NYCS-bull-trans-2.svg/1200px-NYCS-bull-tr" +
+                    "ans-\2.svg.png"
             )
         )
 
