@@ -5,6 +5,7 @@ import ListAltIcon from '@material-ui/icons/ListAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import StorageIcon from '@material-ui/icons/Storage';
+import {ORDER_TAKER, ORDER_FULFILLER, SUPER_USER} from "../constants/ROLES";
 
 export const UserContext = createContext();
 
@@ -42,9 +43,9 @@ const LINKS = {
 }
 
 const access = {
-    "Administrator": [0, 1, 2, 3, 4, 5],
-    "Order Taker": [0, 1, 2, 5],
-    "Order Fulfiller": [0, 1, 2, 5]
+    [SUPER_USER]: [0, 1, 2, 3, 4, 5],
+    [ORDER_TAKER]: [0, 1, 2, 5],
+    [ORDER_FULFILLER]: [0, 1, 2, 5]
 }
 
 const getLinksBasedOnUserType = (userType) => {
@@ -72,6 +73,20 @@ const UserContextProvider = ({children}) => {
             prev['name'] = name
             return prev
         })
+    }
+
+    const resetUser = () => {
+        setUser((u) => {
+            return {
+                id: undefined,
+                email: undefined,
+                name: undefined,
+                role: undefined,
+                imageUrl: undefined,
+                links: []
+            }
+        })
+
     }
 
     const setId = (id) => {
@@ -109,7 +124,7 @@ const UserContextProvider = ({children}) => {
 
 
     return (
-        <UserContext.Provider value={{user, setName, setImageUrl, setRole, setUserEmail, setId}}>
+        <UserContext.Provider value={{user, setName, setImageUrl, setRole, setUserEmail, setId, resetUser}}>
             {children}
         </UserContext.Provider>
     )

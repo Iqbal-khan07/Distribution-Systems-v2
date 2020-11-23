@@ -53,7 +53,7 @@ export default function SignInDialogue({ onClose, open }) {
           onSubmit={async (values, {setSubmitting, resetForm}) => {
               setSubmitting(true)
               try{
-                  const response = await axios.post('/user/authenticate/default', {
+                  const response = await axios.post('/authenticate/default', {
                       data: {
                           username: values[EMAIL],
                           password: values[PASSWORD]
@@ -69,7 +69,7 @@ export default function SignInDialogue({ onClose, open }) {
                       setImageUrl(image_url)
                       setName(`${name_first} ${name_last}`)
                       setRole(sys_user_role.name)
-                      history.push("/shoptracker");
+                      history.push("/dashboard");
                   }
               }catch (e) {
                   setError(true)

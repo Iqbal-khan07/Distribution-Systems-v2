@@ -11,7 +11,7 @@ export default function FacebookButton(setError) {
   const responseFacebook = async (response) => {
     let email = response.email;
     try{
-      const response = await axios.post('/user/authenticate/facebook', {
+      const response = await axios.post('/authenticate/facebook', {
         data: {
           email: email
         }
@@ -25,7 +25,7 @@ export default function FacebookButton(setError) {
           setImageUrl(image_url)
           setName(`${name_first} ${name_last}`)
           setRole(sys_user_role.name)
-          history.push("/shoptracker");
+          history.push("/dashboard");
       }
     }catch (e){
       setError(true)

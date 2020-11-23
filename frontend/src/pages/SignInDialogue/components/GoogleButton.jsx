@@ -28,7 +28,7 @@ export default function GoogleButton({setError}) {
   const responseGoogle = async (response) => {
     let email = response.profileObj.email;
     try{
-      const response = await axios.post('/user/authenticate/google', {
+      const response = await axios.post('/authenticate/google', {
         data: {
           email: email
         }
@@ -42,7 +42,7 @@ export default function GoogleButton({setError}) {
           setImageUrl(image_url)
           setName(`${name_first} ${name_last}`)
           setRole(sys_user_role.name)
-          history.push("/shoptracker");
+          history.push("/dashboard");
       }
     }catch (e){
       setError(true)

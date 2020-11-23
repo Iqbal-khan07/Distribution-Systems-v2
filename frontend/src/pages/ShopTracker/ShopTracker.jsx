@@ -43,7 +43,7 @@ const ShopTracker = () => {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("/shop/request/all");
+            let response = await axios.get("/shops/all");
             let body = response.data;
 
             const shopOptions = body.data.map((s) => {
