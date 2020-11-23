@@ -5,7 +5,6 @@ import OrderTable from "./components/OrderTable/OrderTable";
 import OrderForm from "./components/OrderForm/OrderForm";
 import OrderInfoPage from "./components/OrderInfoPage/OrderInfoPage";
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import OrderStatus from "./components/OrderStatus/OrderStatus";
 import axios from 'axios';
@@ -31,10 +30,6 @@ import axios from 'axios';
 //     return { id, customer, date, amount, memo, status };
 // }
 
-const useStyles = makeStyles((theme) => ({
-    rootContainer: {
-    }
-}));
 
 // const shopOptions = [
 //     {
@@ -91,7 +86,6 @@ const mapOrdersToOrderOptions = (orders) => {
 }
 
 const Orders = () => {
-    const classes = useStyles();
     const [productOptions, setProductOptions] = useState([]);
     const [orders, setOrders] = useState([]);
     const [shopOptions, setShopOptions] = useState([]);
@@ -102,9 +96,9 @@ const Orders = () => {
     // TODO FIX THE ORDER FORM!
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("company_product/request/all");
+            let response = await axios.get("company_products/all");
             let body = response.data;
-            const productsList = body.request_company_product_response.map((p) => {
+            const productsList = body.data.map((p) => {
                 return {
                     id: p.id,
                     name: p.name,
@@ -113,10 +107,10 @@ const Orders = () => {
             })
             setProductOptions(productsList)
 
-            response = await axios.get("/shop/request/not_delivered");
+            response = await axios.get("/orders/not_delivered");
             body = response.data;
 
-            const orders = body.request_shop_order_not_delivered_response.map((o) => {
+            const orders = body.data.map((o) => {
                 const orderItems = o.shop_order_items.map((item) => {
                     return {
                         productName: item.company_product.name,
@@ -143,10 +137,10 @@ const Orders = () => {
                 }
             })
 
-            response = await axios.get("/shop/request/all");
+            response = await axios.get("/shops/all");
             body = response.data;
 
-            const shopOptions = body.request_shop_response.map((s) => {
+            const shopOptions = body.data.map((s) => {
                 return {
                     id: s.id,
                     name: s.name,
@@ -160,8 +154,6 @@ const Orders = () => {
         }
         fetchData().then()
     }, [])
-
-
 
 
     const onFormShowHandler = () => {

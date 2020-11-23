@@ -4,6 +4,7 @@ import {UserContext} from "../../context/UserContext";
 import Navbar from "../Navbar/NavBar";
 import SideDrawer from "../SideDrawer/SideDrawer";
 import {Typography} from "@material-ui/core";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,15 +35,17 @@ const useStyles = makeStyles((theme) => ({
 
 const WithSignedInSkeleton = ({children, title}) => {
     const classes = useStyles();
-    const {user} = useContext(UserContext);
+    const {user, resetUser} = useContext(UserContext);
     const [open, setOpen] = React.useState(true);
+    let history = useHistory();
 
     const handleToggleOpen = () => {
         open ? setOpen(false): setOpen(true);
     };
 
     const handleLogout = () => {
-
+        resetUser();
+        history.push('/');
     }
 
     return (
@@ -51,6 +54,7 @@ const WithSignedInSkeleton = ({children, title}) => {
                 expanded={open}
                 userName={user.name}
                 handleToggleOpen={handleToggleOpen}
+                urlLink={user.imageUrl}
                 handleLogout={handleLogout}
             />
 
