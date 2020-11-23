@@ -49,16 +49,18 @@ class Sys_user(db.Model):
     password = db.Column(db.String(255), nullable=False)
     email_google = db.Column(db.String(100), nullable=False, unique=True)
     email_fb = db.Column(db.String(100), nullable=False, unique=True)
+    image_url = db.Column(db.String(500), nullable=False, unique=False)
     phone_number = db.Column(db.String(10), nullable=True)
     role = db.Column(db.Integer, db.ForeignKey("sys_user_role.id"), nullable=False)
 
-    def __init__(self, nf, nl, su, pw, eg, ef, pn, ro):
+    def __init__(self, nf, nl, su, pw, eg, ef, iu, pn, ro):
         self.name_first = nf
         self.name_last = nl
         self.sys_username = su
         self.password = pw
         self.email_google = eg
         self.email_fb = ef
+        self.image_url = iu
         self.phone_number = pn
         self.role = ro
 
@@ -78,6 +80,7 @@ class Sys_user(db.Model):
             "sys_username": self.sys_username,
             "email_google": self.email_google,
             "email_fb": self.email_fb,
+            "image_url": self.image_url,
             "phone_number": self.phone_number,
             "sys_user_role": sys_user_role,
         }
@@ -94,6 +97,11 @@ class Sys_user(db.Model):
                 "ot1234",
                 "order_taker@gmail.com",
                 "order_taker@other.com",
+                "https://images.squarespace-cdn.com/content/v1/55ad5011e4b026cf25\
+                    25000a/1441740484174-PTHHQBWISMSJUC9OS1RX/ke17ZwdGBToddI8pDm4\
+                    8kP06O0_IHyRXSOOiqwgWaApZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAg\
+                    TJucoTqqXjS3CfNDSuuf31e0tVEHLRkg2cosQUGLeQ33UzXdgIxPDaVwE3LlE\
+                    pL74qP4JVW4jCyXLPvvdR287iymYt8/the-letter-t.jpg",
                 "1234567890",
                 1,
             )
@@ -106,6 +114,7 @@ class Sys_user(db.Model):
                 "of1234",
                 "order_fulfiller@gmail.com",
                 "order_fulfiller@other.com",
+                "https://i.redd.it/o8rz4s0lxp021.png",
                 "1234567890",
                 2,
             )
@@ -118,6 +127,9 @@ class Sys_user(db.Model):
                 "root",
                 "administrator@gmail.com",
                 "administrator@other.com",
+                "https://lh3.googleusercontent.com/proxy/RNhuhNzPCOufEUuiXAZ6R49T\
+                    4H1qAjaXoVhXv7dZ4SDkTGXzkpFm8AsNAOxgxHgsRJGWuVa_OAM2l7iZ7YJDM\
+                    rrOe2AIi1U",
                 "1234567890",
                 3,
             )
@@ -130,6 +142,8 @@ class Sys_user(db.Model):
                 "dm1234",
                 "dm464@njit.edu",
                 "idislexiaheart@aol.com",
+                "https://i0.wp.com/thevitpro.com/wp-content/uploads/2019/07/Lette\
+                    r-D.png?fit=551%2C640&ssl=1",
                 "1234567890",
                 1,
             )
@@ -142,6 +156,8 @@ class Sys_user(db.Model):
                 "ta1234",
                 "tma26@njit.edu",
                 "hellfrost@embarqmail.com",
+                "https://pioneerinstitute.org/wp-content/uploads/MBTA-T-sign-e143\
+                    8701323593.png",
                 "9739199865",
                 2,
             )
@@ -154,8 +170,25 @@ class Sys_user(db.Model):
                 "aq1234",
                 "aqadeniji@gmail.com",
                 "abdul83@ymail.com",
+                "https://lh3.googleusercontent.com/proxy/DuGp1GYoFa1QAqNutn5Ga0eWg\
+                    B2BlYJaHU5QeQpNJtSXIPOmdmBms6yPWP7F7MpUxd8kNtAqYtqMub-byZ-LJ-R\
+                    quvoun_xfE3eobkfctl0v",
                 "1234567890",
                 2,
+            )
+        )
+        database.session.add(
+            Sys_user(
+                "Zoraiz",
+                "Naeem",
+                "zoraiz",
+                "zn1234",
+                "zoraiznaeem9@gmail.com",
+                "zoraiznaeem9@gmail.com",
+                "https://static6.depositphotos.com/1001599/647/i/600/depositphoto\
+                    s_6477200-stock-photo-fire-letters-a-z.jpg",
+                "1234567890",
+                1,
             )
         )
 
