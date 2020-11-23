@@ -18,7 +18,7 @@ basePath: "/api"
 # Paths supported by the server application
 
 paths:
-  /user/authenticate/default:
+  /authenticate/default:
     post:
       operationId: api.user_authenticate_default
       tags:
@@ -56,7 +56,7 @@ paths:
               data:
                 type: object
 
-  /user/authenticate/google:
+  /authenticate/google:
     post:
       operationId: api.user_authenticate_gmail
       tags:
@@ -90,7 +90,7 @@ paths:
               data:
                 type: object
 
-  /user/authenticate/facebook:
+  /authenticate/facebook:
     post:
       operationId: api.user_authenticate_fb
       tags:
@@ -124,7 +124,7 @@ paths:
               data:
                 type: object
 
-  /company_product/request/all:
+  /company_products/all:
     get:
       operationId: api.get_company_product
       description: Return all company products in the database
@@ -137,7 +137,7 @@ paths:
               data:
                 type: array
 
-  /shop/request/not_delivered:
+  /orders/not_delivered:
     get:
       operationId: api.get_order_not_delivered
       description: Return all shop orders in the database that have completed = False
@@ -150,7 +150,7 @@ paths:
               data:
                 type: array
 
-  /shop/request/all:
+  /shops/all:
     get:
       operationId: api.get_all_shops
       description: Return all shops in database
@@ -163,7 +163,7 @@ paths:
               data:
                 type: array
 
-  /zone/request/all:
+  /zones/all:
     get:
       operationId: api.get_all_zones
       description: Return all zones in database
@@ -176,7 +176,7 @@ paths:
               data:
                 type: array
 
-  /shop_category/request/all:
+  /shop_categories/all:
     get:
       operationId: api.get_all_shop_category
       description: Return all shop categories in database
@@ -189,7 +189,7 @@ paths:
               data:
                 type: array
 
-  /shop/create:
+  /create/shop:
     post:
       operationId: api.shop_create
       description: Create a new shop with JSON data
@@ -265,7 +265,7 @@ paths:
               data:
                 type: object
 
-  /zone/create:
+  /create/zone:
     post:
       operationId: api.zone_create
       description: Create a new zone with JSON data
@@ -296,7 +296,7 @@ paths:
               data:
                 type: object
 
-  /shop_category/create:
+  /create/shop_category:
     post:
       operationId: api.shop_category_create
       description: Create a new shop category with JSON data
@@ -327,7 +327,7 @@ paths:
               data:
                 type: object
 
-  /shop_order/create:
+  /create/shop_order:
     post:
       operationId: api.shop_order_create
       description: Create a new shop order with JSON data
@@ -385,7 +385,7 @@ paths:
               data:
                 type: object
 
-  /shop_order/update/delivered:
+  /deliver/shop_order:
     post:
       operationId: api.shop_order_update
       description: Create a new user in the user list

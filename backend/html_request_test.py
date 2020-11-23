@@ -5,22 +5,22 @@ import json
 base_url = "http://localhost:8080/api"
 # base_url = "https://arcane-scrubland-51912.herokuapp.com/api"
 
-authenticate_default = "/user/authenticate/default"
-authenticate_gmail = "/user/authenticate/google"
-authenticate_facebook = "/user/authenticate/facebook"
+authenticate_default = "/authenticate/default"
+authenticate_gmail = "/authenticate/google"
+authenticate_facebook = "/authenticate/facebook"
 
-get_company_product = "/company_product/request/all"
-get_shop_order_not_delivered = "/shop/request/not_delivered"
-get_shop = "/shop/request/all"
-get_zone = "/zone/request/all"
-get_shop_category = "/shop_category/request/all"
+get_company_product = "/company_products/all"
+get_shop_order_not_delivered = "/orders/not_delivered"
+get_shop = "/shops/all"
+get_zone = "/zones/all"
+get_shop_category = "/shop_categories/all"
 
-create_shop = "/shop/create"
-create_zone = "/zone/create"
-create_shop_category = "/shop_category/create"
-create_shop_order = "/shop_order/create"
+create_shop = "/create/shop"
+create_zone = "/create/zone"
+create_shop_category = "/create/shop_category"
+create_shop_order = "/create/shop_order"
 
-update_shop_order_delevered = "/shop_order/update/delivered"
+update_shop_order_delevered = "/deliver/shop_order"
 
 def spacer():
     print("___________________________________________________________")
@@ -69,16 +69,16 @@ def update_sod():
     spacer()
 
 if __name__ == '__main__':
-    #auth_default()
-    #auth_gmail()
-    #auth_fb()
-    #get_comp_prod()
-    #get_sond()
-    #get_sh()
-    #get_z()
-    #get_s_c()
-    #create_s()
-    #create_z()
-    #create_s_c()
+    auth_default()
+    auth_gmail()
+    auth_fb()
+    get_comp_prod()
+    get_sond()
+    get_sh()
+    get_z()
+    get_s_c()
+    create_s()
+    create_z()
+    create_s_c()
     create_s_o()
-    #update_sod()
+    update_sod()
