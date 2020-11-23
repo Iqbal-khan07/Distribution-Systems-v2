@@ -16,6 +16,7 @@ import axios from "axios"
 import OrderFulfillerDashboard from "./pages/OrderFulfillerDashboard/OrderFulfillerDashboard";
 import {UserContext} from "./context/UserContext";
 import {ORDER_FULFILLER, ORDER_TAKER, SUPER_USER} from "./constants/ROLES";
+import OrderTakerDashboard from "./pages/OrderTakerDashboard/OrderTakerDashboard";
 
 
 axios.defaults.baseURL = "https://arcane-scrubland-51912.herokuapp.com/api/";
@@ -29,7 +30,7 @@ function App() {
             case ORDER_FULFILLER:
                 return <OrderFulfillerDashboard />
             case ORDER_TAKER:
-                break
+                return <OrderTakerDashboard />
             case SUPER_USER:
                 return <SuperDashboard />
             default:
