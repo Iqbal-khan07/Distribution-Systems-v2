@@ -6,14 +6,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios';
 import DeliveryProductTable from "./components/DeliveryProductTable/DeliveryProductTable";
 import DeliveryNote from "./components/DeliveryNote/DeliveryNote";
+import DeliveriesGrid from "./components/DeliveriesGrid/DeliveriesGrid";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
-    }
+    },
 }));
 
 const mapOrdersToOrderItems = (orders) => {
-    let allProducts= orders.map((s) => {
+    let allProducts = orders.map((s) => {
         return s.orderItems.map((o) => {
             return {
                 id: o.productNumber,
@@ -24,9 +25,9 @@ const mapOrdersToOrderItems = (orders) => {
         })
     }).flat();
     var aggregateProducts = [];
-    for (var i=0; i < allProducts.length; i++) {
+    for (var i = 0; i < allProducts.length; i++) {
         var increased = false;
-        for (var j=0; j < aggregateProducts.length; j++) {
+        for (var j = 0; j < aggregateProducts.length; j++) {
             if (allProducts[i].id === aggregateProducts[j].id) {
                 aggregateProducts[j].quantity += allProducts[i].quantity;
                 increased = true;
@@ -41,9 +42,9 @@ const mapOrdersToOrderItems = (orders) => {
 
 
 const OrderFulfillerDashboard = () => {
-    //const classes = useStyles();
-    const [loading, setLoading] = useState(true)
-    const [orders, setOrders] = useState([]);
+    const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [orders, setOrders] = useState([]);;
 
 
     useEffect(() => {
@@ -82,7 +83,7 @@ const OrderFulfillerDashboard = () => {
         <WithSignedInSkeleton title={'Order Fulfiller Dashboard'}>
             {!loading ? (
                 <>
-                    <Grid container lg={12} xs={12} spacing={3}>
+                    <Grid container lg={12} xs={12} spacing={3} className={classes.rootContainer}>
                         <Grid item lg={12} xs={12}>
                             <Grid container>
                                 <Grid item lg={8} xs={12}>
@@ -94,7 +95,9 @@ const OrderFulfillerDashboard = () => {
                         </Grid>
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
-                                <DeliveryNote details={orders[0]} />
+                                <Grid item lg={12} xs={12}>
+                                    <DeliveriesGrid orders={orders} />
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
