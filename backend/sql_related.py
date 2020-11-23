@@ -400,9 +400,11 @@ class Company(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
+    image_url = db.Column(db.String(500), nullable=False)
 
-    def __init__(self, na):
+    def __init__(self, na, iu):
         self.name = na
+        self.image_url = iu
 
     def request_company_info(self, database):
         """produces a dictionary of all relevant company_product information"""
@@ -418,14 +420,33 @@ class Company(db.Model):
         for zone in company_zone_query:
             zones.append(zone.request_zone_info(database))
 
-        return {"id": self.id, "name": self.name, "zones": zones}
+        return {
+            "id": self.id,
+            "name": self.name,
+            "image_url": self.image_url,
+            "zones": zones
+        }
 
     @staticmethod
     def bootstrap_populate(database):
         """database bootstrap function for company"""
 
-        database.session.add(Company("Company 1"))
-        database.session.add(Company("Company 2"))
+        database.session.add(
+            Company(
+                "Company 1",
+                "https://upload.wikimedia.org/wikipedia/commons/thum\
+                    b/3/3f/NYCS-bull-trans-1.svg/1024px-NYCS-bull-tr\
+                    ans-1.svg.png"
+            )
+        )
+        database.session.add(
+            Company(
+                "Company 2",
+                "https://upload.wikimedia.org/wikipedia/commons/thum\
+                    b/6/61/NYCS-bull-trans-2.svg/1200px-NYCS-bull-tr\
+                    ans-\2.svg.png"
+            )
+        )
 
         database.session.commit()
 
