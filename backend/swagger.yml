@@ -246,6 +246,7 @@ paths:
                 required:
                  - name
                  - email
+                 - image_url
                  - phone_number
                  - category
                  - street
@@ -347,6 +348,9 @@ paths:
                   price_paid:
                     type: boolean
                     description: True if the order was paid for when the order was taken
+                  memo:
+                    type: string
+                    description: Shop order memo
                   order_taker_id:
                     type: integer
                     description: Order Taker database id
@@ -367,6 +371,7 @@ paths:
                 required:
                  - shop_id
                  - price_paid
+                 - memo
                  - order_taker_id
                  - order_items
             required:

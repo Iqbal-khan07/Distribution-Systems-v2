@@ -55,8 +55,9 @@ def create_shop_category():
 def create_shop_order():
     jsonmock = {
         "data": {
-            "shop_id": 14,
+            "shop_id": 3,
             "price_paid": True,
+            "memo": "big smelly memo",
             "order_taker_id": 1,
             "order_items": [
                 {"id": 1, "quantity_units": 100},

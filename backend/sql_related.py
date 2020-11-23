@@ -556,6 +556,7 @@ class Shop_order(db.Model):
     shop = db.Column(db.Integer, db.ForeignKey("shop.id"), nullable=False)
     price_due = db.Column(db.Numeric(10, 2), nullable=False)
     price_paid = db.Column(db.Boolean(), nullable=False)
+    memo = db.Column(db.String(500), nullable=False)
     date_ordered = db.Column(db.DateTime(True), nullable=False)
     date_delivered_projected = db.Column(db.DateTime(True), nullable=False)
     date_delivered = db.Column(db.DateTime(True), nullable=True)
@@ -563,10 +564,11 @@ class Shop_order(db.Model):
     order_fulfiller = db.Column(db.Integer, db.ForeignKey("sys_user.id"), nullable=True)
     completed = db.Column(db.Boolean(), nullable=False)
 
-    def __init__(self, sh, pd, pp, do, ddp, dd, ot, of, co):
+    def __init__(self, sh, pd, pp, me, do, ddp, dd, ot, of, co):
         self.shop = sh
         self.price_due = pd
         self.price_paid = pp
+        self.memo = me
         self.date_ordered = do
         self.date_delivered_projected = ddp
         self.date_delivered = dd
@@ -612,6 +614,7 @@ class Shop_order(db.Model):
             "shop": shop_entry.request_shop_info(database),
             "price_due": float(self.price_due),
             "price_paid": self.price_paid,
+            "memo": self.memo,
             "date_ordered": str(self.date_ordered),
             "date_delivered_projected": str(self.date_delivered_projected),
             "date_delivered": self.date_delivered,
@@ -632,13 +635,31 @@ class Shop_order(db.Model):
         # order placed and paid
         database.session.add(
             Shop_order(
-                1, 40614.00, True, current_time_utc, week_forward, None, 1, None, False
+                1, 
+                40614.00, 
+                True, 
+                "test 1", 
+                current_time_utc, 
+                week_forward, 
+                None, 
+                1, 
+                None, 
+                False
             )
         )
         # order placed and not paid
         database.session.add(
             Shop_order(
-                2, 7928.00, False, current_time_utc, week_forward, None, 1, None, False
+                2, 
+                7928.00, 
+                False, 
+                "test 2", 
+                current_time_utc, 
+                week_forward, 
+                None, 
+                1, 
+                None, 
+                False
             )
         )
         # order placed, paid and delivered
@@ -647,6 +668,7 @@ class Shop_order(db.Model):
                 3,
                 400400.00,
                 True,
+                "",
                 current_time_utc,
                 week_forward,
                 week_forward,
@@ -1158,6 +1180,7 @@ def create_shop_order(database, data):
                     data_loaded["shop_id"],
                     price_total,
                     False,
+                    data_loaded["memo"],
                     current_time_utc,
                     week_forward,
                     None,
