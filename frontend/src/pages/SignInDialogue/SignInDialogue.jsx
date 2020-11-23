@@ -13,8 +13,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LockIcon from '@material-ui/icons/Lock';
 import Button from '@material-ui/core/Button';
-import styles from './SignInDialogue.module.css'
-    ;
+import styles from './SignInDialogue.module.css';
 import { useHistory } from "react-router-dom";
 
 import * as Yup from "yup"
@@ -60,7 +59,6 @@ export default function SignInDialogue({ onClose, open }) {
                       }
                   })
                   const body = response.data;
-                  console.log(response)
                   if(response.status === 200){
                       const {
                           id, name_first, name_last, sys_user_role, image_url
