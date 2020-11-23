@@ -8,70 +8,108 @@ import StorageIcon from '@material-ui/icons/Storage';
 
 export const UserContext = createContext();
 
+const LINKS = {
+    0: {
+        "icon": <HomeIcon style={{fontSize: 30}} />,
+        "text": 'Dashboard',
+        "to": '/dashboard'
+    },
+    1: {
+        "icon": <StoreIcon style={{fontSize: 30}} />,
+        "text": 'Shop Tracker',
+        "to": '/shoptracker'
+    },
+    2: {
+        "icon": <ListAltIcon style={{fontSize: 30}} />,
+        "text": 'Orders',
+        "to": '/orders'
+    },
+    3: {
+        "icon": <StorageIcon style={{fontSize: 30}} />,
+        "text": 'Inventory Manager',
+        "to": '/inventory'
+    },
+    4: {
+        "icon": <PeopleAltIcon style={{fontSize: 30}} />,
+        "text": 'Employers',
+        "to": '/employers'
+    },
+    5: {
+        "icon": <SettingsIcon style={{fontSize: 30}} />,
+        "text": 'Settings',
+        "to": '/settings'
+    }
+}
+
+const access = {
+    "Administrator": [0, 1, 2, 3, 4, 5],
+    "Order Taker": [0, 1, 2, 5],
+    "Order Fulfiller": [0, 1, 2, 5]
+}
+
+const getLinksBasedOnUserType = (userType) => {
+    const accessList = access[userType];
+    const links = []
+    for(let i=0; i<accessList.length; i++){
+        links.push(LINKS[accessList[i]])
+    }
+    return links;
+}
+
 const UserContextProvider = ({children}) => {
     const [user, setUser] = useState({
-        id: 100,
+        id: undefined,
         email: undefined,
-        name: "Zoraiz Naeem",
+        name: undefined,
         role: undefined,
         imageUrl: undefined,
-        links: [
-        {
-            "icon": <HomeIcon style={{fontSize: 30}} />,
-            "text": 'Dashboard',
-            "to": '/dashboard'
-        }, {
-            "icon": <StoreIcon style={{fontSize: 30}} />,
-            "text": 'Shop Tracker',
-            "to": '/shoptracker'
-        }, {
-            "icon": <ListAltIcon style={{fontSize: 30}} />,
-            "text": 'Orders',
-            "to": '/orders'
-        },{
-            "icon": <StorageIcon style={{fontSize: 30}} />,
-            "text": 'Inventory Manager',
-            "to": '/inventory'
-        }, {
-            "icon": <PeopleAltIcon style={{fontSize: 30}} />,
-            "text": 'Employers',
-            "to": '/employers'
-        }, {
-            "icon": <SettingsIcon style={{fontSize: 30}} />,
-            "text": 'Settings',
-            "to": '/settings'
-        }
-
-    ]
-
+        links: []
     })
 
     const setName = (name) => {
-        setUser({name: name, ...user})
+        setUser((u) => {
+            const prev = {...u}
+            prev['name'] = name
+            return prev
+        })
     }
 
     const setId = (id) => {
-        setUser({id: id, ...user})
-    }
-
-    const setDisplayId = (displayId) => {
-        setUser({displayId: displayId, ...user})
+        setUser((u) => {
+            const prev = {...u}
+            prev['id'] = id
+            return prev
+        })
     }
 
     const setImageUrl = (imageUrl) => {
-        setUser({imageUrl: imageUrl, ...user})
+        setUser((u) => {
+            const prev = {...u}
+            prev['imageUrl'] = imageUrl
+            return prev
+        })
     }
 
     const setUserEmail = (email) => {
-        setUser({email: email, ...user})
+        setUser((u) => {
+            const prev = {...u}
+            prev['email'] = email
+            return prev
+        })
     }
 
-    const setUserObject = (user) => {
-        setUser(user)
+    const setRole = (role) => {
+        setUser((u) => {
+            const prev = {...u}
+            prev['role'] = role
+            prev['links'] = getLinksBasedOnUserType(role)
+            return prev
+        })
     }
+
 
     return (
-        <UserContext.Provider value={{user, setName, setDisplayId, setImageUrl, setUserObject, setUserEmail, setId}}>
+        <UserContext.Provider value={{user, setName, setImageUrl, setRole, setUserEmail, setId}}>
             {children}
         </UserContext.Provider>
     )
