@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios';
 import DeliveryProductTable from "./components/DeliveryProductTable/DeliveryProductTable";
 import DeliveriesGrid from "./components/DeliveriesGrid/DeliveriesGrid";
+import DeliveredTodayCard from "./components/DeliveredTodayCard/DeliveredTodayCard";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
@@ -37,7 +38,17 @@ const mapOrdersToOrderItems = (orders) => {
             aggregateProducts.push(allProducts[i]);
     }
     return aggregateProducts;
-}
+};
+
+const completedOrders = (orders) => {
+    let completed = 0;
+    for (let i = 0; i < orders.length; i++) {
+        if (orders[i].completed) {
+            completed++;
+        }
+    }
+    return completed;
+};
 
 
 const OrderFulfillerDashboard = () => {
@@ -70,7 +81,8 @@ const OrderFulfillerDashboard = () => {
                         }
                     }),
                     paymentDue: s.price_due,
-                    memo: ""
+                    memo: "",
+                    delivered: s.completed
                 }
             });
             setOrders(orderOptions)
@@ -85,10 +97,16 @@ const OrderFulfillerDashboard = () => {
                 <>
                     <Grid container spacing={3} className={classes.rootContainer}>
                         <Grid item lg={12} xs={12}>
-                            <Grid container>
+                            <Grid container spacing={3}>
                                 <Grid item lg={8} xs={12}>
                                     <DeliveryProductTable
                                         rows={mapOrdersToOrderItems(orders)}
+                                    />
+                                </Grid>
+                                <Grid item lg={4} xs={12}>
+                                    <DeliveredTodayCard
+                                        delivered={completedOrders(orders)}
+                                        total={orders.length}
                                     />
                                 </Grid>
                             </Grid>
