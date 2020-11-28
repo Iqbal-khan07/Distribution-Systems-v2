@@ -1,0 +1,15 @@
+.listContainer {
+    display: block;
+    width: 100%;
+}
+
+.gridList {
+    overflow: auto;
+    /*white-space: nowrap;*/
+    max-width: 100%;
+}
+
+.tile {
+    display: inline-flex;
+    padding: 14px;
+}

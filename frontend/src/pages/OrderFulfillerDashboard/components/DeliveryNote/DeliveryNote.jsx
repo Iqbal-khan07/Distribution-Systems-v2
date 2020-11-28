@@ -12,6 +12,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import Fab from '@material-ui/core/Fab';
 import { makeStyles } from '@material-ui/core/styles';
 import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
+import DeliveryConfirmationScreen from '../DeliveryConfirmationScreen/DeliveryConfirmationScreen';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         overflow: "auto",
-        maxHeight: 200,
+        maxHeight: 180,
     },
     button: {
         color: "white",
@@ -46,6 +47,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DeliveryNote({ details }) {
     const classes = useStyles();
+    const [disabled, setDisabled] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const clickHandler = () => {
+        setOpen(true);
+    };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <Card className={classes.root} elevation={3}>
@@ -68,7 +77,7 @@ export default function DeliveryNote({ details }) {
                     <List className={classes.list} dense disablePadding>
                         {details.orderItems.map((order) => {
                             return (
-                                <ListItem>
+                                <ListItem key={order.productName}>
                                     <Grid container>
                                         <Grid item xs={3}>
                                             {order.quantity}
@@ -96,11 +105,17 @@ export default function DeliveryNote({ details }) {
             </CardContent>
             <CardActions className={classes.actionArea}>
                 <Tooltip title="Mark delivered" aria-label="Mark delivered">
-                    <Fab size="small" color="primary">
+                    <Fab size="small" color="primary" onClick={clickHandler} disabled={disabled}>
                         <DoneIcon className={classes.button} />
                     </Fab>
                 </Tooltip>
             </CardActions>
+            <DeliveryConfirmationScreen
+                open={open}
+                orderNumber={details.id}
+                onClose={handleClose}
+                handleDisabled={setDisabled}
+            />
 
         </Card>
     );
