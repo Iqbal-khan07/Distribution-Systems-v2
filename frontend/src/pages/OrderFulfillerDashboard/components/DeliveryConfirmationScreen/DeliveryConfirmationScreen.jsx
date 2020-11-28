@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -7,22 +7,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import {UserContext} from "../../../../context/UserContext";
+import {NotificationContext} from "../../../../context/NotificationContext";
+import {ERROR, SUCCESSFUL} from "../../../../constants/NOTIFICATION_TYPES";
+
 
 
 export default function DeliveryConfirmationScreen(props) {
   const { orderNumber, open, onClose, handleDisabled } = props;
-  const [confirmationAlertOpen, setConfirmationAlert] = React.useState(false);
-  const [errorAlertOpen, setErrorAlert] = React.useState(false);
+  const {user} = useContext(UserContext);
+  const { setANotification } = useContext(NotificationContext)
+  
   const handleClose = () => {
     onClose();
-  };
-  const handleConfirmationAlert = () => {
-    setConfirmationAlert(false);
-  };
-  const handleErrorAlert = () => {
-    setErrorAlert(false);
   };
 
   const handleConfirmation = async () => {
@@ -30,14 +27,14 @@ export default function DeliveryConfirmationScreen(props) {
       await axios.post('/deliver/shop_order', {
         data: {
           shop_order_id: { orderNumber },
-          order_fulfiller_id: 0 // TODO - Get id from user context
+          order_fulfiller_id: user.id
         }
       });
-      setConfirmationAlert(true);
+      setANotification(`Order # ${orderNumber} delivered successfully`, SUCCESSFUL)
       handleDisabled(true);
     }
     catch (e) {
-      setErrorAlert(true);
+      setANotification(`Failed to confirm delivery for order # ${orderNumber}. Please try again.`, ERROR)
     }
     finally {
       onClose();
@@ -45,7 +42,6 @@ export default function DeliveryConfirmationScreen(props) {
   };
 
   return (
-    <div>
       <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
         <DialogTitle id="simple-dialog-title">{"Confirm Delivery?"}</DialogTitle>
         <DialogContent>
@@ -62,18 +58,6 @@ export default function DeliveryConfirmationScreen(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      <Snackbar open={confirmationAlertOpen} autoHideDuration={5000} onClose={handleConfirmationAlert}>
-        <MuiAlert elevation={6} variant="filled" onClose={handleConfirmationAlert} severity="success">
-          Order delivery confirmed!
-        </MuiAlert>
-      </Snackbar>
-      <Snackbar open={errorAlertOpen} autoHideDuration={5000} onClose={handleErrorAlert}>
-        <MuiAlert elevation={6} variant="filled" onClose={handleErrorAlert} severity="error">
-          Order delivery failed to confirm! Try again.
-        </MuiAlert>
-      </Snackbar>
-
-    </div>
   );
 }
 
