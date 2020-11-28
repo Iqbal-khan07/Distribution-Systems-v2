@@ -77,7 +77,7 @@ export default function DeliveryNote({ details }) {
                     <List className={classes.list} dense disablePadding>
                         {details.orderItems.map((order) => {
                             return (
-                                <ListItem>
+                                <ListItem key={order.productName}>
                                     <Grid container>
                                         <Grid item xs={3}>
                                             {order.quantity}

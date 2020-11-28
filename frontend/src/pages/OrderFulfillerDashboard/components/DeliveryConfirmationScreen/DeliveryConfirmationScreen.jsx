@@ -12,7 +12,6 @@ import MuiAlert from '@material-ui/lab/Alert';
 
 
 export default function DeliveryConfirmationScreen(props) {
-  /*const classes = useStyles();*/
   const { orderNumber, open, onClose, handleDisabled } = props;
   const [confirmationAlertOpen, setConfirmationAlert] = React.useState(false);
   const [errorAlertOpen, setErrorAlert] = React.useState(false);
@@ -31,14 +30,13 @@ export default function DeliveryConfirmationScreen(props) {
       await axios.post('/deliver/shop_order', {
         data: {
           shop_order_id: { orderNumber },
-          order_fulfiller_id: 0 //TODO
+          order_fulfiller_id: 0 // TODO - Get id from user context
         }
       });
       setConfirmationAlert(true);
       handleDisabled(true);
     }
     catch (e) {
-      //TODO
       setErrorAlert(true);
     }
     finally {
@@ -53,26 +51,26 @@ export default function DeliveryConfirmationScreen(props) {
         <DialogContent>
           <DialogContentText>
             Mark Order # {orderNumber} as delivered.
-        </DialogContentText>
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
             Cancel
-        </Button>
+          </Button>
           <Button onClick={handleConfirmation} color="primary">
             Confirm
-        </Button>
+          </Button>
         </DialogActions>
       </Dialog>
       <Snackbar open={confirmationAlertOpen} autoHideDuration={5000} onClose={handleConfirmationAlert}>
         <MuiAlert elevation={6} variant="filled" onClose={handleConfirmationAlert} severity="success">
           Order delivery confirmed!
-          </MuiAlert>
+        </MuiAlert>
       </Snackbar>
       <Snackbar open={errorAlertOpen} autoHideDuration={5000} onClose={handleErrorAlert}>
         <MuiAlert elevation={6} variant="filled" onClose={handleErrorAlert} severity="error">
           Order delivery failed to confirm! Try again.
-          </MuiAlert>
+        </MuiAlert>
       </Snackbar>
 
     </div>
@@ -82,5 +80,5 @@ export default function DeliveryConfirmationScreen(props) {
 DeliveryConfirmationScreen.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  orderNumber: PropTypes.string.isRequired,
+  orderNumber: PropTypes.number.isRequired,
 };

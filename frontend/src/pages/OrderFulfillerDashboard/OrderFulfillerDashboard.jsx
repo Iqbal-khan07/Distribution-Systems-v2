@@ -83,7 +83,7 @@ const OrderFulfillerDashboard = () => {
         <WithSignedInSkeleton title={'Dashboard'}>
             {!loading ? (
                 <>
-                    <Grid container lg={12} xs={12} spacing={3} className={classes.rootContainer}>
+                    <Grid container spacing={3} className={classes.rootContainer}>
                         <Grid item lg={12} xs={12}>
                             <Grid container>
                                 <Grid item lg={8} xs={12}>
