@@ -68,7 +68,6 @@ const Navbar = (props) => {
     const {expanded, handleToggleOpen, userName, urlLink, pageName, handleLogout} = props;
 
     useEffect(() => {
-        console.log(notification)
         if(!!notification){
             const timer = setTimeout(() => {
                 clearNotification();

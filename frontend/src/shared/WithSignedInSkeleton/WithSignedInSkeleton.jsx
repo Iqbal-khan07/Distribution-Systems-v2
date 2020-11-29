@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 
 const WithSignedInSkeleton = ({children, title}) => {
     const classes = useStyles();
-    const {user, resetUser} = useContext(UserContext);
+    const { user, logout } = useContext(UserContext);
     const [open, setOpen] = React.useState(true);
     let history = useHistory();
 
@@ -44,7 +44,7 @@ const WithSignedInSkeleton = ({children, title}) => {
     };
 
     const handleLogout = () => {
-        resetUser();
+        logout()
         history.push('/');
     }
 

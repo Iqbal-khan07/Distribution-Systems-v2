@@ -1,11 +1,12 @@
-import React, {createContext, useState} from "react";
+import React, {createContext, useCallback, useState} from "react";
 import HomeIcon from "@material-ui/icons/Home";
 import StoreIcon from '@material-ui/icons/Store';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import StorageIcon from '@material-ui/icons/Storage';
-import {ORDER_TAKER, ORDER_FULFILLER, SUPER_USER} from "../constants/ROLES";
+import {ORDER_FULFILLER, ORDER_TAKER, SUPER_USER} from "../constants/ROLES";
+
 
 export const UserContext = createContext();
 
@@ -57,74 +58,62 @@ const getLinksBasedOnUserType = (userType) => {
     return links;
 }
 
-const UserContextProvider = ({children}) => {
-    const [user, setUser] = useState({
-        id: 1,
-        email: undefined,
-        name: 'Zoraiz',
-        role: ORDER_FULFILLER,
-        imageUrl: undefined,
-        links: getLinksBasedOnUserType(ORDER_FULFILLER)
-    })
+// {
+//         id: 1,
+//         email: undefined,
+//         name: 'Zoraiz',
+//         role: ORDER_FULFILLER,
+//         imageUrl: undefined,
+//         links: getLinksBasedOnUserType(ORDER_FULFILLER)
+//     }
 
-    const setName = (name) => {
-        setUser((u) => {
-            const prev = {...u}
-            prev['name'] = name
-            return prev
+
+const UserContextProvider = ({children}) => {
+    const [user, setUser] = useState(undefined)
+
+    const login = useCallback((id, image_url, fullName, sys_user_role) => {
+        console.log('loggin in ')
+        saveUserToLocalStorage(id, image_url, fullName, sys_user_role)
+        setUser({
+            id: id,
+            email: undefined,
+            name: fullName,
+            role: sys_user_role,
+            imageUrl: image_url,
+            links: getLinksBasedOnUserType(sys_user_role)
         })
-    }
+    }, [])
+
+    const logout = useCallback(() => {
+        resetUser()
+        cleanUserFromLocalStorage()
+    }, [])
 
     const resetUser = () => {
-        setUser((u) => {
-            return {
-                id: undefined,
-                email: undefined,
-                name: undefined,
-                role: undefined,
-                imageUrl: undefined,
-                links: []
-            }
-        })
-
+        setUser(undefined)
     }
 
-    const setId = (id) => {
-        setUser((u) => {
-            const prev = {...u}
-            prev['id'] = id
-            return prev
-        })
+    const saveUserToLocalStorage = useCallback((id, image_url, fullName, sys_user_role) => {
+        localStorage.setItem('user', JSON.stringify({
+            id: id,
+            name: fullName,
+            role: sys_user_role,
+            imageUrl: image_url,
+        }));
+    },[])
+
+    const getUserFromLocalStorage = () => {
+        return JSON.parse(localStorage.getItem('user'));
     }
 
-    const setImageUrl = (imageUrl) => {
-        setUser((u) => {
-            const prev = {...u}
-            prev['imageUrl'] = imageUrl
-            return prev
-        })
+    const cleanUserFromLocalStorage = () => {
+        localStorage.removeItem('user');
     }
-
-    const setUserEmail = (email) => {
-        setUser((u) => {
-            const prev = {...u}
-            prev['email'] = email
-            return prev
-        })
-    }
-
-    const setRole = (role) => {
-        setUser((u) => {
-            const prev = {...u}
-            prev['role'] = role
-            prev['links'] = getLinksBasedOnUserType(role)
-            return prev
-        })
-    }
-
 
     return (
-        <UserContext.Provider value={{user, setName, setImageUrl, setRole, setUserEmail, setId, resetUser}}>
+        <UserContext.Provider value={{
+            user, login, logout, getUserFromLocalStorage
+        }}>
             {children}
         </UserContext.Provider>
     )

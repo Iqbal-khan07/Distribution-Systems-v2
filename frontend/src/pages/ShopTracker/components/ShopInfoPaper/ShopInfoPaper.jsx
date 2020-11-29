@@ -1,12 +1,14 @@
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
+import ShopImage from "../../../../assests/images/shop-icon.png";
+import CardMedia from "@material-ui/core/CardMedia";
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,11 +19,13 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#BFDCCD',
         // padding: theme.spacing(2),
     },
-    pic: {
-        margin: theme.spacing(2),
-    },
     content: {
         marginTop: theme.spacing(2),
+    },
+    cover: {
+        width: 151,
+        height: 151,
+        margin: theme.spacing(2),
     },
 }));
 
@@ -45,7 +49,10 @@ export default function (props) {
             <Divider />
             <Grid container spacing={2}>
                 <Grid item xs={3}>
-                    <Avatar alt="Shop Photo" src={props.pic} variant="square" className={classes.pic}/>
+                    <CardMedia
+                        className={classes.cover}
+                        image={ShopImage}
+                    />
                 </Grid>
                 <Grid item className={classes.content} xs={5}>
                     <Grid container spacing={1}>

@@ -156,7 +156,7 @@ function multiLine(props){
 }
 
 
-export default function OrderForm({showForm, onCloseButtonHandler, products, shops}){
+export default function OrderForm({showForm, onCloseButtonHandler, products, shops, reload}){
     const classes = useStyles();
     const {user} = useContext(UserContext);
     const { setANotification } = useContext(NotificationContext)
@@ -216,7 +216,6 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
             validationSchema={validationSchema}
             onSubmit={async (values, {setSubmitting, resetForm}) => {
                 setSubmitting(true)
-                resetForm()
                 try {
                     await axios.post('/create/shop_order', {
                         data: {
@@ -229,9 +228,11 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                     })
                     setANotification('Order Submitted Successfully', SUCCESSFUL)
                     setSubmitting(false)
+                    reload()
                 }catch (e){
                     setANotification('Order Failed to submit! Please try again', ERROR)
                 }finally {
+                    resetForm()
                     onCloseButtonHandler()
                 }
             }}

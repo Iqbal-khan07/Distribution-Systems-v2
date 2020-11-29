@@ -21,6 +21,11 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: "#427C5D",
             color: "#e5e4e4"
+        },
+        '&:disabled': {
+            backgroundColor: "#63ba89",
+            color: "#e5e4e4",
+            opacity: 0.5
         }
     },
 
