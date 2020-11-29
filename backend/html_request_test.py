@@ -11,6 +11,7 @@ authenticate_facebook = "/authenticate/facebook"
 
 get_company_product = "/company_products/all"
 get_shop_order_not_delivered = "/orders/not_delivered"
+get_shop_order_today = "/orders/today"
 get_shop = "/shops/all"
 get_zone = "/zones/all"
 get_shop_category = "/shop_categories/all"
@@ -38,8 +39,11 @@ def auth_fb():
 def get_comp_prod():
     print(requests.get(url = (base_url + get_company_product)).json())
     spacer()
-def get_sond():
+def get_so_nd():
     print(requests.get(url = (base_url + get_shop_order_not_delivered)).json())
+    spacer()
+def get_so_t():
+    print(requests.get(url = (base_url + get_shop_order_today)).json())
     spacer()
 def get_sh():
     print(requests.get(url = (base_url + get_shop)).json())
@@ -69,16 +73,17 @@ def update_sod():
     spacer()
 
 if __name__ == '__main__':
-    auth_default()
-    auth_gmail()
-    auth_fb()
-    get_comp_prod()
-    get_sond()
-    get_sh()
-    get_z()
-    get_s_c()
-    create_s()
-    create_z()
-    create_s_c()
-    create_s_o()
-    update_sod()
+    #auth_default()
+    #auth_gmail()
+    #auth_fb()
+    #get_comp_prod()
+    #get_so_nd()
+    get_so_t()
+    #get_sh()
+    #get_z()
+    #get_s_c()
+    #create_s()
+    #create_z()
+    #create_s_c()
+    #create_s_o()
+    #update_sod()

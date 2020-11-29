@@ -150,6 +150,19 @@ paths:
               data:
                 type: array
 
+  /orders/today:
+    get:
+      operationId: api.get_order_today
+      description: Return all shop orders that are set to be delivered today
+      responses:
+        200:
+          description: List of all shop orders that are set to be delivered today 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
   /shops/all:
     get:
       operationId: api.get_all_shops

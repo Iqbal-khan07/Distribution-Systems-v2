@@ -128,6 +128,18 @@ def get_order_not_delivered():
     return sql_related.request_shop_order_not_delivered(db), 200
 
 
+def get_order_today():
+    """
+    This function links with endpoint:
+    /orders/today
+    through swagger.yml
+
+    Response 200: Successful Request
+    """
+    
+    return sql_related.request_shop_order_today(db), 200
+
+
 # Create a handler for our read (GET) people
 def get_all_shops():
     """

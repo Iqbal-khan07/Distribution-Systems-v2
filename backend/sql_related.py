@@ -871,8 +871,40 @@ def request_shop_order_not_delivered(database):
         result.append(item.request_shop_order(database))
 
     response = {
-            "data": result
-        }
+        "data": result
+    }
+
+    database.session.close()
+
+    return response
+
+
+def request_shop_order_today(database):
+    """
+    Returns a JSON of all shop_order entries in the database
+    that have a date_delivered_projected for today
+    """
+
+    query_result = (
+        database.session.query(Shop_order).all()
+    )
+
+    current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+    
+    result = []
+
+    for entry in query_result:
+        dp = entry.date_delivered_projected
+
+        if dp.day == current_time_utc.day and \
+            dp.month == current_time_utc.month and \
+            dp.year == current_time_utc.year:
+
+            result.append(entry.request_shop_order(database))
+
+    response = {
+        "data": result
+    }
 
     database.session.close()
 
