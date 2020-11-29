@@ -1,3 +1,8 @@
+"""
+endpoint_entry.py: All swagger.yml endpoints call functions here
+"""
+
+
 import flask
 import flask_sqlalchemy
 from datetime import datetime
@@ -6,36 +11,9 @@ from pytz import timezone
 import requests
 import os
 from backend_main import db, app_flask
-from backend_main import sql_related
+import endpoint_logic
 import json
-
-# 3rd party modules
 from flask import make_response, abort
-
-
-def get_timestamp():
-    tz = timezone("EST")
-    return datetime.now(tz).strftime(("%Y-%m-%d %H:%M:%S"))
-
-
-# Data to serve with our APIs
-"""
-try:
-    db.session.query(sql_related.UserTable).all()
-except:
-    print("Error in Database")
-    exit()
-
-    -----------------------------------------> MAKE TRY BLOCK AFTER
-"""
-
-
-"""
-USER RELATED ENDPOINT FUNCTIONS
-
-"""
-
-# Create a handler for our  (POST) people
 
 
 def user_authenticate_default(auth_user_default):
@@ -49,7 +27,7 @@ def user_authenticate_default(auth_user_default):
     Response 400: Bad Request
     """
 
-    response = sql_related.authenticate_default(db, auth_user_default)
+    response = endpoint_logic.authenticate_default(db, auth_user_default)
 
     if type(response) == int:
         if response == 0:
@@ -71,7 +49,7 @@ def user_authenticate_gmail(auth_user_gmail):
     Response 400: Bad Request
     """
 
-    response =  sql_related.authenticate_email(db, auth_user_gmail, True)
+    response =  endpoint_logic.authenticate_email(db, auth_user_gmail, True)
 
     if type(response) == int:
         if response == 0:
@@ -93,7 +71,7 @@ def user_authenticate_fb(auth_user_fb):
     Response 400: Bad Request
     """
 
-    response =  sql_related.authenticate_email(db, auth_user_fb, False)
+    response =  endpoint_logic.authenticate_email(db, auth_user_fb, False)
 
     if type(response) == int:
         if response == 0:
@@ -113,7 +91,7 @@ def get_company_product():
     Response 200: Successful Request
     """
     
-    return sql_related.request_company_product(db), 200
+    return endpoint_logic.request_company_product(db), 200
 
 
 def get_order_not_delivered():
@@ -125,7 +103,7 @@ def get_order_not_delivered():
     Response 200: Successful Request
     """
 
-    return sql_related.request_shop_order_not_delivered(db), 200
+    return endpoint_logic.request_shop_order_not_delivered(db), 200
 
 
 def get_order_today():
@@ -137,10 +115,9 @@ def get_order_today():
     Response 200: Successful Request
     """
     
-    return sql_related.request_shop_order_today(db), 200
+    return endpoint_logic.request_shop_order_today(db), 200
 
 
-# Create a handler for our read (GET) people
 def get_all_shops():
     """
     This function links with endpoint:
@@ -150,7 +127,7 @@ def get_all_shops():
     Response 200: Successful Request
     """
 
-    return sql_related.request_shop(db), 200
+    return endpoint_logic.request_shop(db), 200
 
 
 def get_all_zones():
@@ -162,7 +139,7 @@ def get_all_zones():
     Response 200: Successful Request
     """
 
-    return sql_related.request_zone(db), 200
+    return endpoint_logic.request_zone(db), 200
 
 
 def get_all_shop_category():
@@ -174,7 +151,7 @@ def get_all_shop_category():
     Response 200: Successful Request
     """
 
-    return sql_related.request_shop_category(db), 200
+    return endpoint_logic.request_shop_category(db), 200
 
 
 def shop_create(new_shop):
@@ -187,7 +164,7 @@ def shop_create(new_shop):
     Response 400: Bad Request
     """
 
-    response =  sql_related.create_shop(db, new_shop)
+    response =  endpoint_logic.create_shop(db, new_shop)
 
     if type(response) == int:
         if response == 0:
@@ -210,7 +187,7 @@ def zone_create(new_zone):
     Response 400: Bad Request
     """
 
-    response = sql_related.create_zone(db, new_zone)
+    response = endpoint_logic.create_zone(db, new_zone)
 
     if type(response) == int:
         if response == 0:
@@ -231,7 +208,7 @@ def shop_category_create(new_shop_category):
     Response 400: Bad Request
     """
 
-    response = sql_related.create_shop_category(db, new_shop_category)
+    response = endpoint_logic.create_shop_category(db, new_shop_category)
 
     if type(response) == int:
         if response == 0:
@@ -252,7 +229,7 @@ def shop_order_create(new_shop_order):
     Response 400: Bad Request
     """
 
-    response = sql_related.create_shop_order(db, new_shop_order)
+    response = endpoint_logic.create_shop_order(db, new_shop_order)
 
     if type(response) == int:
         if response == 0:
@@ -279,7 +256,7 @@ def shop_order_update(update_shop_order):
     Response 400: Bad Request
     """
 
-    response = sql_related.update_shop_order_delivered(db, update_shop_order)
+    response = endpoint_logic.update_shop_order_delivered(db, update_shop_order)
 
     if type(response) == int:
         if response == 0:

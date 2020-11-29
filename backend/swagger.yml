@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: This is the swagger file that goes with our server code
+  description: Endpoint definitions for backend_main.py
   version: "1.0.0"
   title: Swagger REST Article
 consumes:
@@ -20,7 +20,7 @@ basePath: "/api"
 paths:
   /authenticate/default:
     post:
-      operationId: api.user_authenticate_default
+      operationId: endpoint_entry.user_authenticate_default
       tags:
         - sys_user
       summary: Authentication
@@ -58,7 +58,7 @@ paths:
 
   /authenticate/google:
     post:
-      operationId: api.user_authenticate_gmail
+      operationId: endpoint_entry.user_authenticate_gmail
       tags:
         - sys_user
       summary: Authentication
@@ -92,7 +92,7 @@ paths:
 
   /authenticate/facebook:
     post:
-      operationId: api.user_authenticate_fb
+      operationId: endpoint_entry.user_authenticate_fb
       tags:
         - sys_user
       summary: Authentication
@@ -126,7 +126,7 @@ paths:
 
   /company_products/all:
     get:
-      operationId: api.get_company_product
+      operationId: endpoint_entry.get_company_product
       description: Return all company products in the database
       responses:
         200:
@@ -139,7 +139,7 @@ paths:
 
   /orders/not_delivered:
     get:
-      operationId: api.get_order_not_delivered
+      operationId: endpoint_entry.get_order_not_delivered
       description: Return all shop orders in the database that have completed = False
       responses:
         200:
@@ -152,7 +152,7 @@ paths:
 
   /orders/today:
     get:
-      operationId: api.get_order_today
+      operationId: endpoint_entry.get_order_today
       description: Return all shop orders that are set to be delivered today
       responses:
         200:
@@ -165,7 +165,7 @@ paths:
 
   /shops/all:
     get:
-      operationId: api.get_all_shops
+      operationId: endpoint_entry.get_all_shops
       description: Return all shops in database
       responses:
         200:
@@ -178,7 +178,7 @@ paths:
 
   /zones/all:
     get:
-      operationId: api.get_all_zones
+      operationId: endpoint_entry.get_all_zones
       description: Return all zones in database
       responses:
         200:
@@ -191,7 +191,7 @@ paths:
 
   /shop_categories/all:
     get:
-      operationId: api.get_all_shop_category
+      operationId: endpoint_entry.get_all_shop_category
       description: Return all shop categories in database
       responses:
         200:
@@ -204,7 +204,7 @@ paths:
 
   /create/shop:
     post:
-      operationId: api.shop_create
+      operationId: endpoint_entry.shop_create
       description: Create a new shop with JSON data
       parameters:
         - name: new_shop
@@ -280,7 +280,7 @@ paths:
 
   /create/zone:
     post:
-      operationId: api.zone_create
+      operationId: endpoint_entry.zone_create
       description: Create a new zone with JSON data
       parameters:
         - name: new_zone
@@ -311,7 +311,7 @@ paths:
 
   /create/shop_category:
     post:
-      operationId: api.shop_category_create
+      operationId: endpoint_entry.shop_category_create
       description: Create a new shop category with JSON data
       parameters:
         - name: new_shop_category
@@ -342,7 +342,7 @@ paths:
 
   /create/shop_order:
     post:
-      operationId: api.shop_order_create
+      operationId: endpoint_entry.shop_order_create
       description: Create a new shop order with JSON data
       parameters:
         - name: new_shop_order
@@ -404,8 +404,8 @@ paths:
 
   /deliver/shop_order:
     post:
-      operationId: api.shop_order_update
-      description: Create a new user in the user list
+      operationId: endpoint_entry.shop_order_update
+      description: Update a shop order as delivered with JSON data
       parameters:
         - name: update_shop_order
           in: body

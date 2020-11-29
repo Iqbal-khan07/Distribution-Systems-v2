@@ -1,6 +1,9 @@
-"""main.py: all fundamental server logic"""
+"""
+main.py: all fundamental server logic
+"""
 
-import sql_related
+
+import sql_tables
 from os.path import join, dirname
 from dotenv import load_dotenv
 import requests
@@ -17,7 +20,6 @@ dotenv_path = join(dirname(__file__), "sql.env")
 load_dotenv(dotenv_path)
 database_uri = os.environ["DATABASE_URL"]
 
-# Flask SQLAlchemy Setup
 app_flask = flask.Flask(__name__)
 app_flask.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 app_flask.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
@@ -29,22 +31,19 @@ db.init_app(app_flask)
 db.app = app_flask
 
 
-# import sql_related here to prevent circular dependacies
-
-
 def db_bootstrap():
     try:
-        db.session.query(sql_related.Sys_user).all()
+        db.session.query(sql_tables.Sys_user).all()
     except BaseException:
         print("Database tables not found.")
         return
 
-    users = db.session.query(sql_related.Sys_user).all()
+    users = db.session.query(sql_tables.Sys_user).all()
     dataCheck = [db_name.name_first for db_name in users]
 
     if dataCheck == []:
         print("Database tables empty, populating.")
-        sql_related.database_bootstrap(db)
+        sql_tables.database_bootstrap(db)
         return
 
 

@@ -1,3 +1,8 @@
+"""
+html_request_test.py: functions that send mocked data as HTTP requests to test endpoints go here
+"""
+
+
 import json_mock
 import requests
 import json
@@ -73,15 +78,15 @@ def update_sod():
     spacer()
 
 if __name__ == '__main__':
-    #auth_default()
-    #auth_gmail()
-    #auth_fb()
-    #get_comp_prod()
-    #get_so_nd()
-    #get_so_t()
-    #get_sh()
-    #get_z()
-    #get_s_c()
+    auth_default()
+    auth_gmail()
+    auth_fb()
+    get_comp_prod()
+    get_so_nd()
+    get_so_t()
+    get_sh()
+    get_z()
+    get_s_c()
     #create_s()
     #create_z()
     #create_s_c()

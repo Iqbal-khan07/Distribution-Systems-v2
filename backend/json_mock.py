@@ -1,3 +1,8 @@
+"""
+json_mock.py: functions that mock json data for testing HTML requests go here
+"""
+
+
 import json
 
 
