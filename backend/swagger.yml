@@ -361,6 +361,9 @@ paths:
                   price_paid:
                     type: boolean
                     description: True if the order was paid for when the order was taken
+                  deliver_days_from_today:
+                    type: integer
+                    description: Days from today that the order will be delivered
                   memo:
                     type: string
                     description: Shop order memo
@@ -384,6 +387,7 @@ paths:
                 required:
                  - shop_id
                  - price_paid
+                 - deliver_days_from_today
                  - memo
                  - order_taker_id
                  - order_items

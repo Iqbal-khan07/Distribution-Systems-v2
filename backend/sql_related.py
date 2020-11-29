@@ -1161,11 +1161,13 @@ def create_shop_order(database, data):
     """
 
     data_loaded = data["data"]
+    deliver_days_from_today = data_loaded["deliver_days_from_today"]
 
     # validate relational data fields
     shop_id_valid = True
     order_taker_valid = True
     shop_order_items_valid = True
+    delivery_date_valid = True
 
     if (
         database.session.query(Shop).filter(Shop.id == data_loaded["shop_id"]).count()
@@ -1182,6 +1184,9 @@ def create_shop_order(database, data):
     ):
 
         order_taker_valid = False
+
+    if deliver_days_from_today < 0:
+        delivery_date_valid = False
 
     price_total = float(0)
 
@@ -1200,66 +1205,69 @@ def create_shop_order(database, data):
                 * item["quantity_units"]
             )
 
-    if shop_id_valid:
-        if order_taker_valid:
-            if shop_order_items_valid:
-                # get current datetime and one week from now
-                current_time_utc = datetime.datetime.now(datetime.timezone.utc)
-                week_forward = current_time_utc + datetime.timedelta(days=7)
-
-                # new Shop_order object
-                new_shop_order = Shop_order(
-                    data_loaded["shop_id"],
-                    price_total,
-                    False,
-                    data_loaded["memo"],
-                    current_time_utc,
-                    week_forward,
-                    None,
-                    data_loaded["order_taker_id"],
-                    None,
-                    False,
-                )
-
-                # add, commit, then refresh Shop object to update with commit
-                database.session.add(new_shop_order)
-                database.session.commit()
-                database.session.refresh(new_shop_order)
-
-                # add new shop_zone entries to session
-                for item in data_loaded["order_items"]:
-                    # account for possible duplicate zone entries in request
-                    duplicate_check_query = database.session.query(
-                        Shop_order_item
-                    ).filter(
-                        Shop_order_item.shop_order == new_shop_order.id,
-                        Shop_order_item.company_product == item["id"],
+    if delivery_date_valid:
+        if shop_id_valid:
+            if order_taker_valid:
+                if shop_order_items_valid:
+                    # get current datetime and one week from now
+                    current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+                    delivery_date = current_time_utc + datetime.timedelta(days=deliver_days_from_today)
+    
+                    # new Shop_order object
+                    new_shop_order = Shop_order(
+                        data_loaded["shop_id"],
+                        price_total,
+                        False,
+                        data_loaded["memo"],
+                        current_time_utc,
+                        delivery_date,
+                        None,
+                        data_loaded["order_taker_id"],
+                        None,
+                        False,
                     )
-
-                    if duplicate_check_query.count() != 0:
-                        duplicate_check_query[0].quantity_units += item[
-                            "quantity_units"]
-                    else:
-                        database.session.add(
-                            Shop_order_item(
-                                new_shop_order.id, item["id"], item["quantity_units"]
-                            )
+    
+                    # add, commit, then refresh Shop object to update with commit
+                    database.session.add(new_shop_order)
+                    database.session.commit()
+                    database.session.refresh(new_shop_order)
+    
+                    # add new shop_zone entries to session
+                    for item in data_loaded["order_items"]:
+                        # account for possible duplicate zone entries in request
+                        duplicate_check_query = database.session.query(
+                            Shop_order_item
+                        ).filter(
+                            Shop_order_item.shop_order == new_shop_order.id,
+                            Shop_order_item.company_product == item["id"],
                         )
-
-                # commit new shop_zone entries
-                database.session.commit()
-
-                response_inner = new_shop_order.request_shop_order(database)
+    
+                        if duplicate_check_query.count() != 0:
+                            duplicate_check_query[0].quantity_units += item[
+                                "quantity_units"]
+                        else:
+                            database.session.add(
+                                Shop_order_item(
+                                    new_shop_order.id, item["id"], item["quantity_units"]
+                                )
+                            )
+    
+                    # commit new shop_zone entries
+                    database.session.commit()
+    
+                    response_inner = new_shop_order.request_shop_order(database)
+                else:
+                    return 0
             else:
-                return 0
+                return 1
         else:
-            return 1
+            return 2
     else:
-        return 2
+        return 3
 
     response = {
-            "data": response_inner
-        }
+        "data": response_inner
+    }
 
     database.session.close()
 

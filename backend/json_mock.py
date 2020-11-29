@@ -57,6 +57,7 @@ def create_shop_order():
         "data": {
             "shop_id": 3,
             "price_paid": True,
+            "deliver_days_from_today": 0,
             "memo": "big smelly memo",
             "order_taker_id": 1,
             "order_items": [

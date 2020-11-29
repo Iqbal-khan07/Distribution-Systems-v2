@@ -257,10 +257,12 @@ def shop_order_create(new_shop_order):
     if type(response) == int:
         if response == 0:
             return "Company product does not exist with id provided", 400
-        if response == 1:
+        elif response == 1:
             return "Order Taker does not exist with id provided", 400
-        if response == 2:
+        elif response == 2:
             return "Shop does not exist with id provided", 400
+        elif response == 3:
+            return "Invalid delivery date, must be at least one day from today", 400
         else:
             return "Bad Request", 400
     else:
@@ -282,9 +284,9 @@ def shop_order_update(update_shop_order):
     if type(response) == int:
         if response == 0:
             return "Shop order is already completed", 400
-        if response == 1:
+        elif response == 1:
             return "Shop order does not exist with id provided", 400
-        if response == 2:
+        elif response == 2:
             return "Order Fulfiller does not exist with id provided", 400
         else:
             return "Bad Request", 400

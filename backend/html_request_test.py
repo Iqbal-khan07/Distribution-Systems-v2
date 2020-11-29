@@ -78,7 +78,7 @@ if __name__ == '__main__':
     #auth_fb()
     #get_comp_prod()
     #get_so_nd()
-    get_so_t()
+    #get_so_t()
     #get_sh()
     #get_z()
     #get_s_c()
