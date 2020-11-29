@@ -1,9 +1,7 @@
-import React, {useContext} from "react";
+import React from "react";
 import { GoogleLogin } from 'react-google-login';
-import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import {makeStyles} from "@material-ui/core/styles";
-import {UserContext} from "../../../context/UserContext";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,10 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function GoogleButton({setError}) {
+export default function GoogleButton({setError, loginHandler}) {
   const classes = useStyles();
-  const { setName, setImageUrl, setId, setRole } = useContext(UserContext);
-  let history = useHistory();
 
   const responseGoogle = async (response) => {
     let email = response.profileObj.email;
@@ -38,11 +34,7 @@ export default function GoogleButton({setError}) {
           const {
               id, name_first, name_last, sys_user_role, image_url
           } = body.data;
-          setId(id);
-          setImageUrl(image_url)
-          setName(`${name_first} ${name_last}`)
-          setRole(sys_user_role.name)
-          history.push("/dashboard");
+          loginHandler(id, image_url, name_first, name_last, sys_user_role)
       }
     }catch (e){
       setError(true)
