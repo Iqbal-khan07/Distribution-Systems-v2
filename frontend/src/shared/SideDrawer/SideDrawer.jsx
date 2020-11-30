@@ -26,7 +26,13 @@ const useStyles = makeStyles((theme) => ({
     },
 
     drawerIconRoot: {
-        overflow: "visible"
+        overflow: "visible",
+        color: "#aaaaaa"
+    },
+
+    drawerIconRootSelected: {
+        overflow: "visible",
+        color: "#ffffff"
     },
 
     drawerOpen: {
@@ -56,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     logoHolder: {
         position: 'relative',
         textAlign: "center",
-        color: "#aaaaaa",
+        color: "#ffffff",
         padding: "0.5rem 0.5rem",
         '& img': {
             bottom: 5,
@@ -94,6 +100,7 @@ const useStyles = makeStyles((theme) => ({
     listItemSelected: {
         borderLeftColor: theme.palette.primary.main,
         backgroundColor: '#5DB285',
+        color: '#ffffff',
         "&:hover": {
             backgroundColor: "#BFDCCD",
         },
@@ -104,12 +111,17 @@ const useStyles = makeStyles((theme) => ({
 
     listItemRoot: {
         backgroundColor: "inheret",
+        color: '#aaaaaa',
         "&:hover": {
             backgroundColor: "#BFDCCD",
         },
         "&:focus":{
             backgroundColor: "#5db285",
         }
+    },
+
+    listItemText: {
+        color: "#inheret",
     },
 }));
 
@@ -162,11 +174,16 @@ const SideDrawer = (props) => {
                         style={{borderRadius: 30, margin: "5px 0px"}}
                     >
                         <ListItemIcon
-                            className={link.icon} classes={{root: classes.drawerIconRoot}} style={{color: "#aaaaaa" }}
+                            className={link.icon} 
+                            classes={{root: clsx({
+                                [classes.drawerIconRootSelected]: link.to === location.pathname,
+                                [classes.drawerIconRoot]: !(link.to === location.pathname)
+                            })}}
+    
                         >
                             {link.icon}
                         </ListItemIcon>
-                        <ListItemText style={{color: "#aaaaaa"}}><Typography style={{fontSize: '1.1rem'}}>{link.text}</Typography></ListItemText>
+                        <ListItemText className={classes.listItemText}><Typography style={{fontSize: '1.1rem'}}>{link.text}</Typography></ListItemText>
                     </ListItem>
                 ))}
             </List>
