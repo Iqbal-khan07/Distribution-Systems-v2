@@ -12,6 +12,18 @@ export default function OrderTakerDashboard() {
     const [loading, setLoading] = useState(false);
     const series = [44, 55];
     const series2 = [10, 2, 5]
+    
+    /*
+    useEffect(() => {
+        async function fetchData() {
+            let response = await axios.get("/orders/not_delivered");
+            let body = response.data;
+            // TODO
+            setLoading(false)
+        }
+        fetchData().then()
+    }, [])
+    */
 
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
@@ -33,7 +45,10 @@ export default function OrderTakerDashboard() {
                                     />
                                 </Grid>
                                 <Grid item lg={4} xs={12}>
-                                    <InfoCard value={36} description="Orders Placed This Month" />
+                                    <InfoCard
+                                        value={36}
+                                        description="Orders Placed This Month"
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>
