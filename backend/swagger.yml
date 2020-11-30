@@ -124,7 +124,7 @@ paths:
               data:
                 type: object
 
-  /company_products/all:
+  /inventory:
     get:
       operationId: endpoint_entry.get_company_product
       description: Return all company products in the database
@@ -459,6 +459,42 @@ paths:
                     description: Database id of order taker
                 required:
                  - order_taker_id
+            required:
+             - data
+      responses:
+        200:
+          description: goal_order_taker data 
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+  /goal/order_taker/new:
+    post:
+      operationId: endpoint_entry.goal_order_taker_new
+      description: Create goal data for a order taker for this month with JSON data
+      parameters:
+        - name: goal_info
+          in: body
+          description: order_taker to get data for
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                description: Data wrapper
+                properties:
+                  order_taker_id:
+                    type: integer
+                    description: Database id of order taker
+                  goal_total:
+                    type: number
+                    description: Money value of goal
+                required:
+                 - order_taker_id
+                 - goal_total
             required:
              - data
       responses:

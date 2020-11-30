@@ -91,7 +91,18 @@ def update_shop_order_delivered():
 
 def goal_order_taker():
     jsonmock = {
-        "data": {"order_taker_id": 1}
+        "data": {"order_taker_id": 4}
+    }
+
+    return json.dumps(jsonmock, indent=4)
+
+
+def goal_order_taker_new():
+    jsonmock = {
+        "data": {
+            "order_taker_id": 4,
+            "goal_total": 300000.12
+        }
     }
 
     return json.dumps(jsonmock, indent=4)

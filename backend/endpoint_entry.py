@@ -296,6 +296,31 @@ def goal_order_taker(order_taker_info):
         return response, 200
 
 
+def goal_order_taker_new(goal_info):
+    """
+    This function links with endpoint:
+    /goal/order_taker
+    through swagger.yml
+
+    Response 200: goal_order_taker data retrieved successfully
+    Response 400: Bad Request
+    """
+
+    response = endpoint_logic.goal_order_taker_new(db, goal_info)
+
+    if type(response) == int:
+        if response == 0:
+            return "Invalid user id", 400
+        elif response == 1:
+            return "User is not an order taker", 400
+        elif response == 2:
+            return "Goal for order taker already exists for this month", 400
+        else:
+            return "Bad Request", 400
+    else:
+        return response, 200
+
+
 def basic_auth(apiKey, required_scopes=None):
     print(apiKey)
     print(type(apiKey))

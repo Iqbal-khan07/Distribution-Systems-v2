@@ -14,7 +14,7 @@ authenticate_default = "/authenticate/default"
 authenticate_gmail = "/authenticate/google"
 authenticate_facebook = "/authenticate/facebook"
 
-get_company_product = "/company_products/all"
+get_company_product = "/inventory"
 get_shop_order_not_delivered = "/orders/not_delivered"
 get_shop_order_today = "/orders/today"
 get_shop = "/shops/all"
@@ -29,6 +29,7 @@ create_shop_order = "/create/shop_order"
 update_shop_order_delevered = "/deliver/shop_order"
 
 goal_order_taker = "/goal/order_taker"
+goal_order_taker_new = "/goal/order_taker/new"
 
 
 def spacer():
@@ -88,6 +89,9 @@ def update_sod():
 def g_ot():
     print(requests.post(url = (base_url + goal_order_taker), json = json.loads(json_mock.goal_order_taker())).json())
     spacer()
+def g_ot_n():
+    print(requests.post(url = (base_url + goal_order_taker_new), json = json.loads(json_mock.goal_order_taker_new())).json())
+    spacer()
 
 
 if __name__ == '__main__':
@@ -105,4 +109,5 @@ if __name__ == '__main__':
     #create_s_c()
     #create_s_o()
     #update_sod()
-    g_ot()
+    #g_ot()
+    #g_ot_n()

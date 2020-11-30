@@ -562,14 +562,16 @@ class Company_product(db.Model):
     price_buy = db.Column(db.Numeric(10, 2), nullable=False)
     price_sell = db.Column(db.Numeric(10, 2), nullable=False)
     units_per_price = db.Column(db.Integer, nullable=False)
+    stock = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(255), nullable=True)
 
-    def __init__(self, co, na, bp, sp, upp, de):
+    def __init__(self, co, na, bp, sp, upp, st, de):
         self.company = co
         self.name = na
         self.price_buy = bp
         self.price_sell = sp
         self.units_per_price = upp
+        self.stock = st
         self.description = de
 
     def request_company_product_info(self, database):
@@ -589,6 +591,7 @@ class Company_product(db.Model):
             "price_sell": float(self.price_sell),
             "units_per_price": self.units_per_price,
             "price_sell_per_unit": float(self.price_sell / self.units_per_price),
+            "stock": self.stock,
             "description": self.description,
         }
 
@@ -598,23 +601,86 @@ class Company_product(db.Model):
         database bootstrap function for company_product
         """
 
-        database.session.add(Company_product(1, "C1 Item 1", 1.00, 2.00, 1, None))
-        database.session.add(Company_product(1, "C1 Item 2", 2.00, 4.00, 2, "Item 2!"))
-        database.session.add(
-            Company_product(1, "C1 Item 3", 300.00, 600.00, 30, "Big Item 3")
+        database.session.add(Company_product(
+            1,
+            "C1 Item 1",
+            1.00,
+            2.00,
+            1,
+            10,
+            None
+            )
         )
-        database.session.add(Company_product(1, "C1 Item 4", 44.00, 88.00, 4, None))
+        database.session.add(Company_product(
+            1,
+            "C1 Item 2",
+            2.00,
+            4.00,
+            2,
+            12,
+            "Item 2!"
+            )
+        )
+        database.session.add(Company_product(
+            1,
+            "C1 Item 3",
+            300.00,
+            600.00,
+            30,
+            33,
+            "Big Item 3"
+            )
+        )
+        database.session.add(Company_product(
+            1,
+            "C1 Item 4",
+            44.00,
+            88.00,
+            4,
+            100,
+            None
+            )
+        )
 
-        database.session.add(
-            Company_product(2, "C2 Item 1", 100.00, 200.00, 1, "Big Item")
+        database.session.add(Company_product(
+            2,
+            "C2 Item 1",
+            100.00,
+            200.00,
+            1,
+            22,
+            "Big Item"
+            )
         )
-        database.session.add(
-            Company_product(2, "C2 Item 2", 0.01, 0.02, 1, "Small Item")
+        database.session.add(Company_product(
+            2,
+            "C2 Item 2",
+            0.01,
+            0.02,
+            1,
+            33,
+            "Small Item"
+            )
         )
-        database.session.add(
-            Company_product(2, "C2 Item 3", 10000.00, 20000.00, 1, "Huge Item")
+        database.session.add(Company_product(
+            2,
+            "C2 Item 3",
+            10000.00,
+            20000.00,
+            1,
+            5,
+            "Huge Item")
         )
-        database.session.add(Company_product(2, "C2 Item 4", 4.44, 8.88, 1, None))
+        database.session.add(Company_product(
+            2,
+            "C2 Item 4",
+            4.44,
+            8.88,
+            1,
+            400,
+            None
+            )
+        )
 
         database.session.commit()
 
@@ -835,7 +901,7 @@ class Order_taker_goal(db.Model):
         self.year = ye
         self.goal_value = gv
 
-    def request_order_taker_goal_info(self, database):
+    def request_order_taker_goal_info(self):
         """
         produces a dictionary of all relevant order_taker_goal information
         """
@@ -853,9 +919,9 @@ class Order_taker_goal(db.Model):
         database bootstrap function for order_taker_goal
         """
 
-        database.session.add(Order_taker_goal(1, 11, 2020, 20000.00))
-        database.session.add(Order_taker_goal(1, 12, 2020, 15000.00))
-        database.session.add(Order_taker_goal(4, 11, 2020, 10000.00))
+        database.session.add(Order_taker_goal(1, 10, 2020, 20000.00))
+        database.session.add(Order_taker_goal(1, 9, 2020, 15000.00))
+        database.session.add(Order_taker_goal(4, 10, 2020, 10000.00))
         database.session.add(Order_taker_goal(4, 12, 2020, 11000.00))
         database.session.add(Order_taker_goal(7, 11, 2020, 12000.00))
         database.session.add(Order_taker_goal(7, 12, 2020, 13000.00))
