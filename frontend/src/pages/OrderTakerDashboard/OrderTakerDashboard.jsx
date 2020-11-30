@@ -21,10 +21,16 @@ export default function OrderTakerDashboard() {
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={3}>
                                 <Grid item lg={4} xs={12}>
-                                    <InfoCard value={DataDisplayUtils.numberWithCommas(40000)} description="Target for the Month" />
+                                    <InfoCard
+                                        value={DataDisplayUtils.numberWithCommas(40000)}
+                                        description="Target for the Month"
+                                    />
                                 </Grid>
                                 <Grid item lg={4} xs={12}>
-                                    <InfoCard value={DataDisplayUtils.numberWithCommas(21960)} description="Current Sales Value" />
+                                    <InfoCard
+                                        value={DataDisplayUtils.numberWithCommas(21960)}
+                                        description="Current Sales Value"
+                                    />
                                 </Grid>
                                 <Grid item lg={4} xs={12}>
                                     <InfoCard value={36} description="Orders Placed This Month" />
