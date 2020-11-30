@@ -33,7 +33,7 @@ const options =  {
     chart: {
         type: 'donut',
     },
-    labels: ['Target Sales', 'Current Sales'],
+    labels: ['Current Sales', 'Target Sales'],
     colors: ['#5DB285', '#BFDCCD'],
     legend: {
         show: true,
