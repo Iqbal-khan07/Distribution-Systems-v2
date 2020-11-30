@@ -72,7 +72,6 @@ const UserContextProvider = ({children}) => {
     const [user, setUser] = useState(undefined)
 
     const login = useCallback((id, image_url, fullName, sys_user_role) => {
-        console.log('loggin in ')
         saveUserToLocalStorage(id, image_url, fullName, sys_user_role)
         setUser({
             id: id,

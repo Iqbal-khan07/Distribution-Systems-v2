@@ -162,7 +162,7 @@ const SideDrawer = (props) => {
                         style={{borderRadius: 30, margin: "5px 0px"}}
                     >
                         <ListItemIcon
-                            className={link.icon} classes={{root: classes.drawerIconRoot}} style={{color: "#aaaaaa" }}
+                            classes={{root: classes.drawerIconRoot}} style={{color: "#aaaaaa" }}
                         >
                             {link.icon}
                         </ListItemIcon>
