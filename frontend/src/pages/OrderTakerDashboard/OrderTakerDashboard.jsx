@@ -1,13 +1,42 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Grid from "@material-ui/core/Grid";
+import InfoCard from "./components/InfoCard/InfoCard";
+import DataDisplayUtils from "../../utils/DataDisplayUtils";
+import axios from 'axios';
+
 
 export default function OrderTakerDashboard() {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
             {!loading ? (
                 <>
+                    <Grid container spacing={3}>
+                        <Grid item lg={12} xs={12}>
+                            <Grid container spacing={3}>
+                                <Grid item lg={4} xs={12}>
+                                    <InfoCard value={DataDisplayUtils.numberWithCommas(40000)} description="Target for the Month" />
+                                </Grid>
+                                <Grid item lg={4} xs={12}>
+                                    <InfoCard value={DataDisplayUtils.numberWithCommas(21960)} description="Current Sales Value" />
+                                </Grid>
+                                <Grid item lg={4} xs={12}>
+                                    <InfoCard value={36} description="Orders Placed This Month" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item lg={12} xs={12}>
+                            <Grid container spacing={3}>
+                                <Grid item lg={6} xs={12}>
+                                </Grid>
+                                <Grid item lg={6} xs={12}>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
                 </>
             ) : <CircularProgress />
 
