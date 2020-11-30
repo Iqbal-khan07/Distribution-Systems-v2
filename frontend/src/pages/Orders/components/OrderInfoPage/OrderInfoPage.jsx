@@ -51,7 +51,7 @@ export default function OrderInfoPage({ details }) {
                 </Grid>
                 <Divider />
                 <Grid container spacing={2}>
-                    <Grid item lg={8} xs={8}>
+                    <Grid item lg={7} xs={8}>
                         <Grid container spacing={1}>
                             <Grid item lg>
                                 <Avatar alt="Shop Photo" src={details.pic} variant="square" className={classes.pic}/>
@@ -63,7 +63,7 @@ export default function OrderInfoPage({ details }) {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item lg={4} className={classes.top}>
+                    <Grid item lg={5} className={classes.top}>
                         <Grid container spacing={0}>
                             <Grid item lg={12} xs={12}>
                                 <Typography>
