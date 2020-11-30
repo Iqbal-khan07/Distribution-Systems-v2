@@ -100,7 +100,7 @@ const Orders = () => {
     // TODO FIX THE ORDER FORM!
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("company_products/all");
+            let response = await axios.get("inventory");
             let body = response.data;
             const productsList = body.data.map((p) => {
                 return {
@@ -177,7 +177,7 @@ const Orders = () => {
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
                 <>
-                    <Grid container lg={12} xs={12} spacing={3}>
+                    <Grid container spacing={3}>
                         <Grid item lg={9} xs={12}>
                             <Grid container>
                                 <Grid item lg={12} xs={12}>

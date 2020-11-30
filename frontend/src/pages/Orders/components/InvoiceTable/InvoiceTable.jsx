@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
+import {Typography} from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -88,7 +89,7 @@ export default function InvoiceTable({ orderItems, memo }) {
                     </TableRow>
                     <TableRow>
                         <TableCell colSpan={4} className={classes.memo}>
-                            <b>Memo:</b> {memo}
+                            <Typography><b>Memo:</b> {memo}</Typography>
                         </TableCell>
                     </TableRow>
                 </TableBody>

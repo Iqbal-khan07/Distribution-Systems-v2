@@ -108,27 +108,27 @@ const ShopTracker = () => {
         <WithSignedInSkeleton title={'Shop Tracker'}>
             {!loading ? (
                 <>
-                    <Grid container lg={12} xs={12} spacing={3} className={classes.rootContainer}>
+                    <Grid container spacing={3} className={classes.rootContainer}>
                         <Grid item lg={9} xs={12}>
-                        <Grid container>
-                            <Grid item lg={12} xs={12}>
-                                <ShopTable
-                                    rows={mapShopsToShopOptions(shops)}
-                                    shopShowDetailHandler={shopShowDetailHandler}
-                                />
+                            <Grid container item>
+                                <Grid item lg={12} xs={12}>
+                                    <ShopTable
+                                        rows={mapShopsToShopOptions(shops)}
+                                        shopShowDetailHandler={shopShowDetailHandler}
+                                    />
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                    <ShopInfoPaper
+                                        id={selectedShop.id}
+                                        name={selectedShop.name}
+                                        street={selectedShop.street}
+                                        city={selectedShop.city}
+                                        providence={selectedShop.providence}
+                                        zip={selectedShop.zip}
+                                        zoneName={selectedShop.zoneName}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item lg={12} xs={12}>
-                                <ShopInfoPaper
-                                    id={selectedShop.id}
-                                    name={selectedShop.name}
-                                    street={selectedShop.street}
-                                    city={selectedShop.city}
-                                    providence={selectedShop.providence}
-                                    zip={selectedShop.zip}
-                                    zoneName={selectedShop.zoneName}
-                                />
-                            </Grid>
-                        </Grid>
                         </Grid>
                         <Grid item lg={3} xs={12}>
                             <Grid container spacing={2} justify="center">
