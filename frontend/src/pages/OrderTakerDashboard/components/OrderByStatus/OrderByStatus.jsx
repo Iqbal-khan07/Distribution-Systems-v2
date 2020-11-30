@@ -9,14 +9,22 @@ const useStyles = makeStyles((theme) => ({
     card: {
         minWidth: '460px',
         // maxWidth: '300px',
+        minHeight: 420
     },
     root: {
-        padding: '0px',
+        padding: 0,
+        "&:last-child": {
+            paddingBottom: 0
+          }
+      
     },
     title: {
         backgroundColor: '#232E33',
         color: 'rgb(255,255,255,0.6)',
         padding: '5px',
+    },
+    content: {
+        padding: theme.spacing(3),
     },
 }));
 
@@ -27,6 +35,9 @@ const options = {
         type: 'bar',
     },
     labels: ['Delivered', 'Paid', 'Pending'],
+    legend: {
+        show: false,
+    },
     plotOptions: {
         bar: {
             horizontal: true,
@@ -49,14 +60,31 @@ const options = {
           maxWidth: 160,
           style: {
               colors: [],
-              fontSize: '16px',
-              fontFamily: 'Helvetica, Arial, sans-serif',
+              fontSize: '18px',
+              fontFamily: 'Montserrat',
               fontWeight: 400,
               cssClass: 'apexcharts-yaxis-label',
           },
       },
   },
-    colors: ['#33b2df', '#546E7A', '#d4526e']
+    colors: ['#5DB285', '#F6E337', '#FB7373'],
+    responsive: [
+        {
+            breakpoint: 480,
+            options: {
+                bar: {
+                    width: 250
+                },
+                legend: {
+                    show: false,
+                    position: 'right',
+                    offsetY: 0,
+                    height: 230,
+                }
+            }
+        }
+    ],
+
 };
 
 export default function OrderByStatus({series}) {
@@ -67,7 +95,7 @@ export default function OrderByStatus({series}) {
                 <Typography variant="h4" className={classes.title} align="center">
                     Orders By Status
                 </Typography>
-                <div>
+                <div className={classes.content}>
                     <ReactApexChart
                         options={options}
                         series={[{data: series}]}
