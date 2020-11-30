@@ -23,23 +23,24 @@ export default function OrderTakerDashboard() {
                     order_taker_id: user.id
                 }
             });
-            let body = response.data;
+            let body = response.data.data;
 
-            console.log(body);
             const orderOptions = {
-                goal: body.data.goal_total,
-                current: body.data.current_value_total,
-                orders: body.data.num_orders_total,
-                orders_paid: body.data.orders_paid,
-                orders_pending: body.data.orders_pending
+                goal: body.goal_total,
+                current: body.current_value_total,
+                orders: body.num_orders_total,
+                orders_paid: body.orders_paid.num_orders,
+                orders_pending: body.orders_pending.num_orders
             };
             setGoalInfo(orderOptions);
+            const salesLeft = orderOptions.goal - orderOptions.current < 0 ? 0 : orderOptions.goal - orderOptions.current;
+            setSalesSeries([orderOptions.current, salesLeft]);
+            setOrderSeries([0, orderOptions.orders_paid, orderOptions.orders_pending]);
             setLoading(false);
         }
         fetchData().then()
-    }, [])
+    }, []);
 
-    console.log(goalInfo);
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
             {!loading ? (
