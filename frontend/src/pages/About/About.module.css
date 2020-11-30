@@ -13,7 +13,7 @@
     object-fit: cover;
     height: 100vh;
     top:0;
-    right:left;
+    right: left;
     width: 100%;
 }
 .title {
@@ -24,6 +24,7 @@
     font-weight: 100;
     font-size: 60px;
     text-shadow: 2px 2px 8px #000000;
+    margin-left: 15px ;
 }
 
 .content {

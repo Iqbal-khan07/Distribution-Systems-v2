@@ -2,7 +2,6 @@ import React from "react";
 import MainMenuBar from '../../shared/MainMenuBar/MainMenuBar';
 import styles from './About.module.css';
 import { Team, Intro, Technologies, Purpose } from "./about.json";
-import { WarehouseImage } from "../../assests/images/Warehouse.jpg";
 
 const About = () => {
     return (
