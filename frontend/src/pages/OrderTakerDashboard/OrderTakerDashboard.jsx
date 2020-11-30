@@ -61,7 +61,11 @@ export default function OrderTakerDashboard() {
                                 </Grid>
                                 <Grid item lg={4} xs={12}>
                                     <InfoCard
+<<<<<<< HEAD
                                         value={DataDisplayUtils.numberWithCommas(goalInfo.orders)}
+=======
+                                        value={36}
+>>>>>>> 78e3a7892c8466101e353849607661487772df34
                                         description="Orders Placed This Month"
                                     />
                                 </Grid>
