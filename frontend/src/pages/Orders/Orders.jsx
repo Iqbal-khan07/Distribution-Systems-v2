@@ -100,7 +100,7 @@ const Orders = () => {
     // TODO FIX THE ORDER FORM!
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("company_products/all");
+            let response = await axios.get("inventory");
             let body = response.data;
             const productsList = body.data.map((p) => {
                 return {
