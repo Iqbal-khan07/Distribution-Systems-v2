@@ -10,15 +10,23 @@ const useStyles = makeStyles((theme) => ({
     card: {
         minWidth: '200px',
         // maxWidth: '300px',
+        minHeight: 420
     },
     root: {
         padding: '0px',
+        "&:last-child": {
+            paddingBottom: 0
+          }
     },
     title: {
         backgroundColor: '#232E33',
         color: 'rgb(255,255,255,0.6)',
         padding: '5px',
     },
+    content: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(3),
+    }
 }));
 
 const options =  {
@@ -129,7 +137,7 @@ export default function CurrentVsTarget({series}) {
                 <Typography variant="h4" className={classes.title} align="center">
                     Current vs. Target Sales
                 </Typography>
-                <div>
+                <div className={classes.content}>
                     <ReactApexChart
                         options={options}
                         series={series}
