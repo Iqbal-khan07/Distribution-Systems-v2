@@ -10,25 +10,23 @@ const useStyles = makeStyles((theme) => ({
     card: {
         minWidth: '200px',
         // maxWidth: '300px',
+        minHeight: 420
     },
     root: {
         padding: '0px',
+        "&:last-child": {
+            paddingBottom: 0
+          }
     },
     title: {
         backgroundColor: '#232E33',
         color: 'rgb(255,255,255,0.6)',
         padding: '5px',
     },
-    // display: {
-    //     backgroundColor: '#BFD7DC',
-    //     minWidth: '150px',
-    //     minHeight: '150px',
-    //     fontSize: '80px',
-    //     color: 'rgb(35, 46, 51, 0.8)',
-    //     marginRight: 'auto',
-    //     marginLeft: 'auto',
-    //     marginTop: '24px',
-    // },
+    content: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(3),
+    }
 }));
 
 const options =  {
@@ -36,16 +34,18 @@ const options =  {
         type: 'donut',
     },
     labels: ['Target Sales', 'Current Sales'],
+    colors: ['#5DB285', '#BFDCCD'],
     legend: {
         show: true,
         showForSingleSeries: false,
         showForNullSeries: true,
         showForZeroSeries: true,
-        position: 'bottom',
-        horizontalAlign: 'center',
+        position: 'right',
+        horizontalAlign: 'right',
+        verticalAlign: 'bottom',
         floating: false,
         fontSize: '17px',
-        fontFamily: 'Helvetica, Arial',
+        fontFamily: 'Montserrat',
         fontWeight: 400,
         formatter: undefined,
         inverseOrder: false,
@@ -59,15 +59,15 @@ const options =  {
             useSeriesColors: false
         },
         markers: {
-            width: 12,
-            height: 12,
+            width: 15,
+            height: 15,
             strokeWidth: 2,
             strokeColor: '#fff',
-            fillColors: ['#E91E63', '#546E7A'],
-            radius: 12,
+            fillColors: ['#5DB285', '#BFDCCD'],
+            radius: 15,
         },
         itemMargin: {
-            horizontal: 30,
+            horizontal: 0,
             vertical: 0
         },
         onItemClick: {
@@ -84,13 +84,13 @@ const options =  {
                 labels: {
                     show: true,
                     name: {
-                        show: false
+                        show: true
                     },
                     value: {
                         show: true,
-                        fontSize: '22px',
-                        fontFamily: 'Helvetica, Arial, sans-serif',
-                        fontWeight: 600,
+                        fontSize: '35px',
+                        fontFamily: 'Montserrat',
+                        fontWeight: 500,
                         color: undefined,
                         formatter: function (val) {
                             return val + "%"
@@ -100,9 +100,13 @@ const options =  {
             }
         }
     },
-    colors: ['#546E7A', '#E91E63'],
     dataLabels: {
         enabled: true,
+        style: {
+            fontFamily: 'Montserrat',
+            fontSize: 16,
+            fontWeight: 500,
+        }
     },
     responsive: [
         {
@@ -119,7 +123,10 @@ const options =  {
                 }
             }
         }
-    ]
+    ],
+    stroke: {
+        width: 15
+    }
 };
 
 export default function CurrentVsTarget({series}) {
@@ -128,9 +135,9 @@ export default function CurrentVsTarget({series}) {
         <Card raised className={classes.card}>
             <CardContent className={classes.root}>
                 <Typography variant="h4" className={classes.title} align="center">
-                    Current Vs Target Sales
+                    Current vs. Target Sales
                 </Typography>
-                <div>
+                <div className={classes.content}>
                     <ReactApexChart
                         options={options}
                         series={series}
