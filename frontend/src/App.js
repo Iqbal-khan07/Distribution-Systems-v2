@@ -31,7 +31,8 @@ function App() {
             case ORDER_TAKER:
                 return <OrderTakerDashboard />
             case SUPER_USER:
-                return <SuperDashboard />
+                // return <SuperDashboard />
+                return <OrderTakerDashboard />
             default:
                 break
         }
