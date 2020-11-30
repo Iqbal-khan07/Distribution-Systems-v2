@@ -38,17 +38,19 @@ const useStyles = makeStyles(() => ({
         borderBottom: "1px solid white",
     },
     valueButtonAdd: {
-        backgroundColor: "#0bec2a",
+        backgroundColor: "#5DB285",
         marginLeft: 5,
         minWidth: 10,
+        padding: 3,
         '&:hover': {
             backgroundColor: "#027211",
         }
     },
     valueButtonSubtract: {
-        backgroundColor: "red",
+        backgroundColor: "#FB7373",
         marginRight: 5,
         minWidth: 10,
+        padding: 3,
         '&:hover': {
             backgroundColor: "#b60000",
         }

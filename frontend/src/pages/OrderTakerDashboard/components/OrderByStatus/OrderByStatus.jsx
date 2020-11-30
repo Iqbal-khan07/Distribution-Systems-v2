@@ -98,7 +98,7 @@ export default function OrderByStatus({series}) {
                 <div className={classes.content}>
                     <ReactApexChart
                         options={options}
-                        series={[{data: series}]}
+                        series={[{data: series, name: "Orders"}]}
                         type={"bar"}
                     />
                 </div>
