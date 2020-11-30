@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect } from "react";
 import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 
 import Home from './pages/Home/Home'
@@ -66,13 +66,13 @@ function App() {
 
     return (
         <div className="App">
-            <BrowserRouter>
-                <Switch>
-                    <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <BrowserRouter>
+                    <Switch>
                         {routes}
-                    </ThemeProvider>
-                </Switch>
-            </BrowserRouter>
+                    </Switch>
+                </BrowserRouter>
+            </ThemeProvider>
         </div>
       );
 }

@@ -177,7 +177,7 @@ const Orders = () => {
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
                 <>
-                    <Grid container lg={12} xs={12} spacing={3}>
+                    <Grid container spacing={3}>
                         <Grid item lg={9} xs={12}>
                             <Grid container>
                                 <Grid item lg={12} xs={12}>
