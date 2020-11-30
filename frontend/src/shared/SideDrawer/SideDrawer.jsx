@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
     drawerIconRootSelected: {
         overflow: "visible",
-        color: "#ffffff"
+        color: "#eeeeee"
     },
 
     drawerOpen: {
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     logoHolder: {
         position: 'relative',
         textAlign: "center",
-        color: "#ffffff",
+        color: "#eeeeee",
         padding: "0.5rem 0.5rem",
         '& img': {
             bottom: 5,
