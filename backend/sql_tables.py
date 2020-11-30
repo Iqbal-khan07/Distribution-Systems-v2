@@ -919,9 +919,9 @@ class Order_taker_goal(db.Model):
         database bootstrap function for order_taker_goal
         """
 
-        database.session.add(Order_taker_goal(1, 10, 2020, 20000.00))
-        database.session.add(Order_taker_goal(1, 9, 2020, 15000.00))
-        database.session.add(Order_taker_goal(4, 10, 2020, 10000.00))
+        database.session.add(Order_taker_goal(1, 11, 2020, 20000.00))
+        database.session.add(Order_taker_goal(1, 12, 2020, 15000.00))
+        database.session.add(Order_taker_goal(4, 11, 2020, 10000.00))
         database.session.add(Order_taker_goal(4, 12, 2020, 11000.00))
         database.session.add(Order_taker_goal(7, 11, 2020, 12000.00))
         database.session.add(Order_taker_goal(7, 12, 2020, 13000.00))
