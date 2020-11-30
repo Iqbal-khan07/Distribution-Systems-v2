@@ -748,3 +748,57 @@ def goal_order_taker_new(database, data):
     database.session.close()
 
     return response
+
+
+def inventory_update(database, data):
+    """
+    Updates inventory data based on JSON data
+    
+    return values and what they mean:
+
+    0: company product ids are not valid
+    """
+
+    inventory_data = data["data"]
+
+    # validate relational data fields
+    products_valid = True
+
+    company_product_query = database.session.query(sql_tables.Company_product).all()
+
+    for item in inventory_data:
+        item_found = False
+        
+        for entry in company_product_query:
+            if item["company_product_id"] == entry.id:
+                item_found = True
+                break
+        
+        if not item_found:
+            products_valid = False
+            break
+
+    if not products_valid:
+        return 0
+    else:
+        for item in inventory_data:
+            for entry in company_product_query:
+                if item["company_product_id"] == entry.id:
+                    entry.stock += item["stock_delta"]
+
+        database.session.commit()
+
+    updated_query = database.session.query(sql_tables.Company_product).all()
+
+    response_inner = []
+
+    for entry in updated_query:
+        response_inner.append(entry.request_company_product_info(database))
+
+    response = {
+        "data": response_inner
+    }
+
+    database.session.close()
+
+    return response

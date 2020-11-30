@@ -279,6 +279,7 @@ def goal_order_taker(order_taker_info):
 
     Response 200: goal_order_taker data retrieved successfully
     Response 400: Bad Request
+    Response 404: goal data not found
     """
 
     response = endpoint_logic.goal_order_taker(db, order_taker_info)
@@ -299,10 +300,10 @@ def goal_order_taker(order_taker_info):
 def goal_order_taker_new(goal_info):
     """
     This function links with endpoint:
-    /goal/order_taker
+    /goal/order_taker/new
     through swagger.yml
 
-    Response 200: goal_order_taker data retrieved successfully
+    Response 200: goal_order_taker data created successfully
     Response 400: Bad Request
     """
 
@@ -315,6 +316,27 @@ def goal_order_taker_new(goal_info):
             return "User is not an order taker", 400
         elif response == 2:
             return "Goal for order taker already exists for this month", 400
+        else:
+            return "Bad Request", 400
+    else:
+        return response, 200
+
+
+def inventory_update(inventory_data):
+    """
+    This function links with endpoint:
+    /inventory/update
+    through swagger.yml
+
+    Response 200: inventory updated successfully
+    Response 400: Bad Request
+    """
+
+    response = endpoint_logic.inventory_update(db, inventory_data)
+
+    if type(response) == int:
+        if response == 0:
+            return "Invalid company product id", 400
         else:
             return "Bad Request", 400
     else:

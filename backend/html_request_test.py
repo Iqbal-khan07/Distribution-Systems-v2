@@ -15,6 +15,8 @@ authenticate_gmail = "/authenticate/google"
 authenticate_facebook = "/authenticate/facebook"
 
 get_company_product = "/inventory"
+inventory_update = "/inventory/update"
+
 get_shop_order_not_delivered = "/orders/not_delivered"
 get_shop_order_today = "/orders/today"
 get_shop = "/shops/all"
@@ -93,6 +95,10 @@ def g_ot_n():
     print(requests.post(url = (base_url + goal_order_taker_new), json = json.loads(json_mock.goal_order_taker_new())).json())
     spacer()
 
+def i_u():
+    print(requests.post(url = (base_url + inventory_update), json = json.loads(json_mock.inventory_update())).json())
+    spacer()
+
 
 if __name__ == '__main__':
     #auth_default()
@@ -111,3 +117,6 @@ if __name__ == '__main__':
     #update_sod()
     #g_ot()
     #g_ot_n()
+    get_comp_prod()
+    i_u()
+    get_comp_prod()

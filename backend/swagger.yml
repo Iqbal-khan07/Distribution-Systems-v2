@@ -56,6 +56,7 @@ paths:
               data:
                 type: object
 
+
   /authenticate/google:
     post:
       operationId: endpoint_entry.user_authenticate_gmail
@@ -89,6 +90,7 @@ paths:
             properties:
               data:
                 type: object
+
 
   /authenticate/facebook:
     post:
@@ -124,6 +126,7 @@ paths:
               data:
                 type: object
 
+
   /inventory:
     get:
       operationId: endpoint_entry.get_company_product
@@ -136,6 +139,44 @@ paths:
             properties:
               data:
                 type: array
+
+
+  /inventory/update:
+    post:
+      operationId: endpoint_entry.inventory_update
+      description: Update inventory stock with JSON data
+      parameters:
+        - name: inventory_data
+          in: body
+          description: items and stock deltas
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                description: Data wrapper
+                properties:
+                  company_product_id:
+                    type: integer
+                    description: Database id of company product
+                  stock_delta:
+                    type: integer
+                    description: Delta of stock for item
+                required:
+                 - company_product_id
+                 - stock_delta
+            required:
+             - data
+      responses:
+        200:
+          description: goal_order_taker data 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
 
   /orders/not_delivered:
     get:
@@ -150,6 +191,7 @@ paths:
               data:
                 type: array
 
+
   /orders/today:
     get:
       operationId: endpoint_entry.get_order_today
@@ -162,6 +204,7 @@ paths:
             properties:
               data:
                 type: array
+
 
   /shops/all:
     get:
@@ -176,6 +219,7 @@ paths:
               data:
                 type: array
 
+
   /zones/all:
     get:
       operationId: endpoint_entry.get_all_zones
@@ -189,6 +233,7 @@ paths:
               data:
                 type: array
 
+
   /shop_categories/all:
     get:
       operationId: endpoint_entry.get_all_shop_category
@@ -201,6 +246,7 @@ paths:
             properties:
               data:
                 type: array
+
 
   /create/shop:
     post:
@@ -278,6 +324,7 @@ paths:
               data:
                 type: object
 
+
   /create/zone:
     post:
       operationId: endpoint_entry.zone_create
@@ -309,6 +356,7 @@ paths:
               data:
                 type: object
 
+
   /create/shop_category:
     post:
       operationId: endpoint_entry.shop_category_create
@@ -339,6 +387,7 @@ paths:
             properties:
               data:
                 type: object
+
 
   /create/shop_order:
     post:
@@ -402,6 +451,7 @@ paths:
               data:
                 type: object
 
+
   /deliver/shop_order:
     post:
       operationId: endpoint_entry.shop_order_update
@@ -438,6 +488,7 @@ paths:
               data:
                 type: object
 
+
   /goal/order_taker:
     post:
       operationId: endpoint_entry.goal_order_taker
@@ -469,6 +520,7 @@ paths:
             properties:
               data:
                 type: object
+
 
   /goal/order_taker/new:
     post:
@@ -505,6 +557,7 @@ paths:
             properties:
               data:
                 type: object
+
 
 securityDefinitions:
   APIKeyHeader:

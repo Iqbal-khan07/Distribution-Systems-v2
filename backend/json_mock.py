@@ -106,3 +106,20 @@ def goal_order_taker_new():
     }
 
     return json.dumps(jsonmock, indent=4)
+
+
+def inventory_update():
+    jsonmock = {
+        "data": [
+            {"company_product_id": 1, "stock_delta": 1},
+            {"company_product_id": 2, "stock_delta": -2},
+            {"company_product_id": 3, "stock_delta": 3},
+            {"company_product_id": 4, "stock_delta": 4},
+            {"company_product_id": 5, "stock_delta": -5},
+            {"company_product_id": 6, "stock_delta": 6},
+            {"company_product_id": 7, "stock_delta": -1},
+            {"company_product_id": 8, "stock_delta": 600},
+        ]
+    }
+
+    return json.dumps(jsonmock, indent=4)
