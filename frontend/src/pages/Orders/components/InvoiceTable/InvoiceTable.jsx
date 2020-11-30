@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function InvoiceTable({ orderItems }) {
+export default function InvoiceTable({ orderItems, memo }) {
     const priceRow = (qty, unit) => (qty * unit);
 
     function createRow(desc, qty, unit) {
@@ -88,7 +88,7 @@ export default function InvoiceTable({ orderItems }) {
                     </TableRow>
                     <TableRow>
                         <TableCell colSpan={4} className={classes.memo}>
-                            <b>Memo: </b>
+                            <b>Memo:</b> {memo}
                         </TableCell>
                     </TableRow>
                 </TableBody>

@@ -113,7 +113,7 @@ export default function OrderInfoPage({ details }) {
                     </Grid>
                 </Grid>
                 <Grid container className={classes.sectionSpacing}>
-                    <InvoiceTable orderItems={details.orderItems}></InvoiceTable>
+                    <InvoiceTable orderItems={details.orderItems} memo={details.memo}></InvoiceTable>
                 </Grid>
 
             </div>
