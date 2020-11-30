@@ -1,21 +1,21 @@
 """
-sql_tables.py: all SQL interface functions and table definitions
+sql_tables.py: all SQL table definitions and bootstrapping goes here
 """
 
 
 import flask_sqlalchemy
 import datetime
-import json
-from flask import jsonify
 from backend_main import db
 
 
 class Sys_user_role(db.Model):
-    """system user role database table definition
+    """
+    system user role database table definition
     Stores roles for sys_user
     1 = Order Taker
     2 = Order Fulfiller
-    3 = Administrator"""
+    3 = Administrator
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=False, unique=True)
@@ -24,13 +24,20 @@ class Sys_user_role(db.Model):
         self.name = na
 
     def request_sys_user_role_info(self):
-        """produces a dictionary of all relevant sys_user_role information"""
+        """
+        produces a dictionary of all relevant sys_user_role information
+        """
 
-        return {"id": self.id, "name": self.name}
+        return {
+            "id": self.id, 
+            "name": self.name
+        }
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for Sys_user_role"""
+        """
+        database bootstrap function for Sys_user_role
+        """
 
         database.session.add(Sys_user_role("Order Taker"))
         database.session.add(Sys_user_role("Order Fulfiller"))
@@ -40,8 +47,10 @@ class Sys_user_role(db.Model):
 
 
 class Sys_user(db.Model):
-    """sys_user database table definition
-    Stores all employee / system user information"""
+    """
+    sys_user database table definition
+    Stores all employee / system user information
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name_first = db.Column(db.String(50), nullable=False)
@@ -68,7 +77,9 @@ class Sys_user(db.Model):
         self.role = ro
 
     def request_sys_user_info(self, database):
-        """produces a dictionary of all relevant sys_user information"""
+        """
+        produces a dictionary of all relevant sys_user information
+        """
 
         sys_user_role = (
             database.session.query(Sys_user_role)
@@ -90,7 +101,9 @@ class Sys_user(db.Model):
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for sys_user"""
+        """
+        database bootstrap function for sys_user
+        """
 
         database.session.add(
             Sys_user(
@@ -199,8 +212,10 @@ class Sys_user(db.Model):
 
 
 class Zone(db.Model):
-    """zone database table definition
-    Zones are assigned to companyies and shops"""
+    """
+    zone database table definition
+    Zones are assigned to companyies and shops
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False, unique=True)
@@ -209,13 +224,20 @@ class Zone(db.Model):
         self.name = na
 
     def request_zone_info(self):
-        """produces a dictionary of all relevant zone information"""
+        """
+        produces a dictionary of all relevant zone information
+        """
 
-        return {"id": self.id, "name": self.name}
+        return {
+            "id": self.id, 
+            "name": self.name
+        }
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for zone"""
+        """
+        database bootstrap function for zone
+        """
 
         database.session.add(Zone("Temp Zone 1"))
         database.session.add(Zone("Temp Zone 2"))
@@ -226,7 +248,9 @@ class Zone(db.Model):
 
 
 class Shop_category(db.Model):
-    """shop category database table definition"""
+    """
+    shop category database table definition
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     type = db.Column(db.String(100), nullable=False, unique=True)
@@ -235,13 +259,20 @@ class Shop_category(db.Model):
         self.type = ty
 
     def request_category_info(self):
-        """produces a dictionary of all relevant shop information"""
+        """
+        produces a dictionary of all relevant shop information
+        """
 
-        return {"id": self.id, "type": self.type}
+        return {
+            "id": self.id, 
+            "type": self.type
+        }
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for Shop_category"""
+        """
+        database bootstrap function for Shop_category
+        """
 
         database.session.add(Shop_category("Temp Category 1"))
         database.session.add(Shop_category("Temp Category 2"))
@@ -250,7 +281,9 @@ class Shop_category(db.Model):
 
 
 class Shop(db.Model):
-    """shop database table definition"""
+    """
+    shop database table definition
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
@@ -275,7 +308,9 @@ class Shop(db.Model):
         self.zip_4 = zi
 
     def request_shop_info(self, database):
-        """produces a dictionary of all relevant shop information"""
+        """
+        produces a dictionary of all relevant shop information
+        """
 
         if self.category != None:
             shop_category_info = (
@@ -311,7 +346,9 @@ class Shop(db.Model):
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for shop"""
+        """
+        database bootstrap function for shop
+        """
 
         database.session.add(
             Shop(
@@ -359,7 +396,9 @@ class Shop(db.Model):
 
 
 class Shop_zone(db.Model):
-    """shop_zone database table definition"""
+    """
+    shop_zone database table definition
+    """
 
     shop = db.Column(
         db.Integer, db.ForeignKey("shop.id"), primary_key=True, nullable=False
@@ -373,17 +412,24 @@ class Shop_zone(db.Model):
         self.zone = zo
 
     def request_zone_info(self, database):
-        """produces a dictionary of all relevant zone information"""
+        """
+        produces a dictionary of all relevant zone information
+        """
 
         zone_name = (database.session.query(Zone).filter(Zone.id == self.zone).all())[
             0
         ].name
 
-        return {"id": self.zone, "name": zone_name}
+        return {
+            "id": self.zone, 
+            "name": zone_name
+        }
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for shop_zone"""
+        """
+        database bootstrap function for shop_zone
+        """
 
         database.session.add(Shop_zone(1, 1))
         database.session.add(Shop_zone(1, 4))
@@ -399,7 +445,9 @@ class Shop_zone(db.Model):
 
 
 class Company(db.Model):
-    """company database table definition"""
+    """
+    company database table definition
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
@@ -410,7 +458,9 @@ class Company(db.Model):
         self.image_url = iu
 
     def request_company_info(self, database):
-        """produces a dictionary of all relevant company_product information"""
+        """
+        produces a dictionary of all relevant company_product information
+        """
 
         company_zone_query = (
             database.session.query(Company_zone)
@@ -432,7 +482,9 @@ class Company(db.Model):
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for company"""
+        """
+        database bootstrap function for company
+        """
 
         database.session.add(
             Company(
@@ -455,7 +507,9 @@ class Company(db.Model):
 
 
 class Company_zone(db.Model):
-    """company_zone database table definition"""
+    """
+    company_zone database table definition
+    """
 
     company = db.Column(
         db.Integer, db.ForeignKey("company.id"), primary_key=True, nullable=False
@@ -469,17 +523,24 @@ class Company_zone(db.Model):
         self.zone = zo
 
     def request_zone_info(self, database):
-        """produces a dictionary of all relevant zone information"""
+        """
+        produces a dictionary of all relevant zone information
+        """
 
         zone_name = (database.session.query(Zone).filter(Zone.id == self.zone).all())[
             0
         ].name
 
-        return {"id": self.zone, "name": zone_name}
+        return {
+            "id": self.zone, 
+            "name": zone_name
+        }
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for company_zone"""
+        """
+        database bootstrap function for company_zone
+        """
 
         database.session.add(Company_zone(1, 2))
         database.session.add(Company_zone(1, 3))
@@ -491,7 +552,9 @@ class Company_zone(db.Model):
 
 
 class Company_product(db.Model):
-    """company_product database table definition"""
+    """
+    company_product database table definition
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     company = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
@@ -510,7 +573,9 @@ class Company_product(db.Model):
         self.description = de
 
     def request_company_product_info(self, database):
-        """produces a dictionary of all relevant company_product information"""
+        """
+        produces a dictionary of all relevant company_product information
+        """
 
         company = (
             database.session.query(Company).filter(Company.id == self.company).all()
@@ -529,7 +594,9 @@ class Company_product(db.Model):
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for company_product"""
+        """
+        database bootstrap function for company_product
+        """
 
         database.session.add(Company_product(1, "C1 Item 1", 1.00, 2.00, 1, None))
         database.session.add(Company_product(1, "C1 Item 2", 2.00, 4.00, 2, "Item 2!"))
@@ -553,7 +620,9 @@ class Company_product(db.Model):
 
 
 class Shop_order(db.Model):
-    """shop_order database table definition"""
+    """
+    shop_order database table definition
+    """
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     shop = db.Column(db.Integer, db.ForeignKey("shop.id"), nullable=False)
@@ -580,7 +649,9 @@ class Shop_order(db.Model):
         self.completed = co
 
     def request_shop_order(self, database):
-        """produces a dictionary of all relevant shop_order information"""
+        """
+        produces a dictionary of all relevant shop_order information
+        """
 
         shop_entry = (database.session.query(Shop).filter(Shop.id == self.shop).all())[
             0
@@ -629,7 +700,9 @@ class Shop_order(db.Model):
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for shop_order"""
+        """
+        database bootstrap function for shop_order
+        """
 
         current_time_utc = datetime.datetime.now(datetime.timezone.utc)
         # one week ahead for projected delivery date
@@ -685,7 +758,9 @@ class Shop_order(db.Model):
 
 
 class Shop_order_item(db.Model):
-    """shop_order_item database table definition"""
+    """
+    shop_order_item database table definition
+    """
 
     shop_order = db.Column(
         db.Integer, db.ForeignKey("shop_order.id"), primary_key=True, nullable=False
@@ -704,7 +779,9 @@ class Shop_order_item(db.Model):
         self.quantity_units = qu
 
     def request_shop_order_item_info(self, database):
-        """produces a dictionary of all relevant shop_order_item information"""
+        """
+        produces a dictionary of all relevant shop_order_item information
+        """
 
         company_product = shop_order_items_query = (
             database.session.query(Company_product)
@@ -720,7 +797,9 @@ class Shop_order_item(db.Model):
 
     @staticmethod
     def bootstrap_populate(database):
-        """database bootstrap function for shop_order_items"""
+        """
+        database bootstrap function for shop_order_items
+        """
 
         database.session.add(Shop_order_item(1, 2, 6))
         database.session.add(Shop_order_item(1, 7, 2))
@@ -738,8 +817,57 @@ class Shop_order_item(db.Model):
         database.session.commit()
 
 
+class Order_taker_goal(db.Model):
+    """
+    order_taker_goal database table definition
+    """
+
+    order_taker = db.Column(
+        db.Integer, db.ForeignKey("sys_user.id"), primary_key=True, nullable=False
+    )
+    month = db.Column(db.Integer, primary_key=True, nullable=False)
+    year = db.Column(db.Integer, primary_key=True, nullable=False)
+    goal_value = db.Column(db.Numeric(10, 2), nullable=False)
+
+    def __init__(self, ot, mo, ye, gv):
+        self.order_taker = ot
+        self.month = mo
+        self.year = ye
+        self.goal_value = gv
+
+    def request_order_taker_goal_info(self, database):
+        """
+        produces a dictionary of all relevant order_taker_goal information
+        """
+
+        return {
+            "order_taker": self.order_taker,
+            "month":  self.month,
+            "year": self.year,
+            "goal_value": self.goal_value
+        }
+
+    @staticmethod
+    def bootstrap_populate(database):
+        """
+        database bootstrap function for order_taker_goal
+        """
+
+        database.session.add(Order_taker_goal(1, 11, 2020, 20000.00))
+        database.session.add(Order_taker_goal(1, 12, 2020, 15000.00))
+        database.session.add(Order_taker_goal(4, 11, 2020, 10000.00))
+        database.session.add(Order_taker_goal(4, 12, 2020, 11000.00))
+        database.session.add(Order_taker_goal(7, 11, 2020, 12000.00))
+        database.session.add(Order_taker_goal(7, 12, 2020, 13000.00))
+
+        database.session.commit()
+
+
 def database_bootstrap(database):
-    """this function populates all tables with mock testing data"""
+    """
+    this function populates all tables with mock testing data
+    """
+
     Sys_user_role.bootstrap_populate(database)
     Sys_user.bootstrap_populate(database)
     Zone.bootstrap_populate(database)
@@ -751,4 +879,6 @@ def database_bootstrap(database):
     Company_product.bootstrap_populate(database)
     Shop_order.bootstrap_populate(database)
     Shop_order_item.bootstrap_populate(database)
+    Order_taker_goal.bootstrap_populate(database)
+
     database.session.close()

@@ -413,6 +413,7 @@ def create_shop_order(database, data):
     0: invalid company product id
     1: invalid order taker id
     2: invalid shop id
+    3: invalid delivery date
     """
 
     data_loaded = data["data"]
@@ -590,6 +591,91 @@ def update_shop_order_delivered(database, data):
     response = {
             "data": response_inner
         }
+
+    database.session.close()
+
+    return response
+
+
+def goal_order_taker(database, data):
+    """
+    Returns goal data for an order taker based on JSON data
+    
+    return values and what they mean:
+
+    0: invalid sys_user id
+    1: sys_user not order taker
+    2: no goal data found for order taker
+    """
+
+    order_taker_id = data["data"]["order_taker_id"]
+
+    # validate relational data fields
+    sys_user_valid = True
+    order_taker_valid = True
+
+    sys_user_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.id == order_taker_id)
+
+    if sys_user_query.count() == 0:
+        sys_user_valid = False
+    elif sys_user_query.all()[0].role != 1:
+        order_taker_valid = False
+
+    if not sys_user_valid:
+        return 0
+    elif not order_taker_valid:
+        return 1
+    else:
+        current_month = datetime.datetime.now(datetime.timezone.utc).month
+
+        goal_query = database.session.query(sql_tables.Order_taker_goal).filter(
+            sql_tables.Order_taker_goal.order_taker == order_taker_id,
+            sql_tables.Order_taker_goal.month == current_month)
+
+        if goal_query.count() == 0:
+            return 2
+        else:
+            order_taker_entry = sys_user_query.all()[0]
+            goal_entry = goal_query.all()[0]
+
+            current_value_total = 0
+            orders_paid = 0
+            current_value_paid = 0
+            orders_pending = 0
+            current_value_pending = 0
+
+            order_query = database.session.query(sql_tables.Shop_order).filter(
+                sql_tables.Shop_order.order_taker == order_taker_id).all()
+
+            for entry in order_query:
+                if entry.date_ordered.month == current_month:
+                    current_value_total += entry.price_due
+
+                    if entry.price_paid:
+                        orders_paid += 1
+                        current_value_paid += entry.price_due
+                    else:
+                        orders_pending += 1
+                        current_value_pending += entry.price_due
+
+            response_inner = {
+                "current_value_total": current_value_total,
+                "num_orders_total": orders_paid + orders_pending,
+                "goal_total": goal_entry.goal_value,
+                "orders_paid": {
+                    "num_orders": orders_paid,
+                    "current_value": current_value_paid
+                },
+                "orders_pending": {
+                    "num_orders": orders_pending,
+                    "current_value": current_value_pending
+                }
+            }
+
+    response = {
+        "data": response_inner
+    }
 
     database.session.close()
 

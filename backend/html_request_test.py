@@ -28,8 +28,12 @@ create_shop_order = "/create/shop_order"
 
 update_shop_order_delevered = "/deliver/shop_order"
 
+goal_order_taker = "/goal/order_taker"
+
+
 def spacer():
     print("___________________________________________________________")
+
 
 def auth_default():
     print(requests.post(url = (base_url + authenticate_default), json = json.loads(json_mock.authenticate_default())).json())
@@ -40,7 +44,8 @@ def auth_gmail():
 def auth_fb():
     print(requests.post(url = (base_url + authenticate_facebook), json = json.loads(json_mock.authenticate_email_facebook())).json())
     spacer()
-    
+
+
 def get_comp_prod():
     print(requests.get(url = (base_url + get_company_product)).json())
     spacer()
@@ -59,7 +64,8 @@ def get_z():
 def get_s_c():
     print(requests.get(url = (base_url + get_shop_category)).json())
     spacer()
-    
+
+
 def create_s():
     print(requests.post(url = (base_url + create_shop), json = json.loads(json_mock.create_shop())).json())
     spacer()
@@ -72,23 +78,31 @@ def create_s_c():
 def create_s_o():
     print(requests.post(url = (base_url + create_shop_order), json = json.loads(json_mock.create_shop_order())).json())
     spacer()
-    
+
+
 def update_sod():
     print(requests.post(url = (base_url + update_shop_order_delevered), json = json.loads(json_mock.update_shop_order_delivered())).json())
     spacer()
 
+
+def g_ot():
+    print(requests.post(url = (base_url + goal_order_taker), json = json.loads(json_mock.goal_order_taker())).json())
+    spacer()
+
+
 if __name__ == '__main__':
-    auth_default()
-    auth_gmail()
-    auth_fb()
-    get_comp_prod()
-    get_so_nd()
-    get_so_t()
-    get_sh()
-    get_z()
-    get_s_c()
+    #auth_default()
+    #auth_gmail()
+    #auth_fb()
+    #get_comp_prod()
+    #get_so_nd()
+    #get_so_t()
+    #get_sh()
+    #get_z()
+    #get_s_c()
     #create_s()
     #create_z()
     #create_s_c()
     #create_s_o()
     #update_sod()
+    g_ot()
