@@ -4,11 +4,14 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import InfoCard from "./components/InfoCard/InfoCard";
 import DataDisplayUtils from "../../utils/DataDisplayUtils";
+import CurrentVsTarget from "./components/CurrentVsTarget/CurrentVsTarget";
+import OrderByStatus from "./components/OrderByStatus/OrderByStatus";
 import axios from 'axios';
-
 
 export default function OrderTakerDashboard() {
     const [loading, setLoading] = useState(false);
+    const series = [44, 55];
+    const series2 = [10, 2, 5]
 
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
@@ -31,8 +34,14 @@ export default function OrderTakerDashboard() {
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={3}>
                                 <Grid item lg={6} xs={12}>
+                                    <CurrentVsTarget
+                                        series={series}
+                                    />
                                 </Grid>
                                 <Grid item lg={6} xs={12}>
+                                    <OrderByStatus
+                                        series={series2}
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>

@@ -1,13 +1,8 @@
-import React, {useContext} from "react";
+import React from "react";
 import FacebookLogin from 'react-facebook-login'
-import { useHistory } from "react-router-dom";
 import axios from "axios";
-import {UserContext} from "../../../context/UserContext";
 
-export default function FacebookButton(setError) {
-  let history = useHistory();
-  const { setName, setImageUrl, setId, setRole } = useContext(UserContext);
-
+export default function FacebookButton({setError, loginHandler}) {
   const responseFacebook = async (response) => {
     let email = response.email;
     try{
@@ -21,11 +16,7 @@ export default function FacebookButton(setError) {
           const {
               id, name_first, name_last, sys_user_role, image_url
           } = body.data;
-          setId(id);
-          setImageUrl(image_url)
-          setName(`${name_first} ${name_last}`)
-          setRole(sys_user_role.name)
-          history.push("/dashboard");
+          loginHandler(id, image_url, name_first, name_last, sys_user_role)
       }
     }catch (e){
       setError(true)
