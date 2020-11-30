@@ -8,7 +8,7 @@ import ReactApexChart from "react-apexcharts";
 const useStyles = makeStyles((theme) => ({
     card: {
         minWidth: '460px',
-        // maxWidth: '300px',
+        maxWidth: '600px',
         minHeight: 420
     },
     root: {

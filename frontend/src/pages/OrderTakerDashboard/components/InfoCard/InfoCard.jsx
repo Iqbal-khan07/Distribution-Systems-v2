@@ -8,7 +8,7 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
     card: {
         minWidth: '200px',
-        maxWidth: '300px',
+        maxWidth: '400px',
     },
     root: {
         padding: 15,

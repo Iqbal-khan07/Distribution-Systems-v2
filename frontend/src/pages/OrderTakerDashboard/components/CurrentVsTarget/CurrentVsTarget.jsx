@@ -9,7 +9,7 @@ import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
 const useStyles = makeStyles((theme) => ({
     card: {
         minWidth: '200px',
-        // maxWidth: '300px',
+        maxWidth: '600px',
         minHeight: 420
     },
     root: {
