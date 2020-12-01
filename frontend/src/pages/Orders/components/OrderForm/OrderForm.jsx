@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Backdrop from "@material-ui/core/Backdrop";
 import Paper from "@material-ui/core/Paper";
@@ -6,23 +6,23 @@ import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
 
 import OrderProductTable from "../OrderProductTable/OrderProductTable";
-import {Button} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 import * as Yup from "yup"
-import {Formik, Form, Field} from "formik"
+import { Formik, Form, Field } from "formik"
 import { TextField, fieldToTextField } from 'formik-material-ui'
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
 
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from 'formik-material-ui-pickers';
 import MuiTextField from '@material-ui/core/TextField';
 
 import axios from 'axios'
-import {UserContext} from "../../../../context/UserContext";
-import {NotificationContext} from "../../../../context/NotificationContext";
-import {ERROR, SUCCESSFUL} from "../../../../constants/NOTIFICATION_TYPES";
+import { UserContext } from "../../../../context/UserContext";
+import { NotificationContext } from "../../../../context/NotificationContext";
+import { ERROR, SUCCESSFUL } from "../../../../constants/NOTIFICATION_TYPES";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -118,47 +118,49 @@ const validationSchema = Yup.object({
 
 const initializeProductQuantity = (products) => {
     let productsQuantityObject = {}
-    for(let i=0; i < products.length; i++){
+    for (let i = 0; i < products.length; i++) {
         productsQuantityObject[products[i].id] = 0
     }
     return productsQuantityObject
 }
 
-const covertToAPIProductQuantity = (input) => {
+const convertToAPIProductQuantity = (input) => {
     const keys = Object.keys(input);
     const output = []
-    for(let i=0; i < keys.length; i++){
-        output.push({
-            id: Number(keys[i]),
-            quantity_units: input[keys[i]]
-        })
+    for (let i = 0; i < keys.length; i++) {
+        if (input[keys[i]] > 0) {
+            output.push({
+                id: Number(keys[i]),
+                quantity_units: input[keys[i]]
+            })
+        }
     }
     return output;
 }
 
-function multiLine(props){
-    const { form: {setFieldValue}, field: {name},} = props;
+function multiLine(props) {
+    const { form: { setFieldValue }, field: { name }, } = props;
     // eslint-disable-next-line react-hooks/rules-of-hooks
-     const onChange = React.useCallback(
+    const onChange = React.useCallback(
         (event) => {
-          const {value} = event.target;
-          setFieldValue(name, value);
+            const { value } = event.target;
+            setFieldValue(name, value);
         },
         [setFieldValue, name]
-     );
-     return <MuiTextField
-         {...fieldToTextField(props)}
-         onChange={onChange}
-         rows={3}
-         multiline
-         variant="outlined"
-     />;
+    );
+    return <MuiTextField
+        {...fieldToTextField(props)}
+        onChange={onChange}
+        rows={3}
+        multiline
+        variant="outlined"
+    />;
 }
 
 
-export default function OrderForm({showForm, onCloseButtonHandler, products, shops, reload}){
+export default function OrderForm({ showForm, onCloseButtonHandler, products, shops, reload }) {
     const classes = useStyles();
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const { setANotification } = useContext(NotificationContext)
 
     const shopSelect = (
@@ -196,11 +198,11 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
 
     const memo = (
         <Field
-          component={multiLine}
-          name={MEMO}
-          type="test"
-          label="Memo"
-          className={classes.memo}
+            component={multiLine}
+            name={MEMO}
+            type="test"
+            label="Memo"
+            className={classes.memo}
 
         />
     )
@@ -214,30 +216,32 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                 [MEMO]: ''
             }}
             validationSchema={validationSchema}
-            onSubmit={async (values, {setSubmitting, resetForm}) => {
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setSubmitting(true)
+                const differenceInDays = Math.ceil((values[DELIVERY_DATE].getTime() - new Date().getTime()) / (1000 * 3600 * 24));
                 try {
                     await axios.post('/create/shop_order', {
                         data: {
                             shop_id: values[SELECTED_SHOP],
                             price_paid: false,
+                            deliver_days_from_today: differenceInDays,
                             memo: values[MEMO],
                             order_taker_id: user.id,
-                            order_items: covertToAPIProductQuantity(values[PRODUCT_QUANTITY])
+                            order_items: convertToAPIProductQuantity(values[PRODUCT_QUANTITY])
                         }
                     })
                     setANotification('Order Submitted Successfully', SUCCESSFUL)
                     setSubmitting(false)
                     reload()
-                }catch (e){
+                } catch (e) {
                     setANotification('Order Failed to submit! Please try again', ERROR)
-                }finally {
+                } finally {
                     resetForm()
                     onCloseButtonHandler()
                 }
             }}
         >
-            {({submitForm, isSubmitting, touched, errors, values}) => (
+            {({ submitForm, isSubmitting, touched, errors, values }) => (
                 <Backdrop className={classes.backdrop} open={showForm} >
                     <Paper className={classes.paper_root}>
                         <div>
