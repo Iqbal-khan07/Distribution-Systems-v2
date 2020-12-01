@@ -24,14 +24,18 @@ export default function DeliveryConfirmationScreen(props) {
 
   const handleConfirmation = async () => {
     try {
-      await axios.post('/deliver/shop_order', {
+      let resp = await axios.post('/deliver/shop_order', {
         data: {
-          shop_order_id: { orderNumber },
+          shop_order_id: orderNumber,
           order_fulfiller_id: user.id
         }
       });
-      setANotification(`Order # ${orderNumber} delivered successfully`, SUCCESSFUL)
+      let requestPayment = resp.data.data.request_payment? " Request payment" : "";
+      console.log(requestPayment);
+
+      setANotification(`Order # ${orderNumber} delivered successfully!${requestPayment}`, SUCCESSFUL)
       handleDisabled(true);
+      props.reload(); 
     }
     catch (e) {
       setANotification(`Failed to confirm delivery for order # ${orderNumber}. Please try again.`, ERROR)

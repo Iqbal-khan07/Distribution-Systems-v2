@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios';
 import DeliveryProductTable from "./components/DeliveryProductTable/DeliveryProductTable";
 import DeliveriesGrid from "./components/DeliveriesGrid/DeliveriesGrid";
+import DeliveredTodayCard from "./components/DeliveredTodayCard/DeliveredTodayCard";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
@@ -37,18 +38,29 @@ const mapOrdersToOrderItems = (orders) => {
             aggregateProducts.push(allProducts[i]);
     }
     return aggregateProducts;
-}
+};
+
+const completedOrders = (orders) => {
+    let completed = 0;
+    for (let i = 0; i < orders.length; i++) {
+        if (orders[i].delivered) {
+            completed++;
+        }
+    }
+    return completed;
+};
 
 
 const OrderFulfillerDashboard = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(true);
-    const [orders, setOrders] = useState([]);;
+    const [orders, setOrders] = useState([]);
+    const [reload, setReloading] = useState(false);
 
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("/orders/not_delivered");
+            let response = await axios.get("/orders/today");
             let body = response.data;
 
 
@@ -70,14 +82,16 @@ const OrderFulfillerDashboard = () => {
                         }
                     }),
                     paymentDue: s.price_due,
-                    memo: ""
+                    memo: s.memo,
+                    delivered: s.completed
                 }
             });
-            setOrders(orderOptions)
-            setLoading(false)
+            setOrders(orderOptions);
+            setLoading(false);
+            setReloading(false);
         }
         fetchData().then()
-    }, [])
+    }, [reload])
 
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
@@ -85,10 +99,16 @@ const OrderFulfillerDashboard = () => {
                 <>
                     <Grid container spacing={3} className={classes.rootContainer}>
                         <Grid item lg={12} xs={12}>
-                            <Grid container>
+                            <Grid container spacing={3}>
                                 <Grid item lg={8} xs={12}>
                                     <DeliveryProductTable
                                         rows={mapOrdersToOrderItems(orders)}
+                                    />
+                                </Grid>
+                                <Grid item lg={4} xs={12}>
+                                    <DeliveredTodayCard
+                                        delivered={completedOrders(orders)}
+                                        total={orders.length}
                                     />
                                 </Grid>
                             </Grid>
@@ -96,7 +116,7 @@ const OrderFulfillerDashboard = () => {
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
                                 <Grid item lg={12} xs={12}>
-                                    <DeliveriesGrid orders={orders} />
+                                    <DeliveriesGrid orders={orders} reload={setReloading} />
                                 </Grid>
                             </Grid>
                         </Grid>

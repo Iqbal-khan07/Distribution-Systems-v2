@@ -45,9 +45,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function DeliveryNote({ details }) {
+export default function DeliveryNote({ details, reload }) {
     const classes = useStyles();
-    const [disabled, setDisabled] = React.useState(false);
+    const [disabled, setDisabled] = React.useState(details.delivered === true);
     const [open, setOpen] = React.useState(false);
     const clickHandler = () => {
         setOpen(true);
@@ -95,15 +95,11 @@ export default function DeliveryNote({ details }) {
                     </List>
                 </Card>
                 <Typography className={classes.top}>
-                    <b>Memo:</b>
-
-
-                </Typography>
-                <Typography>
-                    {details.memo}
+                    <b>Memo:</b> {details.memo}
                 </Typography>
             </CardContent>
             <CardActions className={classes.actionArea}>
+                {disabled && <Typography variant="h5" color="primary">Delivered</Typography>}
                 <Tooltip title="Mark delivered" aria-label="Mark delivered">
                     <Fab size="small" color="primary" onClick={clickHandler} disabled={disabled}>
                         <DoneIcon className={classes.button} />
@@ -115,6 +111,7 @@ export default function DeliveryNote({ details }) {
                 orderNumber={details.id}
                 onClose={handleClose}
                 handleDisabled={setDisabled}
+                reload={reload}
             />
 
         </Card>
