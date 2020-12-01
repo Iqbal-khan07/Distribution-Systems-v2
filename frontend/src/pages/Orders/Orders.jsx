@@ -128,7 +128,7 @@ const Orders = () => {
                     id: o.id,
                     date: (new Date(o.date_ordered)).toDateString(),
                     shopId: o.shop.id,
-                    pic: "",
+                    pic: o.shop.image_url,
                     shopName: o.shop.name,
                     street: o.shop.street,
                     city: o.shop.city,
@@ -187,9 +187,11 @@ const Orders = () => {
                                     />
                                 </Grid>
                                 <Grid item lg={12} xs={12}>
+                                    {orders.length > 0 && 
                                     <OrderInfoPage
                                         details={selectedOrder}
                                     />
+                                    }
                                 </Grid>
                             </Grid>
                         </Grid>
