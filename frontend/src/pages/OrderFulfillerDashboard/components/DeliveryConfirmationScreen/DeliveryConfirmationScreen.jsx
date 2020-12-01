@@ -33,6 +33,7 @@ export default function DeliveryConfirmationScreen(props) {
       });
       setANotification(`Order # ${orderNumber} delivered successfully`, SUCCESSFUL)
       handleDisabled(true);
+      props.reload();
     }
     catch (e) {
       setANotification(`Failed to confirm delivery for order # ${orderNumber}. Please try again.`, ERROR)

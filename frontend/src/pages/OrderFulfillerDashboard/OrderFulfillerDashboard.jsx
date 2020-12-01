@@ -54,7 +54,8 @@ const completedOrders = (orders) => {
 const OrderFulfillerDashboard = () => {
     const classes = useStyles();
     const [loading, setLoading] = useState(true);
-    const [orders, setOrders] = useState([]);;
+    const [orders, setOrders] = useState([]);
+    const [reload, setReloading] = useState(false);
 
 
     useEffect(() => {
@@ -85,11 +86,12 @@ const OrderFulfillerDashboard = () => {
                     delivered: s.completed
                 }
             });
-            setOrders(orderOptions)
-            setLoading(false)
+            setOrders(orderOptions);
+            setLoading(false);
+            setReloading(false);
         }
         fetchData().then()
-    }, [])
+    }, [reload])
 
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
@@ -114,7 +116,7 @@ const OrderFulfillerDashboard = () => {
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
                                 <Grid item lg={12} xs={12}>
-                                    <DeliveriesGrid orders={orders} />
+                                    <DeliveriesGrid orders={orders} reload={setReloading} />
                                 </Grid>
                             </Grid>
                         </Grid>

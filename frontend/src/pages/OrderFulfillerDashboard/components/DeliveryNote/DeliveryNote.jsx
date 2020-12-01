@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function DeliveryNote({ details }) {
+export default function DeliveryNote({ details, reload }) {
     const classes = useStyles();
     const [disabled, setDisabled] = React.useState(details.delivered === true);
     const [open, setOpen] = React.useState(false);
@@ -111,6 +111,7 @@ export default function DeliveryNote({ details }) {
                 orderNumber={details.id}
                 onClose={handleClose}
                 handleDisabled={setDisabled}
+                reload={reload}
             />
 
         </Card>
