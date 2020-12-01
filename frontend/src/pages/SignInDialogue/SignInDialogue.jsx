@@ -37,9 +37,16 @@ const validationSchema = Yup.object({
 })
 
 export default function SignInDialogue({ onClose, open }) {
-    const { setName, setImageUrl, setId, setRole } = useContext(UserContext);
+    const { login } = useContext(UserContext);
     const [ error, setError ] = useState(false)
     let history = useHistory();
+
+    const handleLogin = (id, image_url, name_first, name_last, sys_user_role) => {
+        login(id, image_url, `${name_first} ${name_last}`, sys_user_role.name)
+        history.push("/dashboard");
+    }
+
+
     return (
       <Formik
           initialValues={{
@@ -58,22 +65,20 @@ export default function SignInDialogue({ onClose, open }) {
                           password: values[PASSWORD]
                       }
                   })
+                  console.log(response)
                   const body = response.data;
                   if(response.status === 200){
                       const {
                           id, name_first, name_last, sys_user_role, image_url
                       } = body.data;
-                      setId(id);
-                      setImageUrl(image_url)
-                      setName(`${name_first} ${name_last}`)
-                      setRole(sys_user_role.name)
-                      history.push("/dashboard");
+                      handleLogin(id, image_url, name_first, name_last, sys_user_role)
                   }
               }catch (e) {
                   setError(true)
                   resetForm()
               }finally {
                   setSubmitting(false)
+                  resetForm()
               }
           }}
           >
@@ -97,18 +102,20 @@ export default function SignInDialogue({ onClose, open }) {
                       <Grid className={styles.oauthButton}>
                         <GoogleButton
                             setError={setError}
+                            loginHandler={handleLogin}
                         />
                       </Grid>
                       <Grid className={styles.oauthButton}>
                         <FacebookButton
                             setError={setError}
+                            loginHandler={handleLogin}
                          />
                       </Grid>
                         {error ? (
                             <Typography color={"error"}>Wrong Credentials</Typography>
                         ): null}
                          <Field
-                             error={errors[EMAIL] && touched[PASSWORD]}
+                             error={errors[EMAIL] && touched[EMAIL]}
                              component={TextField}
                              type={"email"}
                              name={EMAIL}

@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext, useEffect } from "react";
 import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 
 import Home from './pages/Home/Home'
@@ -18,12 +18,11 @@ import {UserContext} from "./context/UserContext";
 import {ORDER_FULFILLER, ORDER_TAKER, SUPER_USER} from "./constants/ROLES";
 import OrderTakerDashboard from "./pages/OrderTakerDashboard/OrderTakerDashboard";
 
-
 axios.defaults.baseURL = "https://arcane-scrubland-51912.herokuapp.com/api/";
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function App() {
-    const { user } = useContext(UserContext);
+    const { user, getUserFromLocalStorage, login } = useContext(UserContext);
 
     const chooseDashboard = (role) => {
         switch (role){
@@ -38,23 +37,42 @@ function App() {
         }
     }
 
+    useEffect(() => {
+        const storedUser = getUserFromLocalStorage();
+        if(storedUser){
+            login(storedUser.id, storedUser.imageUrl, storedUser.name, storedUser.role)
+        }
+    }, [])
+
+    let routes;
+    if( user ){
+        routes = (
+            <>
+                <Route path={'/dashboard'} render={() => chooseDashboard(user.role)} exact />
+                <Route path={'/orders'} render={() => <Orders />} exact />
+                <Route path={'/shoptracker'} render={() => <ShopTracker />} exact />
+                <Redirect to="/dashboard" />
+            </>
+        );
+    }else {
+        routes = (
+            <>
+                <Route path={'/'} render={() => <Home />} exact />
+                <Route path={'/about'} render={() => <About />} exact />
+                <Redirect to="/" />
+            </>
+        )
+    }
+
     return (
         <div className="App">
-            <BrowserRouter>
-                <Switch>
-                    <ThemeProvider theme={theme}>
-                        <Route path={'/'} render={() => <Home />} exact />
-                        <Route path={'/about'} render={() => <About />} exact />
-                        {user.id ? (
-                            <>
-                                <Route path={'/dashboard'} render={() => chooseDashboard(user.role)} exact />
-                                <Route path={'/orders'} render={() => <Orders />} exact />
-                                <Route path={'/shoptracker'} render={() => <ShopTracker />} exact />
-                            </>
-                        ): <Redirect to="/" />}
-                    </ThemeProvider>
-                </Switch>
-            </BrowserRouter>
+            <ThemeProvider theme={theme}>
+                <BrowserRouter>
+                    <Switch>
+                        {routes}
+                    </Switch>
+                </BrowserRouter>
+            </ThemeProvider>
         </div>
       );
 }

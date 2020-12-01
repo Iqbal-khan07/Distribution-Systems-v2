@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 import ShowAddOrderFormButton from "./components/ShowAddOrderFormButton/ShowAddOrderFormButton";
 import OrderTable from "./components/OrderTable/OrderTable";
@@ -8,6 +8,8 @@ import { Grid } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import OrderStatus from "./components/OrderStatus/OrderStatus";
 import axios from 'axios';
+import {UserContext} from "../../context/UserContext";
+import {ORDER_FULFILLER} from "../../constants/ROLES";
 
 // const shopRows = [
 //     createData(1001, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
@@ -86,17 +88,19 @@ const mapOrdersToOrderOptions = (orders) => {
 }
 
 const Orders = () => {
+    const { user } = useContext(UserContext);
     const [productOptions, setProductOptions] = useState([]);
     const [orders, setOrders] = useState([]);
     const [shopOptions, setShopOptions] = useState([]);
     const [showOrderForm, setOrderForm] = useState(false)
     const [loading, setLoading] = useState(true)
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [reload, setReloading] = useState(false);
 
     // TODO FIX THE ORDER FORM!
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("company_products/all");
+            let response = await axios.get("inventory");
             let body = response.data;
             const productsList = body.data.map((p) => {
                 return {
@@ -153,7 +157,7 @@ const Orders = () => {
             setLoading(false)
         }
         fetchData().then()
-    }, [])
+    }, [reload])
 
 
     const onFormShowHandler = () => {
@@ -173,7 +177,7 @@ const Orders = () => {
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
                 <>
-                    <Grid container lg={12} xs={12} spacing={3}>
+                    <Grid container spacing={3}>
                         <Grid item lg={9} xs={12}>
                             <Grid container>
                                 <Grid item lg={12} xs={12}>
@@ -193,7 +197,7 @@ const Orders = () => {
                             <Grid container spacing={2} justify="center">
                                 <Grid item lg={12} xs={6}>
                                     <ShowAddOrderFormButton
-                                        disable={showOrderForm}
+                                        disable={showOrderForm || user.role === ORDER_FULFILLER}
                                         onClickHandler={onFormShowHandler}
                                         title={"Add New Order"}
                                     />
@@ -215,6 +219,7 @@ const Orders = () => {
                             onCloseButtonHandler={onFormCloseHandler}
                             shops={shopOptions}
                             products={productOptions}
+                            reload={setReloading}
                         />
                     ) : null}
                 </>

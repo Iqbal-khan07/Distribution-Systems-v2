@@ -61,13 +61,13 @@ export default function OrderStatus({delivered, pending, paid, credit}){
             <CardContent className={classes.root}>
                 <div className={classes.statusHolder}>
                     <Avatar className={clsx(classes.display, classes.delivered)}>{delivered}</Avatar>
-                    <Typography variant="h5"  display={"inline"} style={{marginLeft: 10}}>
+                    <Typography variant="h5"  display={"inline"} style={{marginLeft: 30}}>
                         Delivered
                     </Typography>
                 </div>
                 <hr />
                 <div>
-                    <Typography variant="h5" display={"inline"} style={{marginRight: 30}} >
+                    <Typography variant="h5" display={"inline"} style={{marginRight: 40}} >
                         Pending
                     </Typography>
                     <Avatar className={clsx(classes.display, classes.pending)}>
@@ -77,13 +77,13 @@ export default function OrderStatus({delivered, pending, paid, credit}){
                 <hr />
                 <div>
                     <Avatar className={clsx(classes.display, classes.paid)}>{paid}</Avatar>
-                    <Typography variant="h5" display={"inline"} style={{marginLeft: 10}}>
+                    <Typography variant="h5" display={"inline"} style={{marginLeft: 40}}>
                         Paid
                     </Typography>
                 </div>
                 <hr />
                 <div>
-                    <Typography variant="h5" display={"inline"} style={{marginRight: 60}}>
+                    <Typography variant="h5" display={"inline"} style={{marginRight: 80}}>
                         Credit
                     </Typography>
                     <Avatar className={clsx(classes.display, classes.credit)}>{credit}</Avatar>
