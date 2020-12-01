@@ -23,10 +23,11 @@ export default function DeliveryConfirmationScreen(props) {
   };
 
   const handleConfirmation = async () => {
+    console.log(orderNumber, user.id);
     try {
       await axios.post('/deliver/shop_order', {
         data: {
-          shop_order_id: { orderNumber },
+          shop_order_id: orderNumber,
           order_fulfiller_id: user.id
         }
       });

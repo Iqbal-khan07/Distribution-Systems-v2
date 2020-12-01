@@ -59,7 +59,7 @@ const OrderFulfillerDashboard = () => {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("/orders/not_delivered");
+            let response = await axios.get("/orders/today");
             let body = response.data;
 
 
