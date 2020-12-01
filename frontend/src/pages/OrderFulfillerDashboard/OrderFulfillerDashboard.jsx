@@ -81,7 +81,7 @@ const OrderFulfillerDashboard = () => {
                         }
                     }),
                     paymentDue: s.price_due,
-                    memo: "",
+                    memo: s.memo,
                     delivered: s.completed
                 }
             });

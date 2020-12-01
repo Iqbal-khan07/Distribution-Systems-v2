@@ -95,12 +95,7 @@ export default function DeliveryNote({ details }) {
                     </List>
                 </Card>
                 <Typography className={classes.top}>
-                    <b>Memo:</b>
-
-
-                </Typography>
-                <Typography>
-                    {details.memo}
+                    <b>Memo:</b> {details.memo}
                 </Typography>
             </CardContent>
             <CardActions className={classes.actionArea}>
