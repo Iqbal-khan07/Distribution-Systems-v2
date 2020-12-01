@@ -93,7 +93,7 @@ const options =  {
                         fontWeight: 500,
                         color: undefined,
                         formatter: function (val) {
-                            return val + "%"
+                            return "$" + val
                         }
                     }
                 }
