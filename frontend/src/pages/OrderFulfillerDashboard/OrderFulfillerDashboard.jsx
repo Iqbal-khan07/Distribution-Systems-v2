@@ -43,7 +43,7 @@ const mapOrdersToOrderItems = (orders) => {
 const completedOrders = (orders) => {
     let completed = 0;
     for (let i = 0; i < orders.length; i++) {
-        if (orders[i].completed) {
+        if (orders[i].delivered) {
             completed++;
         }
     }
