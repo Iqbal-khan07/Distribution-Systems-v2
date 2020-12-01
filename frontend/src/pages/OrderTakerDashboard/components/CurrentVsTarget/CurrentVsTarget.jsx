@@ -88,7 +88,7 @@ const options =  {
                     },
                     value: {
                         show: true,
-                        fontSize: '35px',
+                        fontSize: '30px',
                         fontFamily: 'Montserrat',
                         fontWeight: 500,
                         color: undefined,
