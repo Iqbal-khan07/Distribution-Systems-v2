@@ -8,6 +8,7 @@ import { UserContext } from "../../context/UserContext";
 import EmployeeTable from "./components/EmployeeTable/EmployeeTable";
 import EmployeeInfoCard from "./components/EmployeeInfoCard/EmployeeInfoCard";
 import AddEmployeeButton from "./components/AddEmployeeButton/AddEmployeeButton";
+import AddEmployeeForm from "./components/AddEmployeeForm/AddEmployeeForm";
 import { SUPER_USER } from "../../constants/ROLES";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,17 +35,22 @@ const Employees = () => {
     const [employees, setEmployees] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [showEmployeeForm, setShowEmployeeForm] = useState(false)
-    // const [zones, setZones] = useState([]);
-    // const [categories, setCategories] = useState([]);
-    // const [reload, setReload] = useState(false);
+    const [roles, setRoles] = useState([]);
+    const [reload, setReload] = useState(false);
     useEffect(() => {
         const rawEmployees = ([
             { id: 10, name: 'John Smith', userName: 'jsmith', role: 'order-taker' },
             { id: 11, name: 'Jane Snow', userName: 'jane123', role: 'admin' },
             { id: 9, name: 'William Shakespeare', userName: 'will123', role: 'order-fulfiller' }
         ]);
+        const roleOptions = ([
+            {id: 1, role: 'administrator'},
+            {id: 2, role: 'order-taker'},
+            {id: 3, role: 'order-fulfiller'}
+        ]);
         setEmployees(rawEmployees);
         setSelectedEmployee(rawEmployees[0]);
+        setRoles(roleOptions);
         setLoading(false);
     }, []);
     // useEffect(() => {
@@ -68,14 +74,6 @@ const Employees = () => {
     //             name: z.name
     //         }))
 
-    //         response = await axios.get("/shop_categories/all");
-    //         body = response.data;
-    //         const categoryOptions = body.data.map((c) => ({
-    //             id: c.id,
-    //             name: c.type
-    //         }))
-
-
     //         setCategories(categoryOptions);
     //         setZones(zoneOptions);
     //         setSelectedShop(shopOptions[0]);
@@ -92,9 +90,9 @@ const Employees = () => {
         setSelectedEmployee(selectedShopRaw[0]);
     }
 
-    // const onFormCloseHandler = () => {
-    //     setShowOrderForm(false);
-    // }
+    const onFormCloseHandler = () => {
+        setShowEmployeeForm(false);
+    }
 
     const onFormShowHandler = () => {
         setShowEmployeeForm(true)
@@ -135,6 +133,15 @@ const Employees = () => {
                             </Grid>
                         </Grid>
                     </Grid>
+                    {showEmployeeForm ? (
+                        <AddEmployeeForm
+                            showForm={showEmployeeForm}
+                            onCloseButtonHandler={onFormCloseHandler}
+                            roles={roles}
+                            reload={setReload}
+                        />
+                    ) : null}
+
                 </>
             ) : <CircularProgress />
             }
