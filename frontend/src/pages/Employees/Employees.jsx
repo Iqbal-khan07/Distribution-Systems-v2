@@ -1,13 +1,14 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 import { Grid } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios'
-import {UserContext} from "../../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 import EmployeeTable from "./components/EmployeeTable/EmployeeTable";
 import EmployeeInfoCard from "./components/EmployeeInfoCard/EmployeeInfoCard";
-import {SUPER_USER} from "../../constants/ROLES";
+import AddEmployeeButton from "./components/AddEmployeeButton/AddEmployeeButton";
+import { SUPER_USER } from "../../constants/ROLES";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
@@ -32,15 +33,15 @@ const Employees = () => {
     const [loading, setLoading] = useState(true);
     const [employees, setEmployees] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
-    // const [showOrderForm, setShowOrderForm] = useState(false)
+    const [showEmployeeForm, setShowEmployeeForm] = useState(false)
     // const [zones, setZones] = useState([]);
     // const [categories, setCategories] = useState([]);
     // const [reload, setReload] = useState(false);
     useEffect(() => {
         const rawEmployees = ([
-            {id:10, name:'John Smith', userName: 'jsmith', role: 'order-taker'},
-            {id:11, name:'Jane Snow', userName: 'jane123', role: 'admin'},
-            {id:9, name:'William Shakespeare', userName: 'will123', role: 'order-fulfiller'}
+            { id: 10, name: 'John Smith', userName: 'jsmith', role: 'order-taker' },
+            { id: 11, name: 'Jane Snow', userName: 'jane123', role: 'admin' },
+            { id: 9, name: 'William Shakespeare', userName: 'will123', role: 'order-fulfiller' }
         ]);
         setEmployees(rawEmployees);
         setSelectedEmployee(rawEmployees[0]);
@@ -95,32 +96,35 @@ const Employees = () => {
     //     setShowOrderForm(false);
     // }
 
-    // const onFormShowHandler = () => {
-    //     setShowOrderForm(true)
-    // }
+    const onFormShowHandler = () => {
+        setShowEmployeeForm(true)
+    }
 
     return (
         <WithSignedInSkeleton title={'Employees'}>
             {!loading ? (
                 <>
-                    <Grid container spacing={3} className={classes.rootContainer}>
+                    <Grid container className={classes.rootContainer}>
                         <Grid item lg={12} xs={12}>
-                            <Grid container item>
+                            <Grid container spacing={3}>
                                 <Grid item lg={9} xs={12}>
-                                    <EmployeeTable 
+                                    <EmployeeTable
                                         rows={employees}
                                         employeeShowDetailHandler={employeeShowDetailHandler}
                                     />
                                 </Grid>
                                 <Grid item lg={3} xs={12}>
-                                    Button goes here
+                                    <AddEmployeeButton
+                                        onClickHandler={onFormShowHandler}
+                                        title={"Add An Employee"}
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2} justify="center">
                                 <Grid item lg={5} xs={12}>
-                                    <EmployeeInfoCard 
+                                    <EmployeeInfoCard
                                         employee={selectedEmployee}
                                     />
                                 </Grid>
@@ -132,7 +136,7 @@ const Employees = () => {
                         </Grid>
                     </Grid>
                 </>
-                ) : <CircularProgress />
+            ) : <CircularProgress />
             }
         </WithSignedInSkeleton>
     )
