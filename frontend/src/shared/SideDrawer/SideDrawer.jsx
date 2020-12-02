@@ -174,7 +174,6 @@ const SideDrawer = (props) => {
                         style={{borderRadius: 30, margin: "5px 0px"}}
                     >
                         <ListItemIcon
-                            className={link.icon} 
                             classes={{root: clsx({
                                 [classes.drawerIconRootSelected]: link.to === location.pathname,
                                 [classes.drawerIconRoot]: !(link.to === location.pathname)
