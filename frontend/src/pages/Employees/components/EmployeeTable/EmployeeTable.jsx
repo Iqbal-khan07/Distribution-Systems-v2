@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 500,
     maxWidth: 1000
   },
+  button: {
+    padding: 2,
+  },  
 }));
 
 function TablePaginationActions(props) {
@@ -146,7 +149,10 @@ export default function EmployeeTable({ rows, employeeShowDetailHandler }) {
                 {row.role}
               </TableCell>
               <TableCell align="center">
-                <IconButton aria-label="get info" onClick={() => employeeShowDetailHandler(row.id)}
+                <IconButton
+                  aria-label="get info"
+                  onClick={() => employeeShowDetailHandler(row.id)}
+                  className={classes.button}
                 >
                   <InfoIcon />
                 </IconButton>
