@@ -1,28 +1,29 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import axios from 'axios'
+import * as Yup from "yup"
+import { Formik, Form, Field } from "formik"
+
 import Backdrop from "@material-ui/core/Backdrop";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
-
-import OrderProductTable from "../OrderProductTable/OrderProductTable";
-import { Button } from "@material-ui/core";
-
-import * as Yup from "yup"
-import { Formik, Form, Field } from "formik"
-import { TextField, fieldToTextField } from 'formik-material-ui'
-import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from 'formik-material-ui-pickers';
-import MuiTextField from '@material-ui/core/TextField';
 
-import axios from 'axios'
+import ShopSelect from "./components/ShopSelect/ShopSelect";
+import PaymentMethodSelect from "./components/PaymentMethodSelect/PaymentMethodSelect";
+import Memo from "./components/Memo/Memo";
+import OrderProductTable from "./components/OrderProductTable/OrderProductTable";
+
 import { UserContext } from "../../../../context/UserContext";
 import { NotificationContext } from "../../../../context/NotificationContext";
 import { ERROR, SUCCESSFUL } from "../../../../constants/NOTIFICATION_TYPES";
+import PaymentMethods from "../../../../constants/PAYMENT_METHODS";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -31,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
     },
     paper_root: {
         padding: "15px",
-        // height: "70%",
         margin: "100px auto",
         textAlign: "center",
         backgroundColor: "#ffffff",
         position: "relative",
         borderRadius: 30
     },
+
     form_container: {
         display: "flex",
         flexDirection: "column",
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     holder: {
         marginBottom: theme.spacing(1)
     },
+
     button: {
         backgroundColor: "#5DB285",
         color: "#e5e4e4",
@@ -65,15 +67,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '2rem',
         fontWeight: "bold"
     },
-    // shop select
-    formControl: {
-        margin: theme.spacing(1),
-        width: 300,
-        marginRight: '100%'
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
     // date select
     container: {
         display: 'flex',
@@ -83,13 +76,9 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         marginBottom: theme.spacing(3),
         marginRight: '100%',
-        width: 300
+        width: 170
     },
-    //memo
-    memo: {
-        marginTop: theme.spacing(2),
-        width: '100%'
-    },
+
     submitButton: {
         marginTop: theme.spacing(3),
         backgroundColor: "#5DB285",
@@ -109,8 +98,10 @@ const useStyles = makeStyles((theme) => ({
 
 const DELIVERY_DATE = 'deliveryDate'
 const SELECTED_SHOP = 'shop'
+const METHOD = 'method'
 const PRODUCT_QUANTITY = 'products'
 const MEMO = 'memo'
+
 
 const validationSchema = Yup.object({
     [SELECTED_SHOP]: Yup.number().required()
@@ -138,54 +129,68 @@ const convertToAPIProductQuantity = (input) => {
     return output;
 }
 
-function multiLine(props) {
-    const { form: { setFieldValue }, field: { name }, } = props;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const onChange = React.useCallback(
-        (event) => {
-            const { value } = event.target;
-            setFieldValue(name, value);
-        },
-        [setFieldValue, name]
-    );
-    return <MuiTextField
-        {...fieldToTextField(props)}
-        onChange={onChange}
-        rows={3}
-        multiline
-        variant="outlined"
-    />;
+const areInventoriesEqual = (inventory1, inventory2) => {
+    const key1 = Object.keys(inventory1);
+    const key2 = Object.keys(inventory2);
+    if (key1.length !== key2.length) return false;
+
+    for(let i=0; i < key1.length; i++){
+        if(inventory2[key1[i]] !== inventory1[key1[i]]) {
+            return false;
+        }
+    }
+    return true;
+
 }
 
+const initializeItemQuantity = (products) => {
+    const itemNumbers = {}
+    for (let i=0; i < products.length; i++){
+        itemNumbers[products[i].id] = 0
+    }
+    return itemNumbers;
+}
 
-export default function OrderForm({ showForm, onCloseButtonHandler, products, shops, reload }) {
+const setDateInAdvanceBy =  (days) => {
+    return new Date(Date.now() + (days * 24 * 3600 * 1000))
+}
+
+export default function OrderForm({ showForm, onCloseButtonHandler, products, shops, initialInventory, reload }) {
     const classes = useStyles();
     const { user } = useContext(UserContext);
     const { setANotification } = useContext(NotificationContext)
+    const [inventory, setInventory] = useState(initialInventory);
+    const [itemsQuantity, setItemsQuantity] = useState(initializeItemQuantity(products));
 
-    const shopSelect = (
-        <Field
-            component={TextField}
-            type="text"
-            name={SELECTED_SHOP}
-            label="Client*"
-            select
-            variant="standard"
-            helperText="Select a Shop (Required)"
-            margin="normal"
-            InputLabelProps={{
-                shrink: true,
-            }}
-            className={classes.formControl}
-        >
-            <MenuItem value="">
-                <em>None</em>
-            </MenuItem>
-            {shops.map((shop) => (
-                <MenuItem key={shop.id} value={shop.id}>{`${shop.name} ${shop.zone}`}</MenuItem>
-            ))}
-        </Field>
-    )
+    useEffect(() => {
+        const timer = setInterval(async () => {
+            const response = await axios.get('/inventory');
+            const body = response.data.data;
+
+            const newInventory = {}
+            for (let i=0; i < body.length; i++) {
+                newInventory[body[i].id] = body[i].stock;
+            }
+            console.log('updating')
+            setInventory((prevInventory) => {
+                if(!areInventoriesEqual(newInventory, inventory)){
+                    return newInventory;
+                }
+                return prevInventory;
+            });
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [inventory])
+
+    const handleItemQuantityChange = (productId, change) => {
+        setItemsQuantity((prevItems) => {
+            prevItems[productId] += change;
+            return {
+                ...prevItems
+            }
+        })
+    }
 
     const dateSelect = (
         <Field
@@ -196,34 +201,24 @@ export default function OrderForm({ showForm, onCloseButtonHandler, products, sh
         />
     )
 
-    const memo = (
-        <Field
-            component={multiLine}
-            name={MEMO}
-            type="test"
-            label="Memo"
-            className={classes.memo}
-
-        />
-    )
-
     return (
         <Formik
             initialValues={{
                 [SELECTED_SHOP]: '',
-                [DELIVERY_DATE]: new Date(),
+                [DELIVERY_DATE]: setDateInAdvanceBy(7),
                 [PRODUCT_QUANTITY]: initializeProductQuantity(products),
+                [METHOD]: PaymentMethods.CASH_ON_DELIVERY,
                 [MEMO]: ''
             }}
             validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setSubmitting(true)
-                const differenceInDays = Math.ceil((values[DELIVERY_DATE].getTime() - new Date().getTime()) / (1000 * 3600 * 24));
+                const differenceInDays = Math.ceil((values[DELIVERY_DATE].getTime() - Date.now()) / (1000 * 3600 * 24));
                 try {
                     await axios.post('/create/shop_order', {
                         data: {
                             shop_id: values[SELECTED_SHOP],
-                            price_paid: false,
+                            price_paid: values[METHOD] === PaymentMethods.CASH,
                             deliver_days_from_today: differenceInDays,
                             memo: values[MEMO],
                             order_taker_id: user.id,
@@ -259,34 +254,50 @@ export default function OrderForm({ showForm, onCloseButtonHandler, products, sh
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Form>
                                 <Grid container direction={"column"}>
-                                    <Grid container item direction={"column"}>
-                                        <Grid>
-                                            {shopSelect}
+                                    <Grid container item direction={"row"} spacing={10}>
+                                        <Grid item>
+                                            <Grid item>
+                                                <ShopSelect
+                                                    shops={shops}
+                                                    width={250}
+                                                    name={SELECTED_SHOP}
+                                                />
+                                            </Grid>
+                                            <Grid item>
+                                                {dateSelect}
+                                            </Grid>
                                         </Grid>
-                                        <Grid>
-                                            {dateSelect}
+                                        <Grid item>
+                                            <PaymentMethodSelect
+                                                methods={Object.values(PaymentMethods)}
+                                                width={250}
+                                                name={METHOD}
+                                            />
                                         </Grid>
                                     </Grid>
-                                    <Grid>
+                                    <Grid item>
                                         <OrderProductTable
                                             products={products}
+                                            inventory={inventory}
                                             value={values[PRODUCT_QUANTITY]}
                                             name={PRODUCT_QUANTITY}
+                                            itemsQuantity={itemsQuantity}
+                                            updateItemQuantity={handleItemQuantityChange}
                                         />
                                     </Grid>
-                                    <Grid>
-                                        {memo}
+                                    <Grid item>
+                                        <Memo
+                                            name={MEMO}
+                                        />
                                     </Grid>
-                                    <Grid>
-                                        <Grid>
-                                            <Button
-                                                className={classes.submitButton}
-                                                disabled={isSubmitting}
-                                                onClick={submitForm}
-                                            >
-                                                Place Order
-                                            </Button>
-                                        </Grid>
+                                    <Grid item>
+                                        <Button
+                                            className={classes.submitButton}
+                                            disabled={isSubmitting}
+                                            onClick={submitForm}
+                                        >
+                                            Place Order
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </Form>

@@ -11,22 +11,6 @@ import axios from 'axios';
 import {UserContext} from "../../context/UserContext";
 import {ORDER_FULFILLER} from "../../constants/ROLES";
 
-// const shopRows = [
-//     createData(1001, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1002, 'Super Mart', '01/02/2020', '$150.00', '', 'Paid'),
-//     createData(1003, 'Corner Central', '01/13/2020', '$400.00', '', 'Pending'),
-//     createData(1004, 'General Plus', '03/01/2020', '$350.00', 'Leave with Manager', 'Paid'),
-//     createData(1005, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1006, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1007, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1008, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1009, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1010, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1011, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1012, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1013, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1014, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-// ];
 
 // function createData(id, customer, date, amount, memo, status) {
 //     return { id, customer, date, amount, memo, status };
@@ -84,7 +68,6 @@ const mapOrdersToOrderOptions = (orders) => {
             status: 'Pending'
         }
     })
-
 }
 
 const Orders = () => {
@@ -96,6 +79,7 @@ const Orders = () => {
     const [loading, setLoading] = useState(true)
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [reload, setReloading] = useState(false);
+    const [initialInventory, setInitialInventory] = useState({})
 
     // TODO FIX THE ORDER FORM!
     useEffect(() => {
@@ -151,6 +135,17 @@ const Orders = () => {
                     zone: ""
                 }
             });
+
+            response = await axios.get('/inventory');
+            body = response.data.data;
+
+
+            const inventory = {}
+            for (let i=0; i < body.length; i++) {
+                inventory[body[i].id] = body[i].stock;
+            }
+
+            setInitialInventory(inventory)
             setShopOptions(shopOptions);
             setSelectedOrder(orders[0])
             setOrders(orders)
@@ -219,6 +214,7 @@ const Orders = () => {
                         <OrderForm
                             showForm={showOrderForm}
                             onCloseButtonHandler={onFormCloseHandler}
+                            initialInventory={initialInventory}
                             shops={shopOptions}
                             products={productOptions}
                             reload={setReloading}

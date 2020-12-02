@@ -13,7 +13,7 @@ import {
 import { useFormikContext } from 'formik';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
+import DataDisplayUtils from "../../../../../../utils/DataDisplayUtils";
 
 const useStyles = makeStyles(() => ({
     table: {
@@ -73,7 +73,6 @@ const calculateCurrentTotalValue = (unitPrice, quantity) => {
     return DataDisplayUtils.displayMoneyValue(unitPrice * quantity);
 }
 
-
 const displayQuantity = (quantity) => {
     if(quantity < 10){
         return "0"+quantity;
@@ -91,13 +90,16 @@ const calculateSubTotal = (products, values) => {
     return DataDisplayUtils.displayMoneyValue(totalCost);
 }
 
-export default function OrderProductTable({products, value}) {
+export default function OrderProductTable({products, value, inventory, itemsQuantity, updateItemQuantity}) {
     const classes = useStyles();
     const { setValues } = useFormikContext();
 
     const increaseCount = (productId) => {
         setValues(({products, ...rest}) => {
-            products[productId] += 1
+            if(inventory[productId] + itemsQuantity[productId] > 0){
+                products[productId] += 1
+                updateItemQuantity(productId, -1);
+            }
             return {
                 products,
                 ...rest
@@ -109,13 +111,13 @@ export default function OrderProductTable({products, value}) {
         setValues(({products, ...rest}) => {
             if(products[productId] > 0){
                 products[productId] -= 1
+                updateItemQuantity(productId, 1);
             }
             return {
                 products,
                 ...rest
             };
         })
-
     }
 
     const makeQuantityField = (quantity, productId) => {
@@ -153,8 +155,9 @@ export default function OrderProductTable({products, value}) {
                   <TableRow>
                     <TableCell className={classes.tableRowCell}>Products</TableCell>
                     <TableCell className={classes.tableRowCell} align="right">Unit Price(Rs)</TableCell>
-                    <TableCell className={classes.tableRowCell} align="right">Quantity</TableCell>
-                    <TableCell className={classes.tableRowCell} align="right">Total(Rs)</TableCell>
+                    <TableCell className={classes.tableRowCell} align="center">Quantity</TableCell>
+                      <TableCell className={classes.tableRowCell} align="center">Available</TableCell>
+                    <TableCell className={classes.tableRowCell} align="center">Total(Rs)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -166,26 +169,29 @@ export default function OrderProductTable({products, value}) {
                       <TableCell className={classes.tableCell} align="right">
                           {DataDisplayUtils.displayMoneyValue(row.unitPrice)}
                       </TableCell>
-                      <TableCell className={classes.tableCell} align="right">
+                      <TableCell className={classes.tableCell} align="center">
                           {makeQuantityField(value[row.id], row.id)}
                       </TableCell>
-                      <TableCell className={classes.tableCell} align="right">
+                        <TableCell className={classes.tableCell} align={"center"}>
+                            {inventory[row.id] + itemsQuantity[row.id]} units
+                      </TableCell>
+                      <TableCell className={classes.tableCell} align="center">
                           {calculateCurrentTotalValue(row.unitPrice, value[row.id])}
                       </TableCell>
                     </TableRow>
                   ))}
                   <TableRow>
-                      <TableCell className={classes.noUnderLine} colSpan={2} />
+                      <TableCell className={classes.noUnderLine} colSpan={3} />
                       <TableCell className={classes.tableCell} colSpan={1}>Subtotal</TableCell>
                       <TableCell className={classes.tableCell} align="right">{calculateSubTotal(products, value)}</TableCell>
                   </TableRow>
                   <TableRow>
-                      <TableCell className={classes.noUnderLine} colSpan={2} />
+                      <TableCell className={classes.noUnderLine} colSpan={3} />
                       <TableCell className={classes.tableCell} colSpan={1}>Delivery Fee</TableCell>
                       <TableCell className={classes.tableCell} align="right">{DataDisplayUtils.displayMoneyValue(0)}</TableCell>
                   </TableRow>
                   <TableRow>
-                      <TableCell className={classes.noUnderLine} colSpan={2} />
+                      <TableCell className={classes.noUnderLine} colSpan={3} />
                       <TableCell className={classes.tableCell} colSpan={1}>Grand Total</TableCell>
                       <TableCell className={classes.tableCell} align="right">{calculateSubTotal(products, value)}</TableCell>
                   </TableRow>
