@@ -5,7 +5,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios'
 import {UserContext} from "../../context/UserContext";
-import EmployeeTable from "./components/EmployeeTable/EmployeeTable"
+import EmployeeTable from "./components/EmployeeTable/EmployeeTable";
+import EmployeeInfoCard from "./components/EmployeeInfoCard/EmployeeInfoCard";
 import {SUPER_USER} from "../../constants/ROLES";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const Employees = () => {
     const classes = useStyles();
     const { user } = useContext(UserContext);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [employees, setEmployees] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     // const [showOrderForm, setShowOrderForm] = useState(false)
@@ -36,7 +37,14 @@ const Employees = () => {
     // const [categories, setCategories] = useState([]);
     // const [reload, setReload] = useState(false);
     useEffect(() => {
-        setEmployees([{id:10, name:'John', userName: 'jsmith', role: 'order-taker'}]);
+        const rawEmployees = ([
+            {id:10, name:'John Smith', userName: 'jsmith', role: 'order-taker'},
+            {id:11, name:'Jane Snow', userName: 'jane123', role: 'admin'},
+            {id:9, name:'William Shakespeare', userName: 'will123', role: 'order-fulfiller'}
+        ]);
+        setEmployees(rawEmployees);
+        setSelectedEmployee(rawEmployees[0]);
+        setLoading(false);
     }, []);
     // useEffect(() => {
     //     async function fetchData() {
@@ -98,21 +106,27 @@ const Employees = () => {
                     <Grid container spacing={3} className={classes.rootContainer}>
                         <Grid item lg={12} xs={12}>
                             <Grid container item>
-                                <Grid item lg={12} xs={12}>
+                                <Grid item lg={9} xs={12}>
                                     <EmployeeTable 
                                         rows={employees}
                                         employeeShowDetailHandler={employeeShowDetailHandler}
                                     />
                                 </Grid>
-                                <Grid item lg={12} xs={12}>
+                                <Grid item lg={3} xs={12}>
+                                    Button goes here
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item lg={3} xs={12}>
+                        <Grid item lg={12} xs={12}>
                             <Grid container spacing={2} justify="center">
-                                <Grid item lg={12} xs={6}>
+                                <Grid item lg={5} xs={12}>
+                                    <EmployeeInfoCard 
+                                        employee={selectedEmployee}
+                                    />
                                 </Grid>
-                                <Grid item lg={12} xs={6}>
+                                <Grid item lg={3} xs={12}>
+                                </Grid>
+                                <Grid item lg={4} xs={12}>
                                 </Grid>
                             </Grid>
                         </Grid>
