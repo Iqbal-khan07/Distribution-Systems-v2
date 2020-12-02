@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
 
-import OrderProductTable from "../OrderProductTable/OrderProductTable";
+import OrderProductTable from "./components/OrderProductTable/OrderProductTable";
 import { Button } from "@material-ui/core";
 
 import * as Yup from "yup"
@@ -23,6 +23,10 @@ import axios from 'axios'
 import { UserContext } from "../../../../context/UserContext";
 import { NotificationContext } from "../../../../context/NotificationContext";
 import { ERROR, SUCCESSFUL } from "../../../../constants/NOTIFICATION_TYPES";
+import PaymentMethods from "../../../../constants/PAYMENT_METHODS";
+import ShopSelect from "./components/ShopSelect/ShopSelect";
+import PaymentMethodSelect from "./components/PaymentMethodSelect/PaymentMethodSelect";
+import Memo from "./components/Memo/Memo";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -65,15 +69,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '2rem',
         fontWeight: "bold"
     },
-    // shop select
-    formControl: {
-        margin: theme.spacing(1),
-        width: 300,
-        marginRight: '100%'
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
     // date select
     container: {
         display: 'flex',
@@ -83,13 +78,9 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         marginBottom: theme.spacing(3),
         marginRight: '100%',
-        width: 300
+        width: 200
     },
-    //memo
-    memo: {
-        marginTop: theme.spacing(2),
-        width: '100%'
-    },
+
     submitButton: {
         marginTop: theme.spacing(3),
         backgroundColor: "#5DB285",
@@ -109,8 +100,10 @@ const useStyles = makeStyles((theme) => ({
 
 const DELIVERY_DATE = 'deliveryDate'
 const SELECTED_SHOP = 'shop'
+const METHOD = 'method'
 const PRODUCT_QUANTITY = 'products'
 const MEMO = 'memo'
+
 
 const validationSchema = Yup.object({
     [SELECTED_SHOP]: Yup.number().required()
@@ -138,54 +131,13 @@ const convertToAPIProductQuantity = (input) => {
     return output;
 }
 
-function multiLine(props) {
-    const { form: { setFieldValue }, field: { name }, } = props;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const onChange = React.useCallback(
-        (event) => {
-            const { value } = event.target;
-            setFieldValue(name, value);
-        },
-        [setFieldValue, name]
-    );
-    return <MuiTextField
-        {...fieldToTextField(props)}
-        onChange={onChange}
-        rows={3}
-        multiline
-        variant="outlined"
-    />;
-}
+
 
 
 export default function OrderForm({ showForm, onCloseButtonHandler, products, shops, reload }) {
     const classes = useStyles();
     const { user } = useContext(UserContext);
     const { setANotification } = useContext(NotificationContext)
-
-    const shopSelect = (
-        <Field
-            component={TextField}
-            type="text"
-            name={SELECTED_SHOP}
-            label="Client*"
-            select
-            variant="standard"
-            helperText="Select a Shop (Required)"
-            margin="normal"
-            InputLabelProps={{
-                shrink: true,
-            }}
-            className={classes.formControl}
-        >
-            <MenuItem value="">
-                <em>None</em>
-            </MenuItem>
-            {shops.map((shop) => (
-                <MenuItem key={shop.id} value={shop.id}>{`${shop.name} ${shop.zone}`}</MenuItem>
-            ))}
-        </Field>
-    )
 
     const dateSelect = (
         <Field
@@ -196,23 +148,13 @@ export default function OrderForm({ showForm, onCloseButtonHandler, products, sh
         />
     )
 
-    const memo = (
-        <Field
-            component={multiLine}
-            name={MEMO}
-            type="test"
-            label="Memo"
-            className={classes.memo}
-
-        />
-    )
-
     return (
         <Formik
             initialValues={{
                 [SELECTED_SHOP]: '',
                 [DELIVERY_DATE]: new Date(),
                 [PRODUCT_QUANTITY]: initializeProductQuantity(products),
+                [METHOD]: PaymentMethods.CASH_ON_DELIVERY,
                 [MEMO]: ''
             }}
             validationSchema={validationSchema}
@@ -259,34 +201,47 @@ export default function OrderForm({ showForm, onCloseButtonHandler, products, sh
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Form>
                                 <Grid container direction={"column"}>
-                                    <Grid container item direction={"column"}>
-                                        <Grid>
-                                            {shopSelect}
+                                    <Grid container item direction={"row"} spacing={10}>
+                                        <Grid item>
+                                            <Grid item>
+                                                <ShopSelect
+                                                    shops={shops}
+                                                    width={250}
+                                                    name={SELECTED_SHOP}
+                                                />
+                                            </Grid>
+                                            <Grid item>
+                                                {dateSelect}
+                                            </Grid>
                                         </Grid>
-                                        <Grid>
-                                            {dateSelect}
+                                        <Grid item>
+                                            <PaymentMethodSelect
+                                                methods={Object.values(PaymentMethods)}
+                                                width={250}
+                                                name={METHOD}
+                                            />
                                         </Grid>
                                     </Grid>
-                                    <Grid>
+                                    <Grid item>
                                         <OrderProductTable
                                             products={products}
                                             value={values[PRODUCT_QUANTITY]}
                                             name={PRODUCT_QUANTITY}
                                         />
                                     </Grid>
-                                    <Grid>
-                                        {memo}
+                                    <Grid item>
+                                        <Memo
+                                            name={MEMO}
+                                        />
                                     </Grid>
-                                    <Grid>
-                                        <Grid>
-                                            <Button
-                                                className={classes.submitButton}
-                                                disabled={isSubmitting}
-                                                onClick={submitForm}
-                                            >
-                                                Place Order
-                                            </Button>
-                                        </Grid>
+                                    <Grid item>
+                                        <Button
+                                            className={classes.submitButton}
+                                            disabled={isSubmitting}
+                                            onClick={submitForm}
+                                        >
+                                            Place Order
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </Form>
