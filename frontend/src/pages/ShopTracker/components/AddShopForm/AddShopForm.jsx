@@ -16,8 +16,7 @@ import * as Yup from "yup";
 import {NotificationContext} from "../../../../context/NotificationContext";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {TextField} from "formik-material-ui";
-import CardMedia from "@material-ui/core/CardMedia";
-import ImagePlaceholder from '../../../../assests/images/placeholder-image.png'
+import Avatar from '@material-ui/core/Avatar';
 import MenuItem from "@material-ui/core/MenuItem";
 
 
@@ -62,9 +61,9 @@ const useStyles = makeStyles((theme) => ({
     },
     // image
     cover: {
-        backgroundColor: '#aba6a6',
         borderRadius: 5,
         height: 200,
+        width: 200,
     },
 
     // shop select
@@ -192,10 +191,9 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                                 <Grid container direction={"column"}>
                                     <Grid container direction={"row"}>
                                         <Grid item xs={4}>
-                                            <CardMedia
-                                                className={classes.cover}
-                                                image={ImagePlaceholder}
-                                            />
+                                        <Avatar variant="square" className={classes.cover} src={values[IMAGE_URL]}>
+                                            Shop Image
+                                        </Avatar>
                                         </Grid>
                                         <Grid item direction={"column"} xs={7}>
                                             <Grid item>

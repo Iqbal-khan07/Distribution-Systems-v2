@@ -6,8 +6,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
-import ShopImage from "../../../../assests/images/shop-icon.png";
-import CardMedia from "@material-ui/core/CardMedia";
+// import ShopImage from "../../../../assests/images/shop-icon.png";
+// import CardMedia from "@material-ui/core/CardMedia";
+import Avatar from "@material-ui/core/Avatar";
 import React from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,25 +58,29 @@ export default function ShopInfoPaper (props) {
             <Divider />
             <div className={classes.detailSection}>
                 <div>
-                    <CardMedia
+                    <Avatar 
+                        variant="square" 
+                        title="Shop Image" 
+                        alt="Shop Image" 
+                        src={props.image_url}
                         className={classes.cover}
-                        image={ShopImage}
-                    />
+                    >
+                        Shop Image
+                    </Avatar>
                 </div>
                 <div className={classes.detailColumn}>
                     <Typography gutterBottom>{props.name}</Typography>
-                    <Typography gutterBottom>{props.street} {props.city}, {props.providence} {props.zip}</Typography>
-                    <Typography gutterBottom>Id: {props.id}</Typography>
-                    <Typography gutterBottom>Zone: {props.zoneName}</Typography>
+                    <Typography gutterBottom>{props.street}</Typography>
+                    <Typography gutterBottom>{props.city}, {props.providence} {props.zip}</Typography>
+                    <Typography gutterBottom><b>Id:</b> {props.id}</Typography>
+                    <Typography gutterBottom><b>Zone:</b> {props.zoneName}</Typography>
                 </div>
                 <div className={classes.detailColumn}>
                     <Typography gutterBottom>
-                        Apples
-                        {/*{props.phone != null && "Phone: " + props.phone}*/}
+                        {props.phone != null && "Phone: " + props.phone}
                     </Typography>
                     <Typography gutterBottom>
-                        Banaas
-                        {/*{props.email != null && "Email: " + props.email}*/}
+                        {props.email != null && "Email: " + props.email}
                     </Typography>
                 </div>
             </div>

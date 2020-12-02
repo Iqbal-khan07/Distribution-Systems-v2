@@ -61,7 +61,10 @@ const ShopTracker = () => {
                     city: s.city,
                     providence: s.providence,
                     zip: s.zip_4,
-                    zoneName: s.zones[0].name
+                    zoneName: s.zones[0].name,
+                    phone: s.phone_number,
+                    email: s.email,
+                    image_url: s.image_url
                 }
             });
 
@@ -126,6 +129,9 @@ const ShopTracker = () => {
                                         providence={selectedShop.providence}
                                         zip={selectedShop.zip}
                                         zoneName={selectedShop.zoneName}
+                                        email={selectedShop.email}
+                                        phone={selectedShop.phone}
+                                        image_url={selectedShop.image_url}
                                     />
                                 </Grid>
                             </Grid>
