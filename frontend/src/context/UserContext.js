@@ -33,8 +33,8 @@ const LINKS = {
     },
     4: {
         "icon": <PeopleAltIcon style={{fontSize: 30}} />,
-        "text": 'Employers',
-        "to": '/employers'
+        "text": 'Employees',
+        "to": '/employees'
     },
     5: {
         "icon": <SettingsIcon style={{fontSize: 30}} />,
