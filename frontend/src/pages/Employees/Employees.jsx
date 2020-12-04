@@ -9,6 +9,7 @@ import EmployeeTable from "./components/EmployeeTable/EmployeeTable";
 import EmployeeInfoCard from "./components/EmployeeInfoCard/EmployeeInfoCard";
 import AddEmployeeButton from "./components/AddEmployeeButton/AddEmployeeButton";
 import AddEmployeeForm from "./components/AddEmployeeForm/AddEmployeeForm";
+import OrdersFulfilledCard from "./components/OrdersFulfilledCard/OrdersFulfilledCard";
 import { SUPER_USER } from "../../constants/ROLES";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,7 +35,8 @@ const Employees = () => {
     const [loading, setLoading] = useState(true);
     const [employees, setEmployees] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
-    const [showEmployeeForm, setShowEmployeeForm] = useState(false)
+    const [showEmployeeForm, setShowEmployeeForm] = useState(false);
+    const [showOFComponents, setShowOFComponents] = useState(false);
     const [roles, setRoles] = useState([]);
     const [reload, setReload] = useState(false);
     useEffect(() => {
@@ -44,9 +46,9 @@ const Employees = () => {
             { id: 9, name: 'William Shakespeare', userName: 'will123', role: 'order-fulfiller' }
         ]);
         const roleOptions = ([
-            {id: 1, role: 'administrator'},
-            {id: 2, role: 'order-taker'},
-            {id: 3, role: 'order-fulfiller'}
+            { id: 1, role: 'administrator' },
+            { id: 2, role: 'order-taker' },
+            { id: 3, role: 'order-fulfiller' }
         ]);
         setEmployees(rawEmployees);
         setSelectedEmployee(rawEmployees[0]);
@@ -88,6 +90,19 @@ const Employees = () => {
     const employeeShowDetailHandler = (employeeId) => {
         const selectedShopRaw = employees.filter((o) => o.id === employeeId);
         setSelectedEmployee(selectedShopRaw[0]);
+        switch(selectedShopRaw[0].role) {
+            case "order-fulfiller":
+                setShowOFComponents(true);
+                break;
+            case "order-taker":
+                setShowOFComponents(false);
+                break;
+            case "administrator":
+                setShowOFComponents(false);
+                break;
+            default:
+                break;
+        }
     }
 
     const onFormCloseHandler = () => {
@@ -102,7 +117,7 @@ const Employees = () => {
         <WithSignedInSkeleton title={'Employees'}>
             {!loading ? (
                 <>
-                    <Grid container className={classes.rootContainer}>
+                    <Grid container spacing={3} className={classes.rootContainer}>
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={3}>
                                 <Grid item lg={9} xs={12}>
@@ -127,6 +142,13 @@ const Employees = () => {
                                     />
                                 </Grid>
                                 <Grid item lg={3} xs={12}>
+                                    {showOFComponents ?
+                                    <OrdersFulfilledCard
+                                        name={selectedEmployee.name}
+                                        delivered={0}
+                                        total={4}
+                                    /> : null
+                                    }
                                 </Grid>
                                 <Grid item lg={4} xs={12}>
                                 </Grid>

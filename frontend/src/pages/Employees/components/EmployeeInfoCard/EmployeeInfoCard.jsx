@@ -11,7 +11,6 @@ import React from "react";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        marginTop: 40,
         minWidth: 300,
         maxWidth: 500,
         backgroundColor: '#BFD7DC',
