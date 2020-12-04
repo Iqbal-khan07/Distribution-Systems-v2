@@ -10,6 +10,7 @@ import EmployeeInfoCard from "./components/EmployeeInfoCard/EmployeeInfoCard";
 import AddEmployeeButton from "./components/AddEmployeeButton/AddEmployeeButton";
 import AddEmployeeForm from "./components/AddEmployeeForm/AddEmployeeForm";
 import OrdersFulfilledCard from "./components/OrdersFulfilledCard/OrdersFulfilledCard";
+import OrderTakerGoalCard from "./components/OrderTakerGoalCard/OrderTakerGoalCard";
 import { SUPER_USER } from "../../constants/ROLES";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +38,7 @@ const Employees = () => {
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [showEmployeeForm, setShowEmployeeForm] = useState(false);
     const [showOFComponents, setShowOFComponents] = useState(false);
+    const [showOTComponents, setShowOTComponents] = useState(false);
     const [roles, setRoles] = useState([]);
     const [reload, setReload] = useState(false);
     useEffect(() => {
@@ -93,12 +95,15 @@ const Employees = () => {
         switch(selectedShopRaw[0].role) {
             case "order-fulfiller":
                 setShowOFComponents(true);
+                setShowOTComponents(false);
                 break;
             case "order-taker":
                 setShowOFComponents(false);
+                setShowOTComponents(true);
                 break;
-            case "administrator":
+            case "admin":
                 setShowOFComponents(false);
+                setShowOTComponents(false);
                 break;
             default:
                 break;
@@ -147,6 +152,14 @@ const Employees = () => {
                                         name={selectedEmployee.name}
                                         delivered={0}
                                         total={4}
+                                    /> : null
+                                    }
+                                    {showOTComponents ?
+                                    <OrderTakerGoalCard 
+                                        name={selectedEmployee.name}
+                                        goal={10000}
+                                        current={2}
+                                        order={3}
                                     /> : null
                                     }
                                 </Grid>
