@@ -81,6 +81,25 @@ def create_shop_order():
     return json.dumps(jsonmock, indent=4)
 
 
+def create_user():
+    jsonmock = {
+        "data": {
+            "name_first": "Shresht",
+            "name_last": "Rengesh",
+            "sys_username": "shresht_rengesh",
+            "password": "sr1234",
+            "email_google": "?",
+            "email_fb": "?",
+            "image_url": "https://ca.slack-edge.com/T017" +
+                "JP7PHFY-U018FALKD5E-266eb5ee4568-512",
+            "phone_number": "1234567890",
+            "role": 3
+        }
+    }
+
+    return json.dumps(jsonmock, indent=4)
+
+
 def update_shop_order_delivered():
     jsonmock = {
         "data": {"shop_order_id": 4, "order_fulfiller_id": 2}

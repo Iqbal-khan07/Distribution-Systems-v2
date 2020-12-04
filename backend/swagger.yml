@@ -452,6 +452,71 @@ paths:
                 type: object
 
 
+  /create/user:
+    post:
+      operationId: endpoint_entry.user_create
+      description: Create a new sys_user with JSON data
+      parameters:
+        - name: new_user
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name_first:
+                    type: string
+                    description: First name of new user
+                  name_last:
+                    type: string
+                    description: Last name of new user
+                  sys_username:
+                    type: string
+                    description: Username of new user
+                  password:
+                    type: string
+                    description: Password of new user
+                  email_google:
+                    type: string
+                    description: Google email of new user
+                  email_fb:
+                    type: string
+                    description: Facebook email of new user
+                  image_url:
+                    type: string
+                    description: Profile image of new user
+                  phone_number:
+                    type: string
+                    x-nullable: true
+                    description: Phone number of new user
+                  role:
+                    type: integer
+                    description: Sys_user_role database id of new user's role
+                required:
+                 - name_first
+                 - name_last
+                 - sys_username
+                 - password
+                 - email_google
+                 - email_fb
+                 - image_url
+                 - phone_number
+                 - role
+            required:
+             - data
+      responses:
+        200:
+          description: Return data for newly created shop order 
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+
   /deliver/shop_order:
     post:
       operationId: endpoint_entry.shop_order_update

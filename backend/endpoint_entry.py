@@ -246,6 +246,33 @@ def shop_order_create(new_shop_order):
         return response, 200
 
 
+def user_create(new_user):
+    """
+    This function links with endpoint:
+    /create/user
+    through swagger.yml
+
+    Response 200: user created successfully
+    Response 400: Bad Request
+    """
+
+    response = endpoint_logic.create_user(db, new_user)
+
+    if type(response) == int:
+        if response == 0:
+            return "A user with this username already exists", 400
+        if response == 1:
+            return "A user with this Google email already exists", 400
+        if response == 2:
+            return "A user with this Facebook email already exists", 400
+        if response == 3:
+            return "Invalid user role id", 400
+        else:
+            return "Bad Request", 400
+    else:
+        return response, 200
+
+
 def shop_order_update(update_shop_order):
     """
     This function links with endpoint:

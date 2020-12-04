@@ -525,6 +525,83 @@ def create_shop_order(database, data):
     return response
 
 
+def create_user(database, data):
+    """
+    Adds a new entry to the Sys_user table and based on JSON data
+
+    return values and what they mean:
+
+    0: username already in use
+    1: gmail already in use
+    2: fb email already in use
+    3: sys_user_role doesn't exist
+    """
+
+    data_loaded = data["data"]
+
+    # validate relational data fields
+    username_valid = True
+    gmail_valid = True
+    fbemail_valid = True
+    role_valid = True
+
+    username_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.sys_username == data_loaded["sys_username"])
+
+    gmail_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.email_google == data_loaded["email_google"])
+
+    fbemail_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.email_fb == data_loaded["email_fb"])
+
+    role_query = database.session.query(sql_tables.Sys_user_role).filter(
+        sql_tables.Sys_user_role.id == data_loaded["role"])
+
+    if username_query.count() != 0:
+        username_valid = False
+
+    if fbemail_query.count() != 0:
+        fbemail_valid = False
+
+    if role_query.count() == 0:
+        role_valid = False
+
+    if not username_valid:
+        return 0
+    elif not gmail_valid:
+        return 1
+    elif not fbemail_valid:
+        return 2
+    elif not role_valid:
+        return 3
+    else:
+        new_sys_user = sql_tables.Sys_user(
+            data_loaded["name_first"],
+            data_loaded["name_last"],
+            data_loaded["sys_username"],
+            data_loaded["password"],
+            data_loaded["email_google"],
+            data_loaded["email_fb"],
+            data_loaded["image_url"],
+            data_loaded["phone_number"],
+            data_loaded["role"]
+        )
+
+        database.session.add(new_sys_user)
+        database.session.commit()
+        database.session.refresh(new_sys_user)
+
+        response_inner = new_sys_user.request_sys_user_info(database)
+
+    response = {
+            "data": response_inner
+        }
+
+    database.session.close()
+
+    return response
+
+
 def update_shop_order_delivered(database, data):
     """
     Updates a shop_order table entry as delivered based on JSON data
@@ -642,37 +719,48 @@ def goal_order_taker(database, data):
             order_taker_entry = sys_user_query.all()[0]
             goal_entry = goal_query.all()[0]
 
+            orders_total = 0
             current_value_total = 0
             orders_paid = 0
             current_value_paid = 0
-            orders_pending = 0
-            current_value_pending = 0
+            orders_unpaid = 0
+            current_value_unpaid = 0
+            orders_completed = 0
+            current_value_completed = 0
 
             order_query = database.session.query(sql_tables.Shop_order).filter(
                 sql_tables.Shop_order.order_taker == order_taker_id).all()
 
             for entry in order_query:
                 if entry.date_ordered.month == current_month:
+                    orders_total += 1
                     current_value_total += entry.price_due
 
-                    if entry.price_paid:
+                    if entry.price_paid and not entry.completed:
                         orders_paid += 1
                         current_value_paid += entry.price_due
-                    else:
-                        orders_pending += 1
-                        current_value_pending += entry.price_due
+                    elif not entry.price_paid and not entry.completed:
+                        orders_unpaid += 1
+                        current_value_unpaid += entry.price_due
+                    elif entry.completed:
+                        orders_completed += 1
+                        current_value_completed += entry.price_due
 
             response_inner = {
-                "num_orders_total": orders_paid + orders_pending,
+                "num_orders_total": orders_total,
                 "current_value_total": current_value_total,
                 "goal_total": goal_entry.goal_value,
                 "orders_paid": {
                     "num_orders": orders_paid,
                     "current_value": current_value_paid
                 },
-                "orders_pending": {
-                    "num_orders": orders_pending,
-                    "current_value": current_value_pending
+                "orders_unpaid": {
+                    "num_orders": orders_unpaid,
+                    "current_value": current_value_unpaid
+                },
+                "orders_completed": {
+                    "num_orders": orders_completed,
+                    "current_value": current_value_completed
                 }
             }
 

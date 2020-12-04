@@ -563,15 +563,17 @@ class Company_product(db.Model):
     price_sell = db.Column(db.Numeric(10, 2), nullable=False)
     units_per_price = db.Column(db.Integer, nullable=False)
     stock = db.Column(db.Integer, nullable=False)
+    image_url = db.Column(db.String(500), nullable=False)
     description = db.Column(db.String(255), nullable=True)
 
-    def __init__(self, co, na, bp, sp, upp, st, de):
+    def __init__(self, co, na, bp, sp, upp, st, iu, de):
         self.company = co
         self.name = na
         self.price_buy = bp
         self.price_sell = sp
         self.units_per_price = upp
         self.stock = st
+        self.image_url = iu
         self.description = de
 
     def request_company_product_info(self, database):
@@ -592,7 +594,8 @@ class Company_product(db.Model):
             "units_per_price": self.units_per_price,
             "price_sell_per_unit": float(self.price_sell / self.units_per_price),
             "stock": self.stock,
-            "description": self.description,
+            "image_url": self.image_url,
+            "description": self.description
         }
 
     @staticmethod
@@ -608,6 +611,8 @@ class Company_product(db.Model):
             2.00,
             1,
             10,
+            "https://www.kindpng.com/picc/m/11-112771_1-number-" + 
+                "circle-desgin-png-1-2-3.png",
             None
             )
         )
@@ -618,6 +623,7 @@ class Company_product(db.Model):
             4.00,
             2,
             12,
+            "https://cdn.picpng.com/2/photo-2-35361.png",
             "Item 2!"
             )
         )
@@ -628,6 +634,7 @@ class Company_product(db.Model):
             600.00,
             30,
             33,
+            "https://blognumbers.files.wordpress.com/2010/09/3.jpg",
             "Big Item 3"
             )
         )
@@ -638,6 +645,7 @@ class Company_product(db.Model):
             88.00,
             4,
             100,
+            "https://blognumbers.files.wordpress.com/2010/09/4.jpg",
             None
             )
         )
@@ -649,6 +657,8 @@ class Company_product(db.Model):
             200.00,
             1,
             22,
+            "https://www.kindpng.com/picc/m/11-112771_1-number-" + 
+                "circle-desgin-png-1-2-3.png",
             "Big Item"
             )
         )
@@ -659,6 +669,7 @@ class Company_product(db.Model):
             0.02,
             1,
             33,
+            "https://cdn.picpng.com/2/photo-2-35361.png",
             "Small Item"
             )
         )
@@ -669,6 +680,7 @@ class Company_product(db.Model):
             20000.00,
             1,
             5,
+            "https://blognumbers.files.wordpress.com/2010/09/3.jpg",
             "Huge Item")
         )
         database.session.add(Company_product(
@@ -678,6 +690,7 @@ class Company_product(db.Model):
             8.88,
             1,
             400,
+            "https://blognumbers.files.wordpress.com/2010/09/4.jpg",
             None
             )
         )

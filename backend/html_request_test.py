@@ -8,7 +8,7 @@ import requests
 import json
 
 base_url = "http://localhost:8080/api"
-# base_url = "https://arcane-scrubland-51912.herokuapp.com/api"
+#base_url = "https://arcane-scrubland-51912.herokuapp.com/api"
 
 authenticate_default = "/authenticate/default"
 authenticate_gmail = "/authenticate/google"
@@ -27,6 +27,7 @@ create_shop = "/create/shop"
 create_zone = "/create/zone"
 create_shop_category = "/create/shop_category"
 create_shop_order = "/create/shop_order"
+create_user = "/create/user"
 
 update_shop_order_delevered = "/deliver/shop_order"
 
@@ -81,6 +82,9 @@ def create_s_c():
 def create_s_o():
     print(requests.post(url = (base_url + create_shop_order), json = json.loads(json_mock.create_shop_order())).json())
     spacer()
+def create_u():
+    print(requests.post(url = (base_url + create_user), json = json.loads(json_mock.create_user())).json())
+    spacer()
 
 
 def update_sod():
@@ -114,9 +118,8 @@ if __name__ == '__main__':
     #create_z()
     #create_s_c()
     #create_s_o()
+    create_u()
     #update_sod()
     #g_ot()
     #g_ot_n()
-    get_comp_prod()
-    i_u()
-    get_comp_prod()
+    #i_u()
