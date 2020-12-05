@@ -274,6 +274,27 @@ def request_sys_user_role(database):
     return response
 
 
+def request_company(database):
+    """
+    Returns a JSON of all company entries in the database
+    """
+
+    query_result = database.session.query(sql_tables.Company).all()
+
+    result = []
+
+    for company in query_result:
+        result.append(company.request_company_info(database))
+
+    response = {
+        "data": result
+    }
+
+    database.session.close()
+
+    return response
+
+
 def create_shop(database, data):
     """
     Adds a new entry to the shop table and populates shop_zone
@@ -714,7 +735,75 @@ def create_company_product(database, data):
 
     database.session.close()
 
-    return response    
+    return response
+
+
+def create_company(database, data):
+    """
+    Adds a new entry to the Company table and based on JSON data
+
+    return values and what they mean:
+
+    0: Company already exists with that name
+    1: Invalid zone id
+    """
+
+    data_loaded = data["data"]
+
+    # validate relational data fields
+    name_valid = True
+    zones_valid = True
+
+    company_query = database.session.query(sql_tables.Company).filter(
+        sql_tables.Company.name == data_loaded["name"])
+
+    if company_query.count() != 0:
+        name_valid = False
+
+    for zone in data_loaded["zones"]:
+        if database.session.query(sql_tables.Zone).filter(
+            sql_tables.Zone.id == zone["id"]).count() == 0:
+
+            zones_valid = False
+            break
+
+    if not name_valid:
+        return 0
+    if not zones_valid:
+        return 1
+    else:
+        new_company = sql_tables.Company(
+            data_loaded["name"],
+            data_loaded["image_url"]
+        )
+
+        database.session.add(new_company)
+        database.session.commit()
+        database.session.refresh(new_company)
+
+        for zone in data_loaded["zones"]:
+            # account for possible duplicate zone entries in request
+            zone_query = database.session.query(sql_tables.Company_zone).filter(
+                sql_tables.Company_zone.company == new_company.id, 
+                sql_tables.Company_zone.zone == zone["id"])
+
+            if zone_query.count() != 0:
+                continue
+
+            database.session.add(sql_tables.Company_zone(new_company.id, zone["id"]))
+
+            # commit new company_zone entries
+            database.session.commit()
+
+        response_inner = new_company.request_company_info(database)
+
+    response = {
+        "data": response_inner
+    }
+
+    database.session.close()
+
+    return response
 
 
 def update_shop_order_delivered(database, data):

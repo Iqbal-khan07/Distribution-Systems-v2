@@ -178,6 +178,18 @@ def get_all_user_roles():
     return endpoint_logic.request_sys_user_role(db), 200
 
 
+def get_all_company():
+    """
+    This function links with endpoint:
+    /company
+    through swagger.yml
+
+    Response 200: Successful Request
+    """
+
+    return endpoint_logic.request_company(db), 200
+
+
 def shop_create(new_shop):
     """
     This function links with endpoint:
@@ -251,6 +263,7 @@ def shop_order_create(new_shop_order):
 
     Response 200: Shop order created successfully
     Response 400: Bad Request
+    Response 409: Unable to perform request
     """
 
     response = endpoint_logic.create_shop_order(db, new_shop_order)
@@ -324,6 +337,29 @@ def company_product_create(new_product):
         return response, 200
 
 
+def company_create(new_company):
+    """
+    This function links with endpoint:
+    /create/company
+    through swagger.yml
+
+    Response 200: company_product created successfully
+    Response 400: Bad Request
+    """
+
+    response = endpoint_logic.create_company(db, new_company)
+
+    if type(response) == int:
+        if response == 0:
+            return "A company with that name already exists", 400
+        elif response == 1:
+            return "Invalid zone id", 400
+        else:
+            return "Bad Request", 400
+    else:
+        return response, 200
+
+
 def shop_order_update(update_shop_order):
     """
     This function links with endpoint:
@@ -378,7 +414,7 @@ def goal_order_taker(order_taker_info):
 def goal_order_taker_new(goal_info):
     """
     This function links with endpoint:
-    /goal/order_taker/new
+    /create/goal/order_taker
     through swagger.yml
 
     Response 200: goal_order_taker data created successfully

@@ -24,6 +24,7 @@ get_zone = "/zones/all"
 get_shop_category = "/shop_categories/all"
 get_users = "/users/all"
 get_user_role = "/users/roles/all"
+get_company = "/company"
 
 create_shop = "/create/shop"
 create_zone = "/create/zone"
@@ -31,6 +32,7 @@ create_shop_category = "/create/shop_category"
 create_shop_order = "/create/shop_order"
 create_user = "/create/user"
 create_company_product = "/create/company_product"
+create_company = "/create/company"
 
 update_shop_order_delevered = "/deliver/shop_order"
 
@@ -77,6 +79,9 @@ def get_u():
 def get_u_r():
     print(requests.get(url = (base_url + get_user_role)).json())
     spacer()
+def get_c():
+    print(requests.get(url = (base_url + get_company)).json())
+    spacer()
 
 
 def create_s():
@@ -96,6 +101,9 @@ def create_u():
     spacer()
 def create_c_p():
     print(requests.post(url = (base_url + create_company_product), json = json.loads(json_mock.create_company_product())).json())
+    spacer()
+def create_c():
+    print(requests.post(url = (base_url + create_company), json = json.loads(json_mock.create_company())).json())
     spacer()
 
 
@@ -128,12 +136,14 @@ if __name__ == '__main__':
     #get_s_c()
     #get_u()
     #get_u_r()
+    #get_c()
     #create_s()
     #create_z()
     #create_s_c()
     #create_s_o()
     #create_u()
-    create_c_p()
+    #create_c_p()
+    create_c()
     #update_sod()
     #g_ot()
     #g_ot_n()

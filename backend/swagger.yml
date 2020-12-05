@@ -291,6 +291,67 @@ paths:
                 type: object
 
 
+# Company related endpoints
+  /company:
+    get:
+      operationId: endpoint_entry.get_all_company
+      description: Return all companies in the database
+      responses:
+        200:
+          description: List of all companies 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /create/company:
+    post:
+      operationId: endpoint_entry.company_create
+      description: Create a new company with JSON data
+      parameters:
+        - name: new_company
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Name of company
+                  image_url:
+                    type: string
+                    description: Profile image url of company
+                  zones:
+                    type: array
+                    description: Company zones
+                    properties:
+                      id:
+                        type: integer
+                        description: Zone database id
+                    required:
+                     - id
+                required:
+                 - name
+                 - image_url
+                 - zones
+            required:
+             - data
+      responses:
+        200:
+          description: Return data for newly created company 
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+
 # Company_product related endpoints
   /inventory:
     get:
