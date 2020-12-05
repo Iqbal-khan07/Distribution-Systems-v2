@@ -163,7 +163,7 @@ def get_all_users():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_shop_category(db), 200
+    return endpoint_logic.request_sys_user(db), 200
 
 
 def shop_create(new_shop):

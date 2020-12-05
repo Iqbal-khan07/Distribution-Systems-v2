@@ -22,6 +22,7 @@ get_shop_order_today = "/orders/today"
 get_shop = "/shops/all"
 get_zone = "/zones/all"
 get_shop_category = "/shop_categories/all"
+get_users = "/users/all"
 
 create_shop = "/create/shop"
 create_zone = "/create/zone"
@@ -68,6 +69,9 @@ def get_z():
 def get_s_c():
     print(requests.get(url = (base_url + get_shop_category)).json())
     spacer()
+def get_u():
+    print(requests.get(url = (base_url + get_users)).json())
+    spacer()    
 
 
 def create_s():
@@ -114,10 +118,11 @@ if __name__ == '__main__':
     #get_sh()
     #get_z()
     #get_s_c()
+    get_u()
     #create_s()
     #create_z()
     #create_s_c()
-    create_s_o()
+    #create_s_o()
     #create_u()
     #update_sod()
     #g_ot()

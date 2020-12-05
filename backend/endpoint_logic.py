@@ -232,6 +232,27 @@ def request_shop_category(database):
     return response
 
 
+def request_sys_user(database):
+    """
+    Returns a JSON of all sys_user entries in the database
+    """
+
+    query_result = database.session.query(sql_tables.Sys_user).all()
+
+    result = []
+
+    for sys_user in query_result:
+        result.append(sys_user.request_sys_user_info(database))
+
+    response = {
+            "data": result
+        }
+
+    database.session.close()
+
+    return response
+
+
 def create_shop(database, data):
     """
     Adds a new entry to the shop table and populates shop_zone
