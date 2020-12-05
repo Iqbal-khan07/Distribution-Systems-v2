@@ -10,53 +10,60 @@ import {ORDER_FULFILLER, ORDER_TAKER, SUPER_USER} from "../constants/ROLES";
 
 export const UserContext = createContext();
 
-const LINKS = {
-    0: {
-        "icon": <HomeIcon style={{fontSize: 30}} />,
-        "text": 'Dashboard',
-        "to": '/dashboard'
-    },
-    1: {
-        "icon": <StoreIcon style={{fontSize: 30}} />,
-        "text": 'Shop Tracker',
-        "to": '/shoptracker'
-    },
-    2: {
-        "icon": <ListAltIcon style={{fontSize: 30}} />,
-        "text": 'Orders',
-        "to": '/orders'
-    },
-    3: {
-        "icon": <StorageIcon style={{fontSize: 30}} />,
-        "text": 'Inventory Manager',
-        "to": '/inventory'
-    },
-    4: {
-        "icon": <PeopleAltIcon style={{fontSize: 30}} />,
-        "text": 'Employees',
-        "to": '/employees'
-    },
-    5: {
-        "icon": <SettingsIcon style={{fontSize: 30}} />,
-        "text": 'Settings',
-        "to": '/settings'
+const makeLinks = (role) => {
+    return function () {
+        return {
+            0: {
+                "icon": <HomeIcon style={{fontSize: 30}} />,
+                "text": 'Dashboard',
+                "to": '/dashboard'
+            },
+            1: {
+                "icon": <StoreIcon style={{fontSize: 30}} />,
+                "text": 'Shop Tracker',
+                "to": '/shoptracker'
+            },
+            2: {
+                "icon": <ListAltIcon style={{fontSize: 30}} />,
+                "text": 'Orders',
+                "to": '/orders'
+            },
+            3: {
+                "icon": <StorageIcon style={{fontSize: 30}} />,
+                "text": role === SUPER_USER ? 'Inventory Manager': 'Inventory',
+                "to": '/inventory'
+            },
+            4: {
+                "icon": <PeopleAltIcon style={{fontSize: 30}} />,
+                "text": 'Employers',
+                "to": '/employers'
+            },
+            5: {
+                "icon": <SettingsIcon style={{fontSize: 30}} />,
+                "text": 'Settings',
+                "to": '/settings'
+            }
+        }
     }
 }
 
+
 const access = {
-    [SUPER_USER]: [0, 1, 2, 3, 4, 5],
-    [ORDER_TAKER]: [0, 1, 2, 5],
-    [ORDER_FULFILLER]: [0, 1, 2, 5]
+    [SUPER_USER]: [0, 1, 2, 3, 4],
+    [ORDER_TAKER]: [0, 1, 2, 3],
+    [ORDER_FULFILLER]: [0, 1, 2, 3]
 }
 
 const getLinksBasedOnUserType = (userType) => {
     const accessList = access[userType];
+    const linkOptions = makeLinks(userType);
     const links = []
     for(let i=0; i<accessList.length; i++){
-        links.push(LINKS[accessList[i]])
+        links.push(linkOptions()[accessList[i]])
     }
     return links;
 }
+
 
 // {
 //         id: 1,

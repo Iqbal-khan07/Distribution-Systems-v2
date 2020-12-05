@@ -17,6 +17,7 @@ import OrderFulfillerDashboard from "./pages/OrderFulfillerDashboard/OrderFulfil
 import {UserContext} from "./context/UserContext";
 import {ORDER_FULFILLER, ORDER_TAKER, SUPER_USER} from "./constants/ROLES";
 import OrderTakerDashboard from "./pages/OrderTakerDashboard/OrderTakerDashboard";
+import InventoryManager from "./pages/InventoryManager/InventoryManger";
 import Employees from "./pages/Employees/Employees";
 
 axios.defaults.baseURL = "https://arcane-scrubland-51912.herokuapp.com/api/";
@@ -52,6 +53,7 @@ function App() {
                 <Route path={'/dashboard'} render={() => chooseDashboard(user.role)} exact />
                 <Route path={'/orders'} render={() => <Orders />} exact />
                 <Route path={'/shoptracker'} render={() => <ShopTracker />} exact />
+                <Route path={'/inventory'} render={() => <InventoryManager />} exact />
                 <Route path={'/employees'} render={() => <Employees />} exact />
                 <Redirect to="/dashboard" />
             </>
