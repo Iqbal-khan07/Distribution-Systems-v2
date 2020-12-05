@@ -30,11 +30,12 @@ create_zone = "/create/zone"
 create_shop_category = "/create/shop_category"
 create_shop_order = "/create/shop_order"
 create_user = "/create/user"
+create_company_product = "/create/company_product"
 
 update_shop_order_delevered = "/deliver/shop_order"
 
 goal_order_taker = "/goal/order_taker"
-goal_order_taker_new = "/goal/order_taker/new"
+goal_order_taker_new = "/create/goal/order_taker"
 
 
 def spacer():
@@ -93,6 +94,9 @@ def create_s_o():
 def create_u():
     print(requests.post(url = (base_url + create_user), json = json.loads(json_mock.create_user())).json())
     spacer()
+def create_c_p():
+    print(requests.post(url = (base_url + create_company_product), json = json.loads(json_mock.create_company_product())).json())
+    spacer()
 
 
 def update_sod():
@@ -123,12 +127,13 @@ if __name__ == '__main__':
     #get_z()
     #get_s_c()
     #get_u()
-    get_u_r()
+    #get_u_r()
     #create_s()
     #create_z()
     #create_s_c()
     #create_s_o()
     #create_u()
+    create_c_p()
     #update_sod()
     #g_ot()
     #g_ot_n()

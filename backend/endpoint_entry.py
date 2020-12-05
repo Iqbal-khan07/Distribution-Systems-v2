@@ -301,6 +301,29 @@ def user_create(new_user):
         return response, 200
 
 
+def company_product_create(new_product):
+    """
+    This function links with endpoint:
+    /create/company_product
+    through swagger.yml
+
+    Response 200: company_product created successfully
+    Response 400: Bad Request
+    """
+
+    response = endpoint_logic.create_company_product(db, new_product)
+
+    if type(response) == int:
+        if response == 0:
+            return "Invalid company id", 400
+        elif response == 1:
+            return "Product already exists with that name for this company", 400
+        else:
+            return "Bad Request", 400
+    else:
+        return response, 200
+
+
 def shop_order_update(update_shop_order):
     """
     This function links with endpoint:

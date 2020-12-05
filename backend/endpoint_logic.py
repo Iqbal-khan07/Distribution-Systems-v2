@@ -657,6 +657,66 @@ def create_user(database, data):
     return response
 
 
+def create_company_product(database, data):
+    """
+    Adds a new entry to the Company_product table and based on JSON data
+
+    return values and what they mean:
+
+    0: invalid company id
+    1: product with same name already exists with company id
+    """
+
+    data_loaded = data["data"]
+
+    # validate relational data fields
+    company_valid = True
+    product_not_duplicate = True
+
+    company_query = database.session.query(sql_tables.Company).filter(
+        sql_tables.Company.id == data_loaded["company"])
+
+    product_query = database.session.query(sql_tables.Company_product).filter(
+        sql_tables.Company_product.company == data_loaded["company"],
+        sql_tables.Company_product.name == data_loaded["name"])
+
+    if company_query.count() == 0:
+        company_valid = False
+
+    if product_query.count() != 0:
+        product_not_duplicate = False
+
+    if not company_valid:
+        return 0
+    if not product_not_duplicate:
+        return 1
+    else:
+        new_company_product = sql_tables.Company_product(
+            data_loaded["company"],
+            data_loaded["name"],
+            float(data_loaded["price_buy"]),
+            float(data_loaded["price_sell"]),
+            data_loaded["units_per_price"],
+            data_loaded["stock"],
+            data_loaded["image_url"],
+            data_loaded["description"]
+        )
+
+        database.session.add(new_company_product)
+        database.session.commit()
+        database.session.refresh(new_company_product)
+
+        response_inner = new_company_product.request_company_product_info(database)
+
+    response = {
+        "data": response_inner
+    }
+
+    database.session.close()
+
+    return response    
+
+
 def update_shop_order_delivered(database, data):
     """
     Updates a shop_order table entry as delivered based on JSON data

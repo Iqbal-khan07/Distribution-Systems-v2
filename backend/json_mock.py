@@ -100,6 +100,24 @@ def create_user():
     return json.dumps(jsonmock, indent=4)
 
 
+def create_company_product():
+    jsonmock = {
+        "data": {
+            "company": 2,
+            "name": "test_created_product",
+            "price_buy": 100.00,
+            "price_sell": 200.00,
+            "units_per_price": 3,
+            "stock": 0,
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons" +
+                "/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
+            "description": "test item!!"
+        }
+    }
+
+    return json.dumps(jsonmock, indent=4)
+
+
 def update_shop_order_delivered():
     jsonmock = {
         "data": {"shop_order_id": 4, "order_fulfiller_id": 2}
