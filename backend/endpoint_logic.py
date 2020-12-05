@@ -414,6 +414,8 @@ def create_shop_order(database, data):
     1: invalid order taker id
     2: invalid shop id
     3: invalid delivery date
+    4: request quantity greater than stock
+    5: duplicate item ids
     """
 
     data_loaded = data["data"]
@@ -424,19 +426,19 @@ def create_shop_order(database, data):
     order_taker_valid = True
     shop_order_items_valid = True
     delivery_date_valid = True
+    stock_valid = True
+    no_duplicate_items = True
 
-    if (
-        database.session.query(sql_tables.Shop).filter(
-            sql_tables.Shop.id == data_loaded["shop_id"]).count() == 0
-    ):
+    shop_query = database.session.query(sql_tables.Shop).filter(
+        sql_tables.Shop.id == data_loaded["shop_id"])
+        
+    sys_user_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.id == data_loaded["order_taker_id"])
 
+    if shop_query.count() == 0:
         shop_id_valid = False
 
-    if (
-        database.session.query(sql_tables.Sys_user).filter(
-            sql_tables.Sys_user.id == data_loaded["order_taker_id"]).count() == 0
-    ):
-
+    if sys_user_query.count() == 0:
         order_taker_valid = False
 
     if deliver_days_from_today < 0:
@@ -444,77 +446,88 @@ def create_shop_order(database, data):
 
     price_total = float(0)
 
+    # Validate all order_items and calc price_total
     for item in data_loaded["order_items"]:
         product_entries = database.session.query(sql_tables.Company_product).filter(
-            sql_tables.Company_product.id == item["id"]
-        )
+            sql_tables.Company_product.id == item["id"])
 
         if product_entries.count() == 0:
             shop_order_items_valid = False
             break
         else:
-            # calculate total price of order
-            price_total += float(
-                (product_entries[0].price_sell / product_entries[0].units_per_price)
-                * item["quantity_units"]
+            if product_entries[0].stock < item["quantity_units"]:
+                stock_valid = False
+                break
+            else:
+                # calculate total price of order
+                price_total += float(
+                    (product_entries[0].price_sell / product_entries[0].units_per_price)
+                    * item["quantity_units"])
+
+    # Validate no duplicate item ids in order_item
+    for x, item in enumerate(data_loaded["order_items"], start = 0):
+        if x == (len(data_loaded["order_items"]) - 1):
+            break
+        else:
+            if item["id"] == data_loaded["order_items"][x + 1]["id"]:
+                no_duplicate_items = False
+                break
+
+    if not shop_order_items_valid:
+        return 0
+    elif not order_taker_valid:
+        return 1
+    elif not shop_id_valid:
+        return 2
+    elif not delivery_date_valid:
+        return 3
+    elif not stock_valid:
+        return 4
+    elif not no_duplicate_items:
+        return 5
+    else:
+        # get current datetime and one week from now
+        current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+        delivery_date = current_time_utc + datetime.timedelta(days=deliver_days_from_today)
+
+        # new Shop_order object
+        new_shop_order = sql_tables.Shop_order(
+            data_loaded["shop_id"],
+            price_total,
+            False,
+            data_loaded["memo"],
+            current_time_utc,
+            delivery_date,
+            None,
+            data_loaded["order_taker_id"],
+            None,
+            False,
+        )
+
+        # add, commit, then refresh Shop object to update with commit
+        database.session.add(new_shop_order)
+        database.session.commit()
+        database.session.refresh(new_shop_order)
+
+        # add new Shop_order_item entries to session and update stock
+        for item in data_loaded["order_items"]:
+            product_entry = database.session.query(sql_tables.Company_product).filter(
+                sql_tables.Company_product.id == item["id"])[0]
+
+            database.session.add(
+                sql_tables.Shop_order_item(
+                    new_shop_order.id,
+                    item["id"],
+                    item["quantity_units"]
+                )
             )
 
-    if delivery_date_valid:
-        if shop_id_valid:
-            if order_taker_valid:
-                if shop_order_items_valid:
-                    # get current datetime and one week from now
-                    current_time_utc = datetime.datetime.now(datetime.timezone.utc)
-                    delivery_date = current_time_utc + datetime.timedelta(days=deliver_days_from_today)
-    
-                    # new Shop_order object
-                    new_shop_order = sql_tables.Shop_order(
-                        data_loaded["shop_id"],
-                        price_total,
-                        False,
-                        data_loaded["memo"],
-                        current_time_utc,
-                        delivery_date,
-                        None,
-                        data_loaded["order_taker_id"],
-                        None,
-                        False,
-                    )
-    
-                    # add, commit, then refresh Shop object to update with commit
-                    database.session.add(new_shop_order)
-                    database.session.commit()
-                    database.session.refresh(new_shop_order)
-    
-                    # add new shop_zone entries to session
-                    for item in data_loaded["order_items"]:
-                        # account for possible duplicate zone entries in request
-                        duplicate_check_query = database.session.query(sql_tables.Shop_order_item).filter(
-                            sql_tables.Shop_order_item.shop_order == new_shop_order.id, 
-                            sql_tables.Shop_order_item.company_product == item["id"])
-    
-                        if duplicate_check_query.count() != 0:
-                            duplicate_check_query[0].quantity_units += item[
-                                "quantity_units"]
-                        else:
-                            database.session.add(
-                                sql_tables.Shop_order_item(
-                                    new_shop_order.id, item["id"], item["quantity_units"]
-                                )
-                            )
-    
-                    # commit new shop_zone entries
-                    database.session.commit()
-    
-                    response_inner = new_shop_order.request_shop_order(database)
-                else:
-                    return 0
-            else:
-                return 1
-        else:
-            return 2
-    else:
-        return 3
+            product_entry.stock -= item["quantity_units"]
+
+        # commit new Shop_order_item entries and stock changes
+        database.session.commit()
+
+        response_inner = new_shop_order.request_shop_order(database)
 
     response = {
         "data": response_inner
@@ -594,8 +607,8 @@ def create_user(database, data):
         response_inner = new_sys_user.request_sys_user_info(database)
 
     response = {
-            "data": response_inner
-        }
+        "data": response_inner
+    }
 
     database.session.close()
 

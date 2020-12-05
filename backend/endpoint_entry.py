@@ -154,6 +154,18 @@ def get_all_shop_category():
     return endpoint_logic.request_shop_category(db), 200
 
 
+def get_all_users():
+    """
+    This function links with endpoint:
+    /users/all
+    through swagger.yml
+
+    Response 200: Successful Request
+    """
+
+    return endpoint_logic.request_shop_category(db), 200
+
+
 def shop_create(new_shop):
     """
     This function links with endpoint:
@@ -240,6 +252,10 @@ def shop_order_create(new_shop_order):
             return "Shop does not exist with id provided", 400
         elif response == 3:
             return "Invalid delivery date, must be at least one day from today", 400
+        elif response == 4:
+            return "Requested quantity for item exceeds current stock", 409
+        elif response == 5:
+            return "No duplicate item ids allowed in order_items", 400
         else:
             return "Bad Request", 400
     else:

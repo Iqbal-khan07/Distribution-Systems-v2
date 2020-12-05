@@ -66,14 +66,14 @@ def create_shop_order():
             "memo": "big smelly memo",
             "order_taker_id": 1,
             "order_items": [
-                {"id": 1, "quantity_units": 100},
-                {"id": 2, "quantity_units": 100},
-                {"id": 3, "quantity_units": 2},
-                {"id": 4, "quantity_units": 10},
-                {"id": 5, "quantity_units": 10},
-                {"id": 6, "quantity_units": 10000},
-                {"id": 7, "quantity_units": 1},
-                {"id": 8, "quantity_units": 100},
+                {"id": 1, "quantity_units": 10},
+                {"id": 2, "quantity_units": 12},
+                {"id": 3, "quantity_units": 33},
+                {"id": 4, "quantity_units": 100},
+                {"id": 5, "quantity_units": 22},
+                {"id": 6, "quantity_units": 33},
+                {"id": 7, "quantity_units": 5},
+                {"id": 8, "quantity_units": 400}
             ],
         }
     }
