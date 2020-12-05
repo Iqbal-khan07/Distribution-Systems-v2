@@ -253,6 +253,27 @@ def request_sys_user(database):
     return response
 
 
+def request_sys_user_role(database):
+    """
+    Returns a JSON of all sys_user_role entries in the database
+    """
+
+    query_result = database.session.query(sql_tables.Sys_user_role).all()
+
+    result = []
+
+    for role in query_result:
+        result.append(role.request_sys_user_role_info())
+
+    response = {
+        "data": result
+    }
+
+    database.session.close()
+
+    return response
+
+
 def create_shop(database, data):
     """
     Adds a new entry to the shop table and populates shop_zone

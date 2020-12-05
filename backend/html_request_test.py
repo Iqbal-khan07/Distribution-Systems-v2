@@ -23,6 +23,7 @@ get_shop = "/shops/all"
 get_zone = "/zones/all"
 get_shop_category = "/shop_categories/all"
 get_users = "/users/all"
+get_user_role = "/users/roles/all"
 
 create_shop = "/create/shop"
 create_zone = "/create/zone"
@@ -71,7 +72,10 @@ def get_s_c():
     spacer()
 def get_u():
     print(requests.get(url = (base_url + get_users)).json())
-    spacer()    
+    spacer()
+def get_u_r():
+    print(requests.get(url = (base_url + get_user_role)).json())
+    spacer()
 
 
 def create_s():
@@ -118,7 +122,8 @@ if __name__ == '__main__':
     #get_sh()
     #get_z()
     #get_s_c()
-    get_u()
+    #get_u()
+    get_u_r()
     #create_s()
     #create_z()
     #create_s_c()

@@ -166,6 +166,18 @@ def get_all_users():
     return endpoint_logic.request_sys_user(db), 200
 
 
+def get_all_user_roles():
+    """
+    This function links with endpoint:
+    /users/roles/all
+    through swagger.yml
+
+    Response 200: Successful Request
+    """
+
+    return endpoint_logic.request_sys_user_role(db), 200
+
+
 def shop_create(new_shop):
     """
     This function links with endpoint:
