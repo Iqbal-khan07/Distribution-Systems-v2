@@ -7,12 +7,12 @@ import {makeStyles} from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
     memo: {
         marginTop: theme.spacing(2),
-        width: '100%'
+        width: '100%',
     },
 }));
 
 
-function multiLine(props) {
+function multiLine(props, rows) {
     const { form: { setFieldValue }, field: { name }, } = props;
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const onChange = React.useCallback(
@@ -25,20 +25,20 @@ function multiLine(props) {
     return <MuiTextField
         {...fieldToTextField(props)}
         onChange={onChange}
-        rows={3}
+        rows={rows}
         multiline
         variant="outlined"
     />;
 }
 
-export default function Memo ({name}) {
+export default function MultiLineInput ({name, rows, placeholder}) {
     const classes = useStyles();
     return (
         <Field
-            component={multiLine}
+            component={(props) => multiLine(props, rows)}
             name={name}
             type="test"
-            label="Memo"
+            label={placeholder}
             className={classes.memo}
         />
     )

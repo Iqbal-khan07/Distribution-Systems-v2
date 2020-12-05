@@ -1,24 +1,22 @@
 import React, {useContext} from "react";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import {NotificationContext} from "../../../../context/NotificationContext";
+import {Field, Form, Formik} from "formik";
 import axios from "axios";
 import {ERROR, SUCCESSFUL} from "../../../../constants/NOTIFICATION_TYPES";
-
 import Backdrop from "@material-ui/core/Backdrop";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import {Field, Form, Formik} from "formik";
 import Grid from "@material-ui/core/Grid";
+import Avatar from "@material-ui/core/Avatar";
+import {TextField} from "formik-material-ui";
+import MenuItem from "@material-ui/core/MenuItem";
 import {Button} from "@material-ui/core";
 import * as Yup from "yup";
-
-import {NotificationContext} from "../../../../context/NotificationContext";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import {TextField} from "formik-material-ui";
-import Avatar from '@material-ui/core/Avatar';
-import MenuItem from "@material-ui/core/MenuItem";
-
+import MultiLineInput from "../../../../shared/MultiLineInput/MultiLineInput";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -94,73 +92,60 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const SHOP_NAME = 'name'
-const CATEGORY = 'category'
-const IMAGE_URL = 'imageUrl'
-const PHONE = 'phone'
-const EMAIL = 'email'
-const STREET = 'street'
-const PROVINCE = 'province'
-const CITY = 'city'
-const ZIP = 'zip'
-const ZONE = 'zone'
+const NAME = 'name'
+const COMPANY = 'company'
+const IMAGE_URL = 'image_url'
+const DESCRIPTION = 'description'
+const BUYING = 'buying'
+const SELLING = 'selling'
 
-const VALID_PHONE_REGEX = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 const validationSchema = Yup.object({
-    [SHOP_NAME]: Yup.string().required('name is required'),
-    [CATEGORY]: Yup.string("must be number").required("Choose a category"),
+    [NAME]: Yup.string().required('name is required'),
+    [COMPANY]: Yup.string("must be number").required("Choose a company"),
     [IMAGE_URL]: Yup.string().url('Enter a Valid Image Url'),
-    [PHONE]: Yup.string().matches(VALID_PHONE_REGEX, "Add a valid phone number").required('Phone number is required'),
-    [EMAIL]: Yup.string().email('enter a valid email'),
-    [STREET]: Yup.string().required("Required"),
-    [CITY]: Yup.string().required("Required"),
-    [PROVINCE]: Yup.string().required("Please Choose the Your Province"),
-    [ZIP]: Yup.string("must be number").required("Please Enter Your Zip Code"),
-    [ZONE]: Yup.string("must be number").required("Please Choose a Zone"),
+    [DESCRIPTION]: Yup.string(),
+    [BUYING]: Yup.number().min(0, "Value should be greater than zero").required(),
+    [SELLING]: Yup.number().min(0, "Value should be greater than zero").required(),
 })
 
-export default function AddShopForm({showForm, onCloseButtonHandler, zones, categories, reload}) {
+export default function AddProductForm({reload, onCloseButtonHandler, showForm, companies}) {
     const classes = useStyles();
     const { setANotification } = useContext(NotificationContext)
 
     return (
         <Formik
             initialValues={{
-                [SHOP_NAME]: '',
-                [CATEGORY]: '',
+                [NAME]: '',
+                [COMPANY]: '',
                 [IMAGE_URL]: '',
-                [PHONE]: '',
-                [EMAIL]: '',
-                [STREET]: '',
-                [PROVINCE]: '',
-                [CITY]: '',
-                [ZIP]: '',
-                [ZONE]: '',
+                [DESCRIPTION]: '',
+                [BUYING]: '',
+                [SELLING]: '',
             }}
             validationSchema={validationSchema}
             onSubmit={async (values, {setSubmitting, resetForm}) => {
                 setSubmitting(true)
                 try {
-                    await axios.post('/create/shop', {
-                        data: {
-                            name: values[SHOP_NAME],
-                            email: values[EMAIL],
-                            image_url: values[IMAGE_URL],
-                            phone_number: values[PHONE],
-                            category: values[CATEGORY],
-                            street: values[STREET],
-                            city: values[CITY],
-                            providence: values[PROVINCE],
-                            zip_4: values[ZIP],
-                            zones: [
-                                {
-                                    id: values[ZONE]
-                                }
-                            ]
-                        }
-                    })
-                    setANotification('Shop Added Successfully', SUCCESSFUL)
+                    // await axios.post('/create/shop', {
+                    //     data: {
+                    //         name: values[SHOP_NAME],
+                    //         email: values[EMAIL],
+                    //         image_url: values[IMAGE_URL],
+                    //         phone_number: values[PHONE],
+                    //         category: values[CATEGORY],
+                    //         street: values[STREET],
+                    //         city: values[CITY],
+                    //         providence: values[PROVINCE],
+                    //         zip_4: values[ZIP],
+                    //         zones: [
+                    //             {
+                    //                 id: values[ZONE]
+                    //             }
+                    //         ]
+                    //     }
+                    // })
+                    setANotification('Added Product Successfully', SUCCESSFUL)
                     reload();
                     setSubmitting(false)
                 }catch (e){
@@ -175,7 +160,7 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                 <Backdrop className={classes.backdrop} open={showForm} >
                     <Paper className={classes.paper_root}>
                         <div style={{textAlign: 'center'}}>
-                            <Typography className={classes.title} variant={"h6"}>Add A Shop</Typography>
+                            <Typography className={classes.title} variant={"h6"}>Add A New Product</Typography>
                             <Fab
                                 color="primary"
                                 className={classes.button}
@@ -191,32 +176,31 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                                 <Grid container direction={"column"}>
                                     <Grid container direction={"row"}>
                                         <Grid item xs={4}>
-                                        <Avatar variant="square" className={classes.cover} src={values[IMAGE_URL]}>
-                                            Shop Image
-                                        </Avatar>
+                                            <Avatar variant="square" className={classes.cover} src={values[IMAGE_URL]}>
+                                                Product Image
+                                            </Avatar>
                                         </Grid>
-                                        <Grid item container direction={"column"} xs={7}>
+                                        <Grid item direction={"column"} xs={7}>
                                             <Grid item>
                                                 <Field
-                                                     error={errors[SHOP_NAME] && touched[SHOP_NAME]}
+                                                     error={errors[NAME] && touched[NAME]}
                                                      component={TextField}
                                                      type={"text"}
-                                                     name={SHOP_NAME}
-                                                     label="Shop Name"
+                                                     name={NAME}
+                                                     label="Product Name"
                                                      className={classes.formField}
                                                      required
                                                      style={{marginLeft: 30}}
                                                      // fullWidth
-
                                                 />
                                             </Grid>
                                             <Grid item>
                                                 <Field
                                                     component={TextField}
                                                     type="text"
-                                                    name={CATEGORY}
-                                                    error={errors[CATEGORY] && touched[CATEGORY]}
-                                                    label="Category"
+                                                    name={COMPANY}
+                                                    error={errors[COMPANY] && touched[COMPANY]}
+                                                    label="Company"
                                                     select
                                                     // fullWidth
                                                     required
@@ -229,8 +213,8 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                                                     <MenuItem value="">
                                                         <em>none</em>
                                                     </MenuItem>
-                                                    {categories.map((category) => (
-                                                        <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                                    {companies.map((company) => (
+                                                        <MenuItem key={company.id} value={company.id}>{company.name}</MenuItem>
                                                     ))}
                                                 </Field>
                                                 <Field
@@ -238,7 +222,7 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                                                      component={TextField}
                                                      type={"text"}
                                                      name={IMAGE_URL}
-                                                     label="Shop Image Url"
+                                                     label="Product Image Url"
                                                      className={classes.formField}
                                                      style={{marginLeft: 30}}
                                                      // fullWidth
@@ -247,15 +231,15 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                                         </Grid>
                                     </Grid>
 
-                                    {/*/!*contact info*!/*/}
+                                    {/*price info*/}
                                     <Grid item container direction={"row"} spacing={2}>
                                         <Grid item>
                                             <Field
-                                                 error={errors[PHONE] && touched[PHONE]}
+                                                 error={errors[BUYING] && touched[BUYING]}
                                                  component={TextField}
                                                  type={"text"}
-                                                 name={PHONE}
-                                                 label="Phone"
+                                                 name={BUYING}
+                                                 label="Buying Price"
                                                  className={classes.formField}
                                                  fullWidth
                                                  required
@@ -263,64 +247,11 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                                         </Grid>
                                         <Grid item>
                                             <Field
-                                                 error={errors[EMAIL] && touched[EMAIL]}
+                                                 error={errors[SELLING] && touched[SELLING]}
                                                  component={TextField}
                                                  type={"text"}
-                                                 name={EMAIL}
-                                                 label="Email"
-                                                 className={classes.formField}
-                                                 fullWidth
-                                            />
-                                        </Grid>
-                                    </Grid>
-
-                                    {/*/!*Address 1*!/*/}
-                                    <Grid item container direction={"row"} spacing={2}>
-                                        <Grid item>
-                                            <Field
-                                                 error={errors[STREET] && touched[STREET]}
-                                                 component={TextField}
-                                                 type={"text"}
-                                                 name={STREET}
-                                                 label="Street"
-                                                 className={classes.formField}
-                                                 fullWidth
-                                            />
-                                        </Grid>
-                                        <Grid item>
-                                            <Field
-                                                 error={errors[CITY] && touched[CITY]}
-                                                 component={TextField}
-                                                 type={"text"}
-                                                 name={CITY}
-                                                 label="City"
-                                                 className={classes.formField}
-                                                 fullWidth
-                                            />
-                                        </Grid>
-                                    </Grid>
-
-                                    {/*/!*Address 2*!/*/}
-                                    <Grid item container direction={"row"} spacing={2}>
-                                        <Grid item>
-                                            <Field
-                                                 error={errors[PROVINCE] && touched[PROVINCE]}
-                                                 component={TextField}
-                                                 type={"text"}
-                                                 name={PROVINCE}
-                                                 label="Province"
-                                                 className={classes.formField}
-                                                 fullWidth
-                                                 required
-                                            />
-                                        </Grid>
-                                        <Grid item>
-                                            <Field
-                                                 error={errors[ZIP] && touched[ZIP]}
-                                                 component={TextField}
-                                                 type={"text"}
-                                                 name={ZIP}
-                                                 label="Zip"
+                                                 name={SELLING}
+                                                 label="Selling Price"
                                                  className={classes.formField}
                                                  fullWidth
                                                  required
@@ -328,30 +259,13 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
                                         </Grid>
                                     </Grid>
 
-                                    {/*/!*Zone*!/*/}
                                     <Grid item container direction={"row"}>
-                                        <Grid item>
-                                            <Field
-                                                component={TextField}
-                                                type="text"
-                                                name={ZONE}
-                                                error={errors[ZONE] && touched[ZONE]}
-                                                label="Zone"
-                                                select
-                                                fullWidth
-                                                required
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                className={classes.formField}
-                                            >
-                                                <MenuItem value="">
-                                                    <em>none</em>
-                                                </MenuItem>
-                                                {zones.map((zone) => (
-                                                    <MenuItem key={zone.id} value={zone.id}>{zone.name}</MenuItem>
-                                                ))}
-                                            </Field>
+                                        <Grid item sm={12}>
+                                            <MultiLineInput
+                                                 name={DESCRIPTION}
+                                                 rows={3}
+                                                 placeholder={'Product Description'}
+                                            />
                                         </Grid>
                                     </Grid>
 
@@ -375,5 +289,4 @@ export default function AddShopForm({showForm, onCloseButtonHandler, zones, cate
             )}
         </Formik>
     )
-
 }

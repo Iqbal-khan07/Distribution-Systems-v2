@@ -17,7 +17,7 @@ import { DatePicker } from 'formik-material-ui-pickers';
 
 import ShopSelect from "./components/ShopSelect/ShopSelect";
 import PaymentMethodSelect from "./components/PaymentMethodSelect/PaymentMethodSelect";
-import Memo from "./components/Memo/Memo";
+import MultiLineInput from "../../../../shared/MultiLineInput/MultiLineInput";
 import OrderProductTable from "./components/OrderProductTable/OrderProductTable";
 
 import { UserContext } from "../../../../context/UserContext";
@@ -140,7 +140,6 @@ const areInventoriesEqual = (inventory1, inventory2) => {
         }
     }
     return true;
-
 }
 
 const initializeItemQuantity = (products) => {
@@ -286,8 +285,10 @@ export default function OrderForm({ showForm, onCloseButtonHandler, products, sh
                                         />
                                     </Grid>
                                     <Grid item>
-                                        <Memo
+                                        <MultiLineInput
                                             name={MEMO}
+                                            rows={3}
+                                            placeholder={'Memo'}
                                         />
                                     </Grid>
                                     <Grid item>

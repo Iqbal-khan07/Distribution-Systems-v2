@@ -13,7 +13,6 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import LockIcon from '@material-ui/icons/Lock';
 import Button from '@material-ui/core/Button';
-import styles from './SignInDialogue.module.css';
 import { useHistory } from "react-router-dom";
 
 import * as Yup from "yup"
@@ -21,6 +20,54 @@ import {Formik, Form, Field} from "formik"
 import axios from 'axios';
 import {UserContext} from "../../context/UserContext";
 import {Typography} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() => ({
+    dialogue: {
+        textAlign: 'center',
+        color: '#5DB285',
+        fontSize: '25px'
+    },
+    container: {
+        paddingTop: '24px',
+        paddingBottom: '24px',
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    center:{
+        width: '100%',
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+
+    oauthButton: {
+        marginBottom: '20px'
+    },
+
+    loginButton: {
+        color: 'rgb(255, 255, 255, 0.7)',
+        background: '#5DB285',
+        paddingRight: '15px',
+        paddingLeft: '15px',
+        borderRadius: '15px',
+        margin: '10px',
+        '&:hover': {
+            background: '#427C5D'   
+        }
+    },
+    link: {
+        color: '#5DB285',
+        '&:hover': {
+            color: '#427C5D'
+        }
+    }
+}))
+
+
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -37,6 +84,7 @@ const validationSchema = Yup.object({
 })
 
 export default function SignInDialogue({ onClose, open }) {
+    const classes = useStyles();
     const { login } = useContext(UserContext);
     const [ error, setError ] = useState(false)
     let history = useHistory();
@@ -45,8 +93,7 @@ export default function SignInDialogue({ onClose, open }) {
         login(id, image_url, `${name_first} ${name_last}`, sys_user_role.name)
         history.push("/dashboard");
     }
-
-
+    
     return (
       <Formik
           initialValues={{
@@ -92,20 +139,20 @@ export default function SignInDialogue({ onClose, open }) {
                     fullWidth
                   >
                      <DialogTitle
-                         className={styles.dialogue}
+                         className={classes.dialogue}
                          disable
                          Typography
                      >
                        Sign In
                      </DialogTitle>
-                    <DialogContent className={styles.container} component="main">
-                      <Grid className={styles.oauthButton}>
+                    <DialogContent className={classes.container} component="main">
+                      <Grid className={classes.oauthButton}>
                         <GoogleButton
                             setError={setError}
                             loginHandler={handleLogin}
                         />
                       </Grid>
-                      <Grid className={styles.oauthButton}>
+                      <Grid className={classes.oauthButton}>
                         <FacebookButton
                             setError={setError}
                             loginHandler={handleLogin}
@@ -150,14 +197,14 @@ export default function SignInDialogue({ onClose, open }) {
                               </InputAdornment>),
                           }}
                         />
-                        <div className={styles.center}>
+                        <div className={classes.center}>
                           <Grid item xs>
-                            <Link href="#" variant="body2" className={styles.link}>
+                            <Link href="#" variant="body2" className={classes.link}>
                               Forgot password?
                             </Link>
                           </Grid>
                           <Button
-                              className={styles.loginButton}
+                              className={classes.loginButton}
                               disabled={isSubmitting}
                               onClick={submitForm}
                               type="submit"
@@ -165,7 +212,7 @@ export default function SignInDialogue({ onClose, open }) {
                             Log In
                           </Button>
                           <Grid item>
-                            <Link href="#" variant="body2" className={styles.link}>
+                            <Link href="#" variant="body2" className={classes.link}>
                               {"Don't have an account? Sign Up"}
                             </Link>
                           </Grid>
