@@ -76,7 +76,7 @@ export default function SetGoalForm({ reload, id, name }) {
                         }
                     });
                     setANotification(`Monthly goal for ${name} has been set successfully!`, SUCCESSFUL);
-                    reload();
+                    reload(prevCheck => prevCheck + 1);
                     resetForm();
                 } catch (e) {
                     setANotification('Failed to set the monthly goal! Please try again', ERROR);

@@ -96,6 +96,8 @@ const useStyles = makeStyles((theme) => ({
 
 const FIRST_NAME = 'first';
 const LAST_NAME = 'last';
+const USER_NAME = 'user';
+const PASSWORD = 'password';
 const IMAGE_URL = 'imageUrl';
 const PHONE = 'phone';
 const GMAIL = 'gmail';
@@ -107,8 +109,11 @@ const VALID_PHONE_REGEX = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([
 const validationSchema = Yup.object({
     [FIRST_NAME]: Yup.string().required('First name is required'),
     [LAST_NAME]: Yup.string().required('Last name is required'),
+    [USER_NAME]: Yup.string().required('User name is required'),
+    [PASSWORD]: Yup.string().required('Password is required'),
     [IMAGE_URL]: Yup.string().url('Enter a Valid Image Url'),
-    [PHONE]: Yup.string().matches(VALID_PHONE_REGEX, "Add a valid phone number").required('Phone number is required'),
+    [PHONE]: Yup.string().matches(VALID_PHONE_REGEX, "Add a valid phone number")
+    .required('Phone number is required').min(10, 'Must be exactly 10 digits').max(10, 'Must be exactly 10 digits'),
     [GMAIL]: Yup.string().email('Valid email is required'),
     [FACEBOOK_EMAIL]: Yup.string().email('Valid email is required'),
     [ROLE]: Yup.string("must be number").required("Please choose a role"),
@@ -123,6 +128,8 @@ export default function AddEmployeeForm({ showForm, onCloseButtonHandler, roles,
             initialValues={{
                 [FIRST_NAME]: '',
                 [LAST_NAME]: '',
+                [USER_NAME]: '',
+                [PASSWORD]: '',
                 [IMAGE_URL]: '',
                 [PHONE]: '',
                 [GMAIL]: '',
@@ -133,25 +140,27 @@ export default function AddEmployeeForm({ showForm, onCloseButtonHandler, roles,
             onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setSubmitting(true)
                 try {
-                    await axios.post('/create/employee', {
+                    await axios.post('/create/user', {
                         data: {
-                            first_name: values[FIRST_NAME],
-                            last_name: values[LAST_NAME],
+                            name_first: values[FIRST_NAME],
+                            name_last: values[LAST_NAME],
+                            sys_username: values[USER_NAME],
+                            password: values[PASSWORD],
+                            email_google: values[GMAIL],
+                            email_fb: values[FACEBOOK_EMAIL],
                             image_url: values[IMAGE_URL],
                             phone_number: values[PHONE],
-                            gmail: values[GMAIL],
-                            facebook_email: values[FACEBOOK_EMAIL],
                             role: values[ROLE]
                         }
                     })
-                    setANotification(`Employee added successfully!`, SUCCESSFUL);
+                    setANotification(`Successfully added ${values[FIRST_NAME]} ${values[LAST_NAME]} as an employee!`, SUCCESSFUL);
                     reload();
-                    setSubmitting(false)
+                    setSubmitting(false);
                 }catch (e){
-                    setANotification('Failed to Add Employee! Please try again', ERROR)
+                    setANotification('Failed to Add Employee! Please try again', ERROR);
                 }finally {
-                    resetForm()
-                    onCloseButtonHandler()
+                    resetForm();
+                    onCloseButtonHandler();
                 }
             }}
         >
@@ -221,6 +230,34 @@ export default function AddEmployeeForm({ showForm, onCloseButtonHandler, roles,
                                         </Grid>
                                     </Grid>
 
+                                    {/*/!*sign in info*!/*/}
+                                    <Grid item container direction={"row"} spacing={2}>
+                                        <Grid item>
+                                            <Field
+                                                 error={errors[USER_NAME] && touched[USER_NAME]}
+                                                 component={TextField}
+                                                 type="text"
+                                                 name={USER_NAME}
+                                                 label="Username"
+                                                 className={classes.formField}
+                                                 fullWidth
+                                                 required
+                                            />
+                                        </Grid>
+                                        <Grid item>
+                                            <Field
+                                                 error={errors[PASSWORD] && touched[PASSWORD]}
+                                                 component={TextField}
+                                                 type="password"
+                                                 name={PASSWORD}
+                                                 label="Password"
+                                                 className={classes.formField}
+                                                 required
+                                                 fullWidth
+                                            />
+                                        </Grid>
+                                    </Grid>
+
                                     {/*/!*contact info*!/*/}
                                     <Grid item container direction={"row"} spacing={2}>
                                         <Grid item>
@@ -244,6 +281,7 @@ export default function AddEmployeeForm({ showForm, onCloseButtonHandler, roles,
                                                  label="Gmail"
                                                  className={classes.formField}
                                                  fullWidth
+                                                 required
                                             />
                                         </Grid>
                                     </Grid>
@@ -258,6 +296,7 @@ export default function AddEmployeeForm({ showForm, onCloseButtonHandler, roles,
                                                  label="Facebook Email"
                                                  className={classes.formField}
                                                  fullWidth
+                                                 required
                                             />
                                         </Grid>
                                         <Grid item>

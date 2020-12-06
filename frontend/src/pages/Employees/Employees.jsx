@@ -19,18 +19,6 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-// const mapShopsToShopOptions = (shops) => {
-//     return shops.map((s) => {
-//         return {
-//             id: s.id,
-//             name: s.name,
-//             address: `${s.street}, ${'USA'}`,
-//             status: 'Pending'
-//         }
-//     })
-// }
-
-
 const Employees = () => {
     const classes = useStyles();
     const { user } = useContext(UserContext);
@@ -42,24 +30,14 @@ const Employees = () => {
     const [showOTComponents, setShowOTComponents] = useState(false);
     const [roles, setRoles] = useState([]);
     const [reload, setReload] = useState(false);
-    // useEffect(() => {
-    //     const roleOptions = ([
-    //         { id: 1, role: 'administrator' },
-    //         { id: 2, role: 'order-taker' },
-    //         { id: 3, role: 'order-fulfiller' }
-    //     ]);
-    //     setLoading(false);
-    // }, []);
+
     useEffect(() => {
         async function fetchData() {
             let response = await axios.get("/users/all");
             let body = response.data;
 
-            const roleOptions = new Set();
+            const roleOptions = [];
             const rawEmployees = body.data.map((s) => {
-                const pair = {id: s.sys_user_role.id, role: s.sys_user_role.name};
-                if (!roleOptions.has(pair))
-                    roleOptions.add(pair);
                 return {
                     id: s.id,
                     first: s.name_first,
@@ -73,10 +51,15 @@ const Employees = () => {
                     role: s.sys_user_role.name,
                 }
             });
-
+            let roles = [
+                {id: 1, role: "Order Taker"},
+                {id: 2, role: "Order Fulfiller"},
+                {id: 3, role: "Administrator"}
+            ]
+              
             setEmployees(rawEmployees);
             setSelectedEmployee(rawEmployees[0]);
-            setRoles(roleOptions);
+            setRoles(roles);
             setLoading(false);
         }
         fetchData().then()
@@ -87,7 +70,7 @@ const Employees = () => {
     const employeeShowDetailHandler = (employeeId) => {
         const selectedShopRaw = employees.filter((o) => o.id === employeeId);
         setSelectedEmployee(selectedShopRaw[0]);
-        switch(selectedShopRaw[0].role) {
+        switch (selectedShopRaw[0].role) {
             case "Order Fulfiller":
                 setShowOFComponents(true);
                 setShowOTComponents(false);
@@ -143,28 +126,28 @@ const Employees = () => {
                                 </Grid>
                                 <Grid item lg={3} xs={12}>
                                     {showOFComponents ?
-                                    <OrdersFulfilledCard
-                                        name={`${selectedEmployee.first} ${selectedEmployee.last}`}
-                                        delivered={0}
-                                        total={4}
-                                    /> : null
+                                        <OrdersFulfilledCard
+                                            name={`${selectedEmployee.first} ${selectedEmployee.last}`}
+                                            delivered={0}
+                                            total={4}
+                                        /> : null
                                     }
                                     {showOTComponents ?
-                                    <OrderTakerGoalCard 
-                                        name={`${selectedEmployee.first} ${selectedEmployee.last}`}
-                                        id={selectedEmployee.id}
-                                        goal={10000}
-                                        current={2}
-                                        order={3}
-                                    /> : null
+                                        <OrderTakerGoalCard
+                                            name={`${selectedEmployee.first} ${selectedEmployee.last}`}
+                                            id={selectedEmployee.id}
+                                            goal={10000}
+                                            current={2}
+                                            order={3}
+                                        /> : null
                                     }
                                 </Grid>
                                 <Grid item lg={4} xs={12}>
-                                    {showOTComponents?
-                                    <SetGoalForm 
-                                        id={selectedEmployee.id}
-                                        name={`${selectedEmployee.first} ${selectedEmployee.last}`}
-                                    /> : null
+                                    {showOTComponents ?
+                                        <SetGoalForm
+                                            id={selectedEmployee.id}
+                                            name={`${selectedEmployee.first} ${selectedEmployee.last}`}
+                                        /> : null
                                     }
                                 </Grid>
                             </Grid>
