@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '5px',
     },
     heading: {
+        fontSize: 40,
         padding: '5px',
         textShadow: '1px 1px 4px #b8b8b8',
     },
