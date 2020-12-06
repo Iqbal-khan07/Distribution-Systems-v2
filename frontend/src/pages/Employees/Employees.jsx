@@ -42,51 +42,45 @@ const Employees = () => {
     const [showOTComponents, setShowOTComponents] = useState(false);
     const [roles, setRoles] = useState([]);
     const [reload, setReload] = useState(false);
-    useEffect(() => {
-        const rawEmployees = ([
-            { id: 10, name: 'John Smith', userName: 'jsmith', role: 'order-taker' },
-            { id: 11, name: 'Jane Snow', userName: 'jane123', role: 'admin' },
-            { id: 9, name: 'William Shakespeare', userName: 'will123', role: 'order-fulfiller' }
-        ]);
-        const roleOptions = ([
-            { id: 1, role: 'administrator' },
-            { id: 2, role: 'order-taker' },
-            { id: 3, role: 'order-fulfiller' }
-        ]);
-        setEmployees(rawEmployees);
-        setSelectedEmployee(rawEmployees[0]);
-        setRoles(roleOptions);
-        setLoading(false);
-    }, []);
     // useEffect(() => {
-    //     async function fetchData() {
-    //         let response = await axios.get("/shops/all");
-    //         let body = response.data;
+    //     const roleOptions = ([
+    //         { id: 1, role: 'administrator' },
+    //         { id: 2, role: 'order-taker' },
+    //         { id: 3, role: 'order-fulfiller' }
+    //     ]);
+    //     setLoading(false);
+    // }, []);
+    useEffect(() => {
+        async function fetchData() {
+            let response = await axios.get("/users/all");
+            let body = response.data;
 
-    //         const shopOptions = body.data.map((s) => {
-    //             return {
-    //                 id: s.id,
-    //                 name: s.name,
-    //                 userName: "",
-    //                 role: "",
-    //             }
-    //         });
+            const roleOptions = new Set();
+            const rawEmployees = body.data.map((s) => {
+                const pair = {id: s.sys_user_role.id, role: s.sys_user_role.name};
+                if (!roleOptions.has(pair))
+                    roleOptions.add(pair);
+                return {
+                    id: s.id,
+                    first: s.name_first,
+                    last: s.name_last,
+                    userName: s.sys_username,
+                    gmail: s.email_google,
+                    fbEmail: s.email_fb,
+                    image: s.image_url,
+                    phone: s.phone_number,
+                    roleId: s.sys_user_role.id,
+                    role: s.sys_user_role.name,
+                }
+            });
 
-    //         response = await axios.get("/zones/all");
-    //         body = response.data;
-    //         const zoneOptions = body.data.map((z) => ({
-    //             id: z.id,
-    //             name: z.name
-    //         }))
-
-    //         setCategories(categoryOptions);
-    //         setZones(zoneOptions);
-    //         setSelectedShop(shopOptions[0]);
-    //         setShops(shopOptions);
-    //         setLoading(false);
-    //     }
-    //     fetchData().then()
-    // }, [reload])
+            setEmployees(rawEmployees);
+            setSelectedEmployee(rawEmployees[0]);
+            setRoles(roleOptions);
+            setLoading(false);
+        }
+        fetchData().then()
+    }, [reload])
 
 
 
@@ -94,15 +88,15 @@ const Employees = () => {
         const selectedShopRaw = employees.filter((o) => o.id === employeeId);
         setSelectedEmployee(selectedShopRaw[0]);
         switch(selectedShopRaw[0].role) {
-            case "order-fulfiller":
+            case "Order Fulfiller":
                 setShowOFComponents(true);
                 setShowOTComponents(false);
                 break;
-            case "order-taker":
+            case "Order Taker":
                 setShowOFComponents(false);
                 setShowOTComponents(true);
                 break;
-            case "admin":
+            case "Administrator":
                 setShowOFComponents(false);
                 setShowOTComponents(false);
                 break;
@@ -150,14 +144,14 @@ const Employees = () => {
                                 <Grid item lg={3} xs={12}>
                                     {showOFComponents ?
                                     <OrdersFulfilledCard
-                                        name={selectedEmployee.name}
+                                        name={`${selectedEmployee.first} ${selectedEmployee.last}`}
                                         delivered={0}
                                         total={4}
                                     /> : null
                                     }
                                     {showOTComponents ?
                                     <OrderTakerGoalCard 
-                                        name={selectedEmployee.name}
+                                        name={`${selectedEmployee.first} ${selectedEmployee.last}`}
                                         goal={10000}
                                         current={2}
                                         order={3}
@@ -168,7 +162,7 @@ const Employees = () => {
                                     {showOTComponents?
                                     <SetGoalForm 
                                         id={selectedEmployee.id}
-                                        name={selectedEmployee.name}
+                                        name={`${selectedEmployee.first} ${selectedEmployee.last}`}
                                     /> : null
                                     }
                                 </Grid>
