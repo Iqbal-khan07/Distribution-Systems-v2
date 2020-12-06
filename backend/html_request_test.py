@@ -8,8 +8,8 @@ import requests
 import json_mock
 
 
-BASE_URL = "http://localhost:8080/api"
-#BASE_URL = "https://arcane-scrubland-51912.herokuapp.com/api"
+#BASE_URL = "http://localhost:8080/api"
+BASE_URL = "https://arcane-scrubland-51912.herokuapp.com/api"
 
 AUTH_DEFAULT = "/authenticate/default"
 AUTH_GOOGLE = "/authenticate/google"
