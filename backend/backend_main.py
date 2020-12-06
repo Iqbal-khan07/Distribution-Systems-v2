@@ -47,7 +47,7 @@ def db_bootstrap():
         return
 
 
-def restEndpoint():
+def endpoint_init():
     # Create Connexion Application Instance
     global app_connexion
     app_connexion = connexion.App(__name__, specification_dir="./")
@@ -58,7 +58,7 @@ def restEndpoint():
 
 if __name__ == "__main__":
     db_bootstrap()
-    restEndpoint()
+    endpoint_init()
     app_connexion.run(
         port=int(os.getenv("PORT", 8080)),
         host=os.getenv("IP", "0.0.0.0"),
