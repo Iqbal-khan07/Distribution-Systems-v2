@@ -40,21 +40,31 @@ export default function OrderTakerGoalCard(props) {
     const [goals, setGoals] = useState(null);
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.post("/goal/order_taker", {
+            await axios.post("/goal/order_taker", {
                 data: {
                     order_taker_id: props.id
                 }
             }
-            );
-            let body = response.data.data;
-            const rawGoals = {
-                goal: body.goal_total,
-                current: body.current_value_total,
-                order: body.num_orders_total
-            };
+            ).then(function (response) {
+                let body = response.data.data;
+                const rawGoals = {
+                    goal: body.goal_total,
+                    current: body.current_value_total,
+                    order: body.num_orders_total
+                };
 
-            setGoals(rawGoals);
-            setLoading(false);
+                setGoals(rawGoals);
+            }).catch(function (error) {
+                alert(error);
+                const rawGoals = {
+                    goal: 0,
+                    current: 0,
+                    order: 0
+                }
+                setGoals(rawGoals);
+            }).then(function () {
+                setLoading(false);
+            });
         }
         fetchData().then()
     }, [props])
