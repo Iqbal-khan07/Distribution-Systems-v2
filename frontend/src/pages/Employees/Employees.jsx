@@ -152,6 +152,7 @@ const Employees = () => {
                                     {showOTComponents ?
                                     <OrderTakerGoalCard 
                                         name={`${selectedEmployee.first} ${selectedEmployee.last}`}
+                                        id={selectedEmployee.id}
                                         goal={10000}
                                         current={2}
                                         order={3}

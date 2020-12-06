@@ -3,7 +3,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import DataDisplayUtils from "../../../../utils/DataDisplayUtils";
-import React from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import axios from 'axios';
+import React, { useState, useEffect } from "react";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +36,29 @@ const useStyles = makeStyles((theme) => ({
 
 export default function OrderTakerGoalCard(props) {
     const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [goals, setGoals] = useState(null);
+    useEffect(() => {
+        async function fetchData() {
+            let response = await axios.post("/goal/order_taker", {
+                data: {
+                    order_taker_id: props.id
+                }
+            }
+            );
+            let body = response.data.data;
+            const rawGoals = {
+                goal: body.goal_total,
+                current: body.current_value_total,
+                order: body.num_orders_total
+            };
+
+            setGoals(rawGoals);
+            setLoading(false);
+        }
+        fetchData().then()
+    }, [props])
+
     const section = (title, value) => {
         return (
             <div>
@@ -52,9 +77,16 @@ export default function OrderTakerGoalCard(props) {
                 <Typography variant="h6" className={classes.title} align="center">
                     {props.name}'s Goal Status
                 </Typography>
-                {section(DataDisplayUtils.numberWithCommas(props.goal), "Target for the Month")}
-                {section(DataDisplayUtils.numberWithCommas(props.current), "Current Sales Value")}
-                {section(DataDisplayUtils.numberWithCommas(props.order), "Orders Placed this Month")}
+                {!loading ? (
+                    <>
+
+                        {section(DataDisplayUtils.numberWithCommas(goals.goal), "Target for the Month")}
+                        {section(DataDisplayUtils.numberWithCommas(goals.current), "Current Sales Value")}
+                        {section(DataDisplayUtils.numberWithCommas(goals.order), "Orders Placed this Month")}
+                    </>
+                ) : <CircularProgress />
+                }
+
             </CardContent>
         </Card>
     );
