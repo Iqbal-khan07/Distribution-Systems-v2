@@ -3,12 +3,11 @@ sql_tables.py: all SQL table definitions and bootstrapping goes here
 """
 
 
-import flask_sqlalchemy
 import datetime
-from backend_main import db
+from backend_main import DB
 
 
-class Sys_user_role(db.Model):
+class Sys_user_role(DB.Model):
     """
     system user role database table definition
     Stores roles for sys_user
@@ -17,11 +16,11 @@ class Sys_user_role(db.Model):
     3 = Administrator
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(50), nullable=False, unique=True)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    name = DB.Column(DB.String(50), nullable=False, unique=True)
 
-    def __init__(self, na):
-        self.name = na
+    def __init__(self, name):
+        self.name = name
 
     def request_sys_user_role_info(self):
         """
@@ -29,7 +28,7 @@ class Sys_user_role(db.Model):
         """
 
         return {
-            "id": self.id, 
+            "id": self.id,
             "name": self.name
         }
 
@@ -46,35 +45,35 @@ class Sys_user_role(db.Model):
         database.session.commit()
 
 
-class Sys_user(db.Model):
+class Sys_user(DB.Model):
     """
     sys_user database table definition
     Stores all employee / system user information
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name_first = db.Column(db.String(50), nullable=False)
-    name_last = db.Column(db.String(50), nullable=False)
-    sys_username = db.Column(db.String(50), nullable=False, unique=True)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    name_first = DB.Column(DB.String(50), nullable=False)
+    name_last = DB.Column(DB.String(50), nullable=False)
+    sys_username = DB.Column(DB.String(50), nullable=False, unique=True)
     # Note, password is currently plain text. In the future,
     # make this a hash with a salt, make salt another field
-    password = db.Column(db.String(255), nullable=False)
-    email_google = db.Column(db.String(100), nullable=False, unique=True)
-    email_fb = db.Column(db.String(100), nullable=False, unique=True)
-    image_url = db.Column(db.String(500), nullable=False)
-    phone_number = db.Column(db.String(10), nullable=True)
-    role = db.Column(db.Integer, db.ForeignKey("sys_user_role.id"), nullable=False)
+    password = DB.Column(DB.String(255), nullable=False)
+    email_google = DB.Column(DB.String(100), nullable=False, unique=True)
+    email_fb = DB.Column(DB.String(100), nullable=False, unique=True)
+    image_url = DB.Column(DB.String(500), nullable=False)
+    phone_number = DB.Column(DB.String(10), nullable=True)
+    role = DB.Column(DB.Integer, DB.ForeignKey("sys_user_role.id"), nullable=False)
 
-    def __init__(self, nf, nl, su, pw, eg, ef, iu, pn, ro):
-        self.name_first = nf
-        self.name_last = nl
-        self.sys_username = su
-        self.password = pw
-        self.email_google = eg
-        self.email_fb = ef
-        self.image_url = iu
-        self.phone_number = pn
-        self.role = ro
+    def __init__(self, first, last, username, password, google, facebook, image, phone, role):
+        self.name_first = first
+        self.name_last = last
+        self.sys_username = username
+        self.password = password
+        self.email_google = google
+        self.email_fb = facebook
+        self.image_url = image
+        self.phone_number = phone
+        self.role = role
 
     def request_sys_user_info(self, database):
         """
@@ -114,10 +113,10 @@ class Sys_user(db.Model):
                 "order_taker@gmail.com",
                 "order_taker@other.com",
                 "https://images.squarespace-cdn.com/content/v1/55ad5011e4b026cf25" +
-                    "25000a/1441740484174-PTHHQBWISMSJUC9OS1RX/ke17ZwdGBToddI8pDm4" +
-                    "8kP06O0_IHyRXSOOiqwgWaApZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAg" +
-                    "TJucoTqqXjS3CfNDSuuf31e0tVEHLRkg2cosQUGLeQ33UzXdgIxPDaVwE3LlE" +
-                    "pL74qP4JVW4jCyXLPvvdR287iymYt8/the-letter-t.jpg",
+                "25000a/1441740484174-PTHHQBWISMSJUC9OS1RX/ke17ZwdGBToddI8pDm4" +
+                "8kP06O0_IHyRXSOOiqwgWaApZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAg" +
+                "TJucoTqqXjS3CfNDSuuf31e0tVEHLRkg2cosQUGLeQ33UzXdgIxPDaVwE3LlE" +
+                "pL74qP4JVW4jCyXLPvvdR287iymYt8/the-letter-t.jpg",
                 "1234567890",
                 1,
             )
@@ -144,8 +143,8 @@ class Sys_user(db.Model):
                 "administrator@gmail.com",
                 "administrator@other.com",
                 "https://lh3.googleusercontent.com/proxy/RNhuhNzPCOufEUuiXAZ6R49T" +
-                    "4H1qAjaXoVhXv7dZ4SDkTGXzkpFm8AsNAOxgxHgsRJGWuVa_OAM2l7iZ7YJDM" +
-                    "rrOe2AIi1U",
+                "4H1qAjaXoVhXv7dZ4SDkTGXzkpFm8AsNAOxgxHgsRJGWuVa_OAM2l7iZ7YJDM" +
+                "rrOe2AIi1U",
                 "1234567890",
                 3,
             )
@@ -159,7 +158,7 @@ class Sys_user(db.Model):
                 "dm464@njit.edu",
                 "idislexiaheart@aol.com",
                 "https://i0.wp.com/thevitpro.com/wp-content/uploads/2019/07/Lette" +
-                    "r-D.png?fit=551%2C640&ssl=1",
+                "r-D.png?fit=551%2C640&ssl=1",
                 "1234567890",
                 1,
             )
@@ -173,7 +172,7 @@ class Sys_user(db.Model):
                 "tma26@njit.edu",
                 "hellfrost@embarqmail.com",
                 "https://pioneerinstitute.org/wp-content/uploads/MBTA-T-sign-e143" +
-                    "8701323593.png",
+                "8701323593.png",
                 "9739199865",
                 2,
             )
@@ -187,8 +186,8 @@ class Sys_user(db.Model):
                 "aqadeniji@gmail.com",
                 "abdul83@ymail.com",
                 "https://lh3.googleusercontent.com/proxy/DuGp1GYoFa1QAqNutn5Ga0eWg" +
-                    "B2BlYJaHU5QeQpNJtSXIPOmdmBms6yPWP7F7MpUxd8kNtAqYtqMub-byZ-LJ-R" +
-                    "quvoun_xfE3eobkfctl0v",
+                "B2BlYJaHU5QeQpNJtSXIPOmdmBms6yPWP7F7MpUxd8kNtAqYtqMub-byZ-LJ-R" +
+                "quvoun_xfE3eobkfctl0v",
                 "1234567890",
                 2,
             )
@@ -202,7 +201,7 @@ class Sys_user(db.Model):
                 "zoraiznaeem9@gmail.com",
                 "zoraiznaeem9@gmail.com",
                 "https://static6.depositphotos.com/1001599/647/i/600/depositphoto" +
-                    "s_6477200-stock-photo-fire-letters-a-z.jpg",
+                "s_6477200-stock-photo-fire-letters-a-z.jpg",
                 "1234567890",
                 1,
             )
@@ -211,17 +210,17 @@ class Sys_user(db.Model):
         database.session.commit()
 
 
-class Zone(db.Model):
+class Zone(DB.Model):
     """
     zone database table definition
     Zones are assigned to companyies and shops
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False, unique=True)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    name = DB.Column(DB.String(100), nullable=False, unique=True)
 
-    def __init__(self, na):
-        self.name = na
+    def __init__(self, name):
+        self.name = name
 
     def request_zone_info(self):
         """
@@ -229,7 +228,7 @@ class Zone(db.Model):
         """
 
         return {
-            "id": self.id, 
+            "id": self.id,
             "name": self.name
         }
 
@@ -247,16 +246,16 @@ class Zone(db.Model):
         database.session.commit()
 
 
-class Shop_category(db.Model):
+class Shop_category(DB.Model):
     """
     shop category database table definition
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    type = db.Column(db.String(100), nullable=False, unique=True)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    type = DB.Column(DB.String(100), nullable=False, unique=True)
 
-    def __init__(self, ty):
-        self.type = ty
+    def __init__(self, sc_type):
+        self.type = sc_type
 
     def request_category_info(self):
         """
@@ -264,7 +263,7 @@ class Shop_category(db.Model):
         """
 
         return {
-            "id": self.id, 
+            "id": self.id,
             "type": self.type
         }
 
@@ -280,39 +279,39 @@ class Shop_category(db.Model):
         database.session.commit()
 
 
-class Shop(db.Model):
+class Shop(DB.Model):
     """
     shop database table definition
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=True)
-    image_url = db.Column(db.String(500), nullable=False)
-    phone_number = db.Column(db.String(10), nullable=True)
-    category = db.Column(db.Integer, db.ForeignKey("shop_category.id"), nullable=True)
-    street = db.Column(db.String(255), nullable=False)
-    city = db.Column(db.String(255), nullable=False)
-    providence = db.Column(db.String(255), nullable=False)
-    zip_4 = db.Column(db.String(10), nullable=False)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    name = DB.Column(DB.String(100), nullable=False)
+    email = DB.Column(DB.String(100), nullable=True)
+    image_url = DB.Column(DB.String(500), nullable=False)
+    phone_number = DB.Column(DB.String(10), nullable=True)
+    category = DB.Column(DB.Integer, DB.ForeignKey("shop_category.id"), nullable=True)
+    street = DB.Column(DB.String(255), nullable=False)
+    city = DB.Column(DB.String(255), nullable=False)
+    providence = DB.Column(DB.String(255), nullable=False)
+    zip_4 = DB.Column(DB.String(10), nullable=False)
 
-    def __init__(self, na, em, iu, pn, cat, st, ci, pr, zi):
-        self.name = na
-        self.email = em
-        self.image_url = iu
-        self.phone_number = pn
-        self.category = cat
-        self.street = st
-        self.city = ci
-        self.providence = pr
-        self.zip_4 = zi
+    def __init__(self, name, email, image, phone, category, street, city, providence, zipcode):
+        self.name = name
+        self.email = email
+        self.image_url = image
+        self.phone_number = phone
+        self.category = category
+        self.street = street
+        self.city = city
+        self.providence = providence
+        self.zip_4 = zipcode
 
     def request_shop_info(self, database):
         """
         produces a dictionary of all relevant shop information
         """
 
-        if self.category != None:
+        if self.category is not None:
             shop_category_info = (
                 database.session.query(Shop_category)
                 .filter(Shop_category.id == self.category)
@@ -355,7 +354,7 @@ class Shop(db.Model):
                 "Temp Store 1",
                 None,
                 "https://yt3.ggpht.com/ytc/AAUvwnjLNdkBK-GXpJJQ8K9Nku_gHwS5f" +
-                    "WUKkq0BEoPgTA=s900-c-k-c0x00ffffff-no-rj",
+                "WUKkq0BEoPgTA=s900-c-k-c0x00ffffff-no-rj",
                 "1234567890",
                 None,
                 "Street 1",
@@ -369,7 +368,7 @@ class Shop(db.Model):
                 "Temp Store 2",
                 "ts2@store.com",
                 "https://www.clker.com/cliparts/V/H/K/p/p/u/number-2-black-" +
-                    "hi.png",
+                "hi.png",
                 "1234567890",
                 1,
                 "Street 2",
@@ -395,21 +394,21 @@ class Shop(db.Model):
         database.session.commit()
 
 
-class Shop_zone(db.Model):
+class Shop_zone(DB.Model):
     """
     shop_zone database table definition
     """
 
-    shop = db.Column(
-        db.Integer, db.ForeignKey("shop.id"), primary_key=True, nullable=False
+    shop = DB.Column(
+        DB.Integer, DB.ForeignKey("shop.id"), primary_key=True, nullable=False
     )
-    zone = db.Column(
-        db.Integer, db.ForeignKey("zone.id"), primary_key=True, nullable=False
+    zone = DB.Column(
+        DB.Integer, DB.ForeignKey("zone.id"), primary_key=True, nullable=False
     )
 
-    def __init__(self, sh, zo):
-        self.shop = sh
-        self.zone = zo
+    def __init__(self, shop, zone):
+        self.shop = shop
+        self.zone = zone
 
     def request_zone_info(self, database):
         """
@@ -421,7 +420,7 @@ class Shop_zone(db.Model):
         ].name
 
         return {
-            "id": self.zone, 
+            "id": self.zone,
             "name": zone_name
         }
 
@@ -444,18 +443,18 @@ class Shop_zone(db.Model):
         database.session.commit()
 
 
-class Company(db.Model):
+class Company(DB.Model):
     """
     company database table definition
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False, unique=True)
-    image_url = db.Column(db.String(500), nullable=False)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    name = DB.Column(DB.String(100), nullable=False, unique=True)
+    image_url = DB.Column(DB.String(500), nullable=False)
 
-    def __init__(self, na, iu):
-        self.name = na
-        self.image_url = iu
+    def __init__(self, name, image):
+        self.name = name
+        self.image_url = image
 
     def request_company_info(self, database):
         """
@@ -490,37 +489,37 @@ class Company(db.Model):
             Company(
                 "Company 1",
                 "https://upload.wikimedia.org/wikipedia/commons/thum" +
-                    "b/3/3f/NYCS-bull-trans-1.svg/1024px-NYCS-bull-tr" +
-                    "ans-1.svg.png"
+                "b/3/3f/NYCS-bull-trans-1.svg/1024px-NYCS-bull-tr" +
+                "ans-1.svg.png"
             )
         )
         database.session.add(
             Company(
                 "Company 2",
                 "https://upload.wikimedia.org/wikipedia/commons/thum" +
-                    "b/6/61/NYCS-bull-trans-2.svg/1200px-NYCS-bull-tr" +
-                    "ans-\2.svg.png"
+                "b/6/61/NYCS-bull-trans-2.svg/1200px-NYCS-bull-tr" +
+                "ans-\2.svg.png"
             )
         )
 
         database.session.commit()
 
 
-class Company_zone(db.Model):
+class Company_zone(DB.Model):
     """
     company_zone database table definition
     """
 
-    company = db.Column(
-        db.Integer, db.ForeignKey("company.id"), primary_key=True, nullable=False
+    company = DB.Column(
+        DB.Integer, DB.ForeignKey("company.id"), primary_key=True, nullable=False
     )
-    zone = db.Column(
-        db.Integer, db.ForeignKey("zone.id"), primary_key=True, nullable=False
+    zone = DB.Column(
+        DB.Integer, DB.ForeignKey("zone.id"), primary_key=True, nullable=False
     )
 
-    def __init__(self, co, zo):
-        self.company = co
-        self.zone = zo
+    def __init__(self, company, zone):
+        self.company = company
+        self.zone = zone
 
     def request_zone_info(self, database):
         """
@@ -532,7 +531,7 @@ class Company_zone(db.Model):
         ].name
 
         return {
-            "id": self.zone, 
+            "id": self.zone,
             "name": zone_name
         }
 
@@ -551,30 +550,30 @@ class Company_zone(db.Model):
         database.session.commit()
 
 
-class Company_product(db.Model):
+class Company_product(DB.Model):
     """
     company_product database table definition
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    company = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    price_buy = db.Column(db.Numeric(10, 2), nullable=False)
-    price_sell = db.Column(db.Numeric(10, 2), nullable=False)
-    units_per_price = db.Column(db.Integer, nullable=False)
-    stock = db.Column(db.Integer, nullable=False)
-    image_url = db.Column(db.String(500), nullable=False)
-    description = db.Column(db.String(255), nullable=True)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    company = DB.Column(DB.Integer, DB.ForeignKey("company.id"), nullable=False)
+    name = DB.Column(DB.String(100), nullable=False)
+    price_buy = DB.Column(DB.Numeric(10, 2), nullable=False)
+    price_sell = DB.Column(DB.Numeric(10, 2), nullable=False)
+    units_per_price = DB.Column(DB.Integer, nullable=False)
+    stock = DB.Column(DB.Integer, nullable=False)
+    image_url = DB.Column(DB.String(500), nullable=False)
+    description = DB.Column(DB.String(255), nullable=True)
 
-    def __init__(self, co, na, bp, sp, upp, st, iu, de):
-        self.company = co
-        self.name = na
-        self.price_buy = bp
-        self.price_sell = sp
-        self.units_per_price = upp
-        self.stock = st
-        self.image_url = iu
-        self.description = de
+    def __init__(self, company, name, buy, sell, unit, stock, image, description):
+        self.company = company
+        self.name = name
+        self.price_buy = buy
+        self.price_sell = sell
+        self.units_per_price = unit
+        self.stock = stock
+        self.image_url = image
+        self.description = description
 
     def request_company_product_info(self, database):
         """
@@ -604,128 +603,138 @@ class Company_product(db.Model):
         database bootstrap function for company_product
         """
 
-        database.session.add(Company_product(
-            1,
-            "C1 Item 1",
-            1.00,
-            2.00,
-            1,
-            10,
-            "https://www.kindpng.com/picc/m/11-112771_1-number-" + 
+        database.session.add(
+            Company_product(
+                1,
+                "C1 Item 1",
+                1.00,
+                2.00,
+                1,
+                10,
+                "https://www.kindpng.com/picc/m/11-112771_1-number-" +
                 "circle-desgin-png-1-2-3.png",
-            None
+                None
             )
         )
-        database.session.add(Company_product(
-            1,
-            "C1 Item 2",
-            2.00,
-            4.00,
-            2,
-            12,
-            "https://cdn.picpng.com/2/photo-2-35361.png",
-            "Item 2!"
+        database.session.add(
+            Company_product(
+                1,
+                "C1 Item 2",
+                2.00,
+                4.00,
+                2,
+                12,
+                "https://cdn.picpng.com/2/photo-2-35361.png",
+                "Item 2!"
             )
         )
-        database.session.add(Company_product(
-            1,
-            "C1 Item 3",
-            300.00,
-            600.00,
-            30,
-            33,
-            "https://blognumbers.files.wordpress.com/2010/09/3.jpg",
-            "Big Item 3"
+        database.session.add(
+            Company_product(
+                1,
+                "C1 Item 3",
+                300.00,
+                600.00,
+                30,
+                33,
+                "https://blognumbers.files.wordpress.com/2010/09/3.jpg",
+                "Big Item 3"
             )
         )
-        database.session.add(Company_product(
-            1,
-            "C1 Item 4",
-            44.00,
-            88.00,
-            4,
-            100,
-            "https://blognumbers.files.wordpress.com/2010/09/4.jpg",
-            None
+        database.session.add(
+            Company_product(
+                1,
+                "C1 Item 4",
+                44.00,
+                88.00,
+                4,
+                100,
+                "https://blognumbers.files.wordpress.com/2010/09/4.jpg",
+                None
             )
         )
 
-        database.session.add(Company_product(
-            2,
-            "C2 Item 1",
-            100.00,
-            200.00,
-            1,
-            22,
-            "https://www.kindpng.com/picc/m/11-112771_1-number-" + 
+        database.session.add(
+            Company_product(
+                2,
+                "C2 Item 1",
+                100.00,
+                200.00,
+                1,
+                22,
+                "https://www.kindpng.com/picc/m/11-112771_1-number-" +
                 "circle-desgin-png-1-2-3.png",
-            "Big Item"
+                "Big Item"
             )
         )
-        database.session.add(Company_product(
-            2,
-            "C2 Item 2",
-            0.01,
-            0.02,
-            1,
-            33,
-            "https://cdn.picpng.com/2/photo-2-35361.png",
-            "Small Item"
+        database.session.add(
+            Company_product(
+                2,
+                "C2 Item 2",
+                0.01,
+                0.02,
+                1,
+                33,
+                "https://cdn.picpng.com/2/photo-2-35361.png",
+                "Small Item"
             )
         )
-        database.session.add(Company_product(
-            2,
-            "C2 Item 3",
-            10000.00,
-            20000.00,
-            1,
-            5,
-            "https://blognumbers.files.wordpress.com/2010/09/3.jpg",
-            "Huge Item")
+        database.session.add(
+            Company_product(
+                2,
+                "C2 Item 3",
+                10000.00,
+                20000.00,
+                1,
+                5,
+                "https://blognumbers.files.wordpress.com/2010/09/3.jpg",
+                "Huge Item"
+            )
         )
-        database.session.add(Company_product(
-            2,
-            "C2 Item 4",
-            4.44,
-            8.88,
-            1,
-            400,
-            "https://blognumbers.files.wordpress.com/2010/09/4.jpg",
-            None
+        database.session.add(
+            Company_product(
+                2,
+                "C2 Item 4",
+                4.44,
+                8.88,
+                1,
+                400,
+                "https://blognumbers.files.wordpress.com/2010/09/4.jpg",
+                None
             )
         )
 
         database.session.commit()
 
 
-class Shop_order(db.Model):
+class Shop_order(DB.Model):
     """
     shop_order database table definition
     """
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    shop = db.Column(db.Integer, db.ForeignKey("shop.id"), nullable=False)
-    price_due = db.Column(db.Numeric(10, 2), nullable=False)
-    price_paid = db.Column(db.Boolean(), nullable=False)
-    memo = db.Column(db.String(500), nullable=False)
-    date_ordered = db.Column(db.DateTime(True), nullable=False)
-    date_delivered_projected = db.Column(db.DateTime(True), nullable=False)
-    date_delivered = db.Column(db.DateTime(True), nullable=True)
-    order_taker = db.Column(db.Integer, db.ForeignKey("sys_user.id"), nullable=False)
-    order_fulfiller = db.Column(db.Integer, db.ForeignKey("sys_user.id"), nullable=True)
-    completed = db.Column(db.Boolean(), nullable=False)
+    id = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    shop = DB.Column(DB.Integer, DB.ForeignKey("shop.id"), nullable=False)
+    price_due = DB.Column(DB.Numeric(10, 2), nullable=False)
+    price_paid = DB.Column(DB.Boolean(), nullable=False)
+    memo = DB.Column(DB.String(500), nullable=False)
+    date_ordered = DB.Column(DB.DateTime(True), nullable=False)
+    date_delivered_projected = DB.Column(DB.DateTime(True), nullable=False)
+    date_delivered = DB.Column(DB.DateTime(True), nullable=True)
+    order_taker = DB.Column(DB.Integer, DB.ForeignKey("sys_user.id"), nullable=False)
+    order_fulfiller = DB.Column(DB.Integer, DB.ForeignKey("sys_user.id"), nullable=True)
+    completed = DB.Column(DB.Boolean(), nullable=False)
 
-    def __init__(self, sh, pd, pp, me, do, ddp, dd, ot, of, co):
-        self.shop = sh
-        self.price_due = pd
-        self.price_paid = pp
-        self.memo = me
-        self.date_ordered = do
-        self.date_delivered_projected = ddp
-        self.date_delivered = dd
-        self.order_taker = ot
-        self.order_fulfiller = of
-        self.completed = co
+    def __init__(self, shop, due, paid, memo, ordered, projected,
+                 delivered, taker, fulfiller, completed):
+        self.shop = shop
+        self.price_due = due
+        self.price_paid = paid
+        self.memo = memo
+        self.date_ordered = ordered
+        self.date_delivered_projected = projected
+        self.date_delivered = delivered
+        self.order_taker = taker
+        self.order_fulfiller = fulfiller
+        self.completed = completed
 
     def request_shop_order(self, database):
         """
@@ -742,7 +751,7 @@ class Shop_order(db.Model):
             .all()
         )[0].request_sys_user_info(database)
 
-        if self.order_fulfiller != None:
+        if self.order_fulfiller is not None:
             order_fulfiller = (
                 database.session.query(Sys_user)
                 .filter(Sys_user.id == self.order_fulfiller)
@@ -790,30 +799,30 @@ class Shop_order(db.Model):
         # order placed and paid
         database.session.add(
             Shop_order(
-                1, 
-                40614.00, 
-                True, 
-                "test 1", 
-                current_time_utc, 
-                week_forward, 
-                None, 
-                1, 
-                None, 
+                1,
+                40614.00,
+                True,
+                "test 1",
+                current_time_utc,
+                week_forward,
+                None,
+                1,
+                None,
                 False
             )
         )
         # order placed and not paid
         database.session.add(
             Shop_order(
-                2, 
-                7928.00, 
-                False, 
-                "test 2", 
-                current_time_utc, 
-                week_forward, 
-                None, 
-                1, 
-                None, 
+                2,
+                7928.00,
+                False,
+                "test 2",
+                current_time_utc,
+                week_forward,
+                None,
+                1,
+                None,
                 False
             )
         )
@@ -836,26 +845,26 @@ class Shop_order(db.Model):
         database.session.commit()
 
 
-class Shop_order_item(db.Model):
+class Shop_order_item(DB.Model):
     """
     shop_order_item database table definition
     """
 
-    shop_order = db.Column(
-        db.Integer, db.ForeignKey("shop_order.id"), primary_key=True, nullable=False
+    shop_order = DB.Column(
+        DB.Integer, DB.ForeignKey("shop_order.id"), primary_key=True, nullable=False
     )
-    company_product = db.Column(
-        db.Integer,
-        db.ForeignKey("company_product.id"),
+    company_product = DB.Column(
+        DB.Integer,
+        DB.ForeignKey("company_product.id"),
         primary_key=True,
         nullable=False,
     )
-    quantity_units = db.Column(db.Integer, nullable=False)
+    quantity_units = DB.Column(DB.Integer, nullable=False)
 
-    def __init__(self, so, cp, qu):
-        self.shop_order = so
-        self.company_product = cp
-        self.quantity_units = qu
+    def __init__(self, order, company, units):
+        self.shop_order = order
+        self.company_product = company
+        self.quantity_units = units
 
     def request_shop_order_item_info(self, database):
         """
@@ -896,23 +905,23 @@ class Shop_order_item(db.Model):
         database.session.commit()
 
 
-class Order_taker_goal(db.Model):
+class Order_taker_goal(DB.Model):
     """
     order_taker_goal database table definition
     """
 
-    order_taker = db.Column(
-        db.Integer, db.ForeignKey("sys_user.id"), primary_key=True, nullable=False
+    order_taker = DB.Column(
+        DB.Integer, DB.ForeignKey("sys_user.id"), primary_key=True, nullable=False
     )
-    month = db.Column(db.Integer, primary_key=True, nullable=False)
-    year = db.Column(db.Integer, primary_key=True, nullable=False)
-    goal_value = db.Column(db.Numeric(10, 2), nullable=False)
+    month = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    year = DB.Column(DB.Integer, primary_key=True, nullable=False)
+    goal_value = DB.Column(DB.Numeric(10, 2), nullable=False)
 
-    def __init__(self, ot, mo, ye, gv):
-        self.order_taker = ot
-        self.month = mo
-        self.year = ye
-        self.goal_value = gv
+    def __init__(self, taker, month, year, value):
+        self.order_taker = taker
+        self.month = month
+        self.year = year
+        self.goal_value = value
 
     def request_order_taker_goal_info(self):
         """

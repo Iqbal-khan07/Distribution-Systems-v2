@@ -3,17 +3,9 @@ endpoint_entry.py: All swagger.yml endpoints call functions here
 """
 
 
-import flask
-import flask_sqlalchemy
-from datetime import datetime
-import backend_main
-from pytz import timezone
-import requests
-import os
-from backend_main import db, app_flask
+from flask import abort
+from backend_main import DB
 import endpoint_logic
-import json
-from flask import make_response, abort
 
 
 def user_authenticate_default(auth_user_default):
@@ -27,15 +19,15 @@ def user_authenticate_default(auth_user_default):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.authenticate_default(db, auth_user_default)
+    response = endpoint_logic.authenticate_default(DB, auth_user_default)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Failed Authentication", 401
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def user_authenticate_gmail(auth_user_gmail):
@@ -49,15 +41,15 @@ def user_authenticate_gmail(auth_user_gmail):
     Response 400: Bad Request
     """
 
-    response =  endpoint_logic.authenticate_email(db, auth_user_gmail, True)
+    response = endpoint_logic.authenticate_email(DB, auth_user_gmail, True)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Failed Authentication", 401
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def user_authenticate_fb(auth_user_fb):
@@ -71,15 +63,15 @@ def user_authenticate_fb(auth_user_fb):
     Response 400: Bad Request
     """
 
-    response =  endpoint_logic.authenticate_email(db, auth_user_fb, False)
+    response = endpoint_logic.authenticate_email(DB, auth_user_fb, False)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Unauthorized", 401
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def get_company_product():
@@ -90,8 +82,8 @@ def get_company_product():
 
     Response 200: Successful Request
     """
-    
-    return endpoint_logic.request_company_product(db), 200
+
+    return endpoint_logic.request_company_product(DB), 200
 
 
 def get_order_not_delivered():
@@ -103,7 +95,7 @@ def get_order_not_delivered():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_shop_order_not_delivered(db), 200
+    return endpoint_logic.request_shop_order_not_delivered(DB), 200
 
 
 def get_order_today():
@@ -114,8 +106,8 @@ def get_order_today():
 
     Response 200: Successful Request
     """
-    
-    return endpoint_logic.request_shop_order_today(db), 200
+
+    return endpoint_logic.request_shop_order_today(DB), 200
 
 
 def get_all_shops():
@@ -127,7 +119,7 @@ def get_all_shops():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_shop(db), 200
+    return endpoint_logic.request_shop(DB), 200
 
 
 def get_all_zones():
@@ -139,7 +131,7 @@ def get_all_zones():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_zone(db), 200
+    return endpoint_logic.request_zone(DB), 200
 
 
 def get_all_shop_category():
@@ -151,7 +143,7 @@ def get_all_shop_category():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_shop_category(db), 200
+    return endpoint_logic.request_shop_category(DB), 200
 
 
 def get_all_users():
@@ -163,7 +155,7 @@ def get_all_users():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_sys_user(db), 200
+    return endpoint_logic.request_sys_user(DB), 200
 
 
 def get_all_user_roles():
@@ -175,7 +167,7 @@ def get_all_user_roles():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_sys_user_role(db), 200
+    return endpoint_logic.request_sys_user_role(DB), 200
 
 
 def get_all_company():
@@ -187,7 +179,7 @@ def get_all_company():
     Response 200: Successful Request
     """
 
-    return endpoint_logic.request_company(db), 200
+    return endpoint_logic.request_company(DB), 200
 
 
 def shop_create(new_shop):
@@ -200,17 +192,17 @@ def shop_create(new_shop):
     Response 400: Bad Request
     """
 
-    response =  endpoint_logic.create_shop(db, new_shop)
+    response = endpoint_logic.create_shop(DB, new_shop)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Zone does not exists with id provided", 400
         elif response == 1:
             return "Shop category does not exist with id provided", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def zone_create(new_zone):
@@ -223,15 +215,15 @@ def zone_create(new_zone):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.create_zone(db, new_zone)
+    response = endpoint_logic.create_zone(DB, new_zone)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Zone already exists with that name", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def shop_category_create(new_shop_category):
@@ -244,15 +236,15 @@ def shop_category_create(new_shop_category):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.create_shop_category(db, new_shop_category)
+    response = endpoint_logic.create_shop_category(DB, new_shop_category)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Shop category already exists with that name", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def shop_order_create(new_shop_order):
@@ -266,9 +258,9 @@ def shop_order_create(new_shop_order):
     Response 409: Unable to perform request
     """
 
-    response = endpoint_logic.create_shop_order(db, new_shop_order)
+    response = endpoint_logic.create_shop_order(DB, new_shop_order)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Company product does not exist with id provided", 400
         elif response == 1:
@@ -281,10 +273,10 @@ def shop_order_create(new_shop_order):
             return "Requested quantity for item exceeds current stock", 409
         elif response == 5:
             return "No duplicate item ids allowed in order_items", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def user_create(new_user):
@@ -297,9 +289,9 @@ def user_create(new_user):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.create_user(db, new_user)
+    response = endpoint_logic.create_user(DB, new_user)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "A user with this username already exists", 400
         if response == 1:
@@ -308,10 +300,10 @@ def user_create(new_user):
             return "A user with this Facebook email already exists", 400
         if response == 3:
             return "Invalid user role id", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def company_product_create(new_product):
@@ -324,17 +316,17 @@ def company_product_create(new_product):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.create_company_product(db, new_product)
+    response = endpoint_logic.create_company_product(DB, new_product)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Invalid company id", 400
         elif response == 1:
             return "Product already exists with that name for this company", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def company_create(new_company):
@@ -347,17 +339,17 @@ def company_create(new_company):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.create_company(db, new_company)
+    response = endpoint_logic.create_company(DB, new_company)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "A company with that name already exists", 400
         elif response == 1:
             return "Invalid zone id", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def shop_order_update(update_shop_order):
@@ -370,19 +362,19 @@ def shop_order_update(update_shop_order):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.update_shop_order_delivered(db, update_shop_order)
+    response = endpoint_logic.update_shop_order_delivered(DB, update_shop_order)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Shop order is already completed", 400
         elif response == 1:
             return "Shop order does not exist with id provided", 400
         elif response == 2:
             return "Order Fulfiller does not exist with id provided", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def goal_order_taker(order_taker_info):
@@ -396,19 +388,19 @@ def goal_order_taker(order_taker_info):
     Response 404: goal data not found
     """
 
-    response = endpoint_logic.goal_order_taker(db, order_taker_info)
+    response = endpoint_logic.goal_order_taker(DB, order_taker_info)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Invalid user id", 400
         elif response == 1:
             return "User is not an order taker", 400
         elif response == 2:
             return "No goal data for this month found for order taker", 404
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def goal_order_taker_new(goal_info):
@@ -421,19 +413,19 @@ def goal_order_taker_new(goal_info):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.goal_order_taker_new(db, goal_info)
+    response = endpoint_logic.goal_order_taker_new(DB, goal_info)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Invalid user id", 400
         elif response == 1:
             return "User is not an order taker", 400
         elif response == 2:
             return "Goal for order taker already exists for this month", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
 def inventory_update(inventory_data):
@@ -446,20 +438,24 @@ def inventory_update(inventory_data):
     Response 400: Bad Request
     """
 
-    response = endpoint_logic.inventory_update(db, inventory_data)
+    response = endpoint_logic.inventory_update(DB, inventory_data)
 
-    if type(response) == int:
+    if isinstance(response, int):
         if response == 0:
             return "Invalid company product id", 400
-        else:
-            return "Bad Request", 400
-    else:
-        return response, 200
+
+        return "Bad Request", 400
+
+    return response, 200
 
 
-def basic_auth(apiKey, required_scopes=None):
-    print(apiKey)
-    print(type(apiKey))
-    if apiKey != "38873888119208341920489043128490384398138409834":
+def basic_auth(api_key):
+    """
+    Provides api key support for HTTP requests
+    """
+
+    print(api_key)
+    print(type(api_key))
+    if api_key != "38873888119208341920489043128490384398138409834":
         abort(401, "Incorrect API Key Given")
     return {}

@@ -7,31 +7,48 @@ import json
 
 
 def authenticate_default():
+    """
+    Generates mock JSON data for the /authenticate/default endpoint
+    """
+
     jsonmock = {"data": {"username": "denisse", "password": "dm1234"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def authenticate_email_google():
+    """
+    Generates mock JSON data for the /authenticate/google endpoint
+    """
+
     jsonmock = {"data": {"email": "order_taker@gmail.com"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def authenticate_email_facebook():
+    """
+    Generates mock JSON data for the /authenticate/facebook endpoint
+    """
+
     jsonmock = {"data": {"email": "order_taker@other.com"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def create_shop():
+    """
+    Generates mock JSON data for the /create/shop endpoint
+    """
+
     jsonmock = {
         "data": {
             "name": "Test Created Shop",
             "email": None,
             "image_url": "https://images.sftcdn.net/images/t_app-cover-" +
-                "l,f_auto/p/ce2ece60-9b32-11e6-95ab-00163ed833e7/2606637" +
-                "10/the-test-fun-for-friends-screenshot.jpg",
+                         "l,f_auto/p/ce2ece60-9b32-11e6-95ab-00163ed833" +
+                         "e7/260663710/the-test-fun-for-friends-screens" +
+                         "hot.jpg",
             "phone_number": None,
             "category": None,
             "zones": [{"id": 1}, {"id": 2}, {"id": 3}, {"id": 4}],
@@ -46,18 +63,30 @@ def create_shop():
 
 
 def create_zone():
+    """
+    Generates mock JSON data for the /create/zone endpoint
+    """
+
     jsonmock = {"data": {"name": "Test Created Zone 2"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def create_shop_category():
+    """
+    Generates mock JSON data for the /create/shop_category endpoint
+    """
+
     jsonmock = {"data": {"type": "Temp Category 3"}}
 
     return json.dumps(jsonmock, indent=4)
 
 
 def create_shop_order():
+    """
+    Generates mock JSON data for the /create/shop_order endpoint
+    """
+
     jsonmock = {
         "data": {
             "shop_id": 3,
@@ -82,6 +111,10 @@ def create_shop_order():
 
 
 def create_user():
+    """
+    Generates mock JSON data for the /create/user endpoint
+    """
+
     jsonmock = {
         "data": {
             "name_first": "Shresht",
@@ -91,7 +124,8 @@ def create_user():
             "email_google": "?",
             "email_fb": "?",
             "image_url": "https://ca.slack-edge.com/T017" +
-                "JP7PHFY-U018FALKD5E-266eb5ee4568-512",
+                         "JP7PHFY-U018FALKD5E-266eb5ee45" +
+                         "68-512",
             "phone_number": "1234567890",
             "role": 3
         }
@@ -101,6 +135,10 @@ def create_user():
 
 
 def create_company_product():
+    """
+    Generates mock JSON data for the /create/company_product endpoint
+    """
+
     jsonmock = {
         "data": {
             "company": 2,
@@ -110,7 +148,8 @@ def create_company_product():
             "units_per_price": 3,
             "stock": 0,
             "image_url": "https://upload.wikimedia.org/wikipedia/commons" +
-                "/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
+                         "/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg." +
+                         "png",
             "description": "test item!!"
         }
     }
@@ -119,11 +158,16 @@ def create_company_product():
 
 
 def create_company():
+    """
+    Generates mock JSON data for the /create/company endpoint
+    """
+
     jsonmock = {
         "data": {
             "name": "test_created_company3",
             "image_url": "https://upload.wikimedia.org/wikipedia/commons" +
-                "/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png",
+                         "/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg." +
+                         "png",
             "zones": [{"id": 1}, {"id": 2}, {"id": 3}, {"id": 4}]
         }
     }
@@ -132,6 +176,10 @@ def create_company():
 
 
 def update_shop_order_delivered():
+    """
+    Generates mock JSON data for the /deliver/shop_order endpoint
+    """
+
     jsonmock = {
         "data": {"shop_order_id": 4, "order_fulfiller_id": 2}
     }
@@ -140,6 +188,10 @@ def update_shop_order_delivered():
 
 
 def goal_order_taker():
+    """
+    Generates mock JSON data for the /goal/order_taker endpoint
+    """
+
     jsonmock = {
         "data": {"order_taker_id": 4}
     }
@@ -148,6 +200,10 @@ def goal_order_taker():
 
 
 def goal_order_taker_new():
+    """
+    Generates mock JSON data for the /create/goal/order_taker endpoint
+    """
+
     jsonmock = {
         "data": {
             "order_taker_id": 4,
@@ -159,6 +215,10 @@ def goal_order_taker_new():
 
 
 def inventory_update():
+    """
+    Generates mock JSON data for the /inventory/update endpoint
+    """
+
     jsonmock = {
         "data": [
             {"company_product_id": 1, "stock_delta": 1},

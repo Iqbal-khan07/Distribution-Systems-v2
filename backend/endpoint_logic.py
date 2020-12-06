@@ -3,16 +3,13 @@ endpoint_logic.py: all endpoint implementation logic goes here
 """
 
 
-import flask_sqlalchemy
 import datetime
-import json
-from flask import jsonify
 import sql_tables
 
 
 def authenticate_default(database, data):
     """
-    This function authenticates a user based upon 
+    This function authenticates a user based upon
     Sys_user: sys_username and password database fields
     by checking passed parameters against the database
 
@@ -29,7 +26,7 @@ def authenticate_default(database, data):
     query_result = (
         database.session.query(sql_tables.Sys_user)
         .filter(
-            sql_tables.Sys_user.sys_username == username_login, 
+            sql_tables.Sys_user.sys_username == username_login,
             sql_tables.Sys_user.password == password_login
         )
         .all()
@@ -41,9 +38,9 @@ def authenticate_default(database, data):
         return 0
 
     response = {
-            "data": response_inner
-        }
-    
+        "data": response_inner
+    }
+
     database.session.close()
 
     return response
@@ -51,7 +48,7 @@ def authenticate_default(database, data):
 
 def authenticate_email(database, data, google):
     """
-    This function authenticates a user based upon 
+    This function authenticates a user based upon
     Sys_user: email_google or email_fb database fields
     by checking passed parameters against either
     email_google if google = True or
@@ -83,8 +80,8 @@ def authenticate_email(database, data, google):
         return 0
 
     response = {
-            "data": response_inner
-        }
+        "data": response_inner
+    }
 
     database.session.close()
 
@@ -104,8 +101,8 @@ def request_company_product(database):
         result.append(item.request_company_product_info(database))
 
     response = {
-            "data": result
-        }
+        "data": result
+    }
 
     database.session.close()
 
@@ -118,10 +115,8 @@ def request_shop_order_not_delivered(database):
     that have not been delivered
     """
 
-    query_result = (
-        database.session.query(sql_tables.Shop_order).filter(
-            sql_tables.Shop_order.completed == False).all()
-    )
+    query_result = database.session.query(sql_tables.Shop_order).filter(
+        sql_tables.Shop_order.completed == False).all()
 
     result = []
 
@@ -148,15 +143,15 @@ def request_shop_order_today(database):
     )
 
     current_time_utc = datetime.datetime.now(datetime.timezone.utc)
-    
+
     result = []
 
     for entry in query_result:
-        dp = entry.date_delivered_projected
+        date_delivered = entry.date_delivered_projected
 
-        if dp.day == current_time_utc.day and \
-            dp.month == current_time_utc.month and \
-            dp.year == current_time_utc.year:
+        if date_delivered.day == current_time_utc.day and \
+            date_delivered.month == current_time_utc.month and \
+            date_delivered.year == current_time_utc.year:
 
             result.append(entry.request_shop_order(database))
 
@@ -182,8 +177,8 @@ def request_shop(database):
         result.append(item.request_shop_info(database))
 
     response = {
-            "data": result
-        }
+        "data": result
+    }
 
     database.session.close()
 
@@ -203,8 +198,8 @@ def request_zone(database):
         result.append(item.request_zone_info())
 
     response = {
-            "data": result
-        }
+        "data": result
+    }
 
     database.session.close()
 
@@ -224,8 +219,8 @@ def request_shop_category(database):
         result.append(item.request_category_info())
 
     response = {
-            "data": result
-        }
+        "data": result
+    }
 
     database.session.close()
 
@@ -245,8 +240,8 @@ def request_sys_user(database):
         result.append(sys_user.request_sys_user_info(database))
 
     response = {
-            "data": result
-        }
+        "data": result
+    }
 
     database.session.close()
 
@@ -299,7 +294,7 @@ def create_shop(database, data):
     """
     Adds a new entry to the shop table and populates shop_zone
     entries for itbased on JSON data
-    
+
     return values and what they mean:
 
     0: invalid zone id
@@ -312,19 +307,19 @@ def create_shop(database, data):
     # validate relational data fields
     shop_category_valid = True
     zones_valid = True
-    
+
     if data_loaded["category"] != None:
-        if (
-            database.session.query(sql_tables.Shop_category).filter(
-                sql_tables.Shop_category.id == data_loaded["category"]).count() == 0
-        ):
-    
+        shop_category_query = database.session.query(sql_tables.Shop_category).filter(
+            sql_tables.Shop_category.id == data_loaded["category"])
+
+        if shop_category_query.count() == 0:
             shop_category_valid = False
 
     for zone in data_loaded["zones"]:
-        if database.session.query(sql_tables.Zone).filter(
-            sql_tables.Zone.id == zone["id"]).count() == 0:
+        zone_query = database.session.query(sql_tables.Zone).filter(
+            sql_tables.Zone.id == zone["id"])
 
+        if zone_query.count() == 0:
             zones_valid = False
             break
 
@@ -352,12 +347,11 @@ def create_shop(database, data):
             # add new shop_zone entries to session
             for zone in data_loaded["zones"]:
                 # account for possible duplicate zone entries in request
-                if (
-                    database.session.query(sql_tables.Shop_zone).filter(
-                        sql_tables.Shop_zone.shop == new_shop.id, 
-                        sql_tables.Shop_zone.zone == zone["id"]).count() != 0
-                ):
+                shop_zone_query = database.session.query(sql_tables.Shop_zone).filter(
+                    sql_tables.Shop_zone.shop == new_shop.id,
+                    sql_tables.Shop_zone.zone == zone["id"])
 
+                if shop_zone_query.count() != 0:
                     continue
 
                 database.session.add(sql_tables.Shop_zone(new_shop.id, zone["id"]))
@@ -372,8 +366,8 @@ def create_shop(database, data):
         return 1
 
     response = {
-            "data": response_inner
-        }
+        "data": response_inner
+    }
 
     database.session.close()
 
@@ -383,7 +377,7 @@ def create_shop(database, data):
 def create_zone(database, data):
     """
     Adds a new entry to the zone table based on JSON data
-    
+
     return values and what they mean:
 
     0: zone with name already exists
@@ -394,11 +388,10 @@ def create_zone(database, data):
     # validate relational data fields
     zone_name_valid = True
 
-    if (
-        database.session.query(sql_tables.Zone).filter(
-            sql_tables.Zone.name == data_loaded["name"]).count() != 0
-    ):
+    zone_query = database.session.query(sql_tables.Zone).filter(
+        sql_tables.Zone.name == data_loaded["name"])
 
+    if zone_query.count() != 0:
         zone_name_valid = False
 
     if zone_name_valid:
@@ -415,8 +408,8 @@ def create_zone(database, data):
         return 0
 
     response = {
-            "data": response_inner
-        }
+        "data": response_inner
+    }
 
     database.session.close()
 
@@ -426,7 +419,7 @@ def create_zone(database, data):
 def create_shop_category(database, data):
     """
     Adds a new entry to the shop_category table based on JSON data
-    
+
     return values and what they mean:
 
     0: shop category with name already exists
@@ -437,11 +430,10 @@ def create_shop_category(database, data):
     # validate relational data fields
     shop_category_type_valid = True
 
-    if (
-        database.session.query(sql_tables.Shop_category).filter(
-            sql_tables.Shop_category.type == data_loaded["type"]).count() != 0
-    ):
+    shop_category_query = database.session.query(sql_tables.Shop_category).filter(
+        sql_tables.Shop_category.type == data_loaded["type"])
 
+    if shop_category_query.count() != 0:
         shop_category_type_valid = False
 
     if shop_category_type_valid:
@@ -458,8 +450,8 @@ def create_shop_category(database, data):
         return 0
 
     response = {
-            "data": response_inner
-        }
+        "data": response_inner
+    }
 
     database.session.close()
 
@@ -470,7 +462,7 @@ def create_shop_order(database, data):
     """
     Adds a new entry to the Shop_order table and
     populates Shop_order_item entries for it based on JSON data
-    
+
     return values and what they mean:
 
     0: invalid company product id
@@ -494,7 +486,7 @@ def create_shop_order(database, data):
 
     shop_query = database.session.query(sql_tables.Shop).filter(
         sql_tables.Shop.id == data_loaded["shop_id"])
-        
+
     sys_user_query = database.session.query(sql_tables.Sys_user).filter(
         sql_tables.Sys_user.id == data_loaded["order_taker_id"])
 
@@ -528,11 +520,11 @@ def create_shop_order(database, data):
                     * item["quantity_units"])
 
     # Validate no duplicate item ids in order_item
-    for x, item in enumerate(data_loaded["order_items"], start = 0):
-        if x == (len(data_loaded["order_items"]) - 1):
+    for pos, item in enumerate(data_loaded["order_items"], start=0):
+        if pos == (len(data_loaded["order_items"]) - 1):
             break
         else:
-            if item["id"] == data_loaded["order_items"][x + 1]["id"]:
+            if item["id"] == data_loaded["order_items"][pos + 1]["id"]:
                 no_duplicate_items = False
                 break
 
@@ -635,6 +627,9 @@ def create_user(database, data):
 
     if username_query.count() != 0:
         username_valid = False
+
+    if gmail_query.count() != 0:
+        gmail_valid = False
 
     if fbemail_query.count() != 0:
         fbemail_valid = False
@@ -761,9 +756,10 @@ def create_company(database, data):
         name_valid = False
 
     for zone in data_loaded["zones"]:
-        if database.session.query(sql_tables.Zone).filter(
-            sql_tables.Zone.id == zone["id"]).count() == 0:
+        zone_query = database.session.query(sql_tables.Zone).filter(
+            sql_tables.Zone.id == zone["id"])
 
+        if zone_query.count() == 0:
             zones_valid = False
             break
 
@@ -784,7 +780,7 @@ def create_company(database, data):
         for zone in data_loaded["zones"]:
             # account for possible duplicate zone entries in request
             zone_query = database.session.query(sql_tables.Company_zone).filter(
-                sql_tables.Company_zone.company == new_company.id, 
+                sql_tables.Company_zone.company == new_company.id,
                 sql_tables.Company_zone.zone == zone["id"])
 
             if zone_query.count() != 0:
@@ -809,7 +805,7 @@ def create_company(database, data):
 def update_shop_order_delivered(database, data):
     """
     Updates a shop_order table entry as delivered based on JSON data
-    
+
     return values and what they mean:
 
     0: shop order already completed
@@ -825,23 +821,19 @@ def update_shop_order_delivered(database, data):
     order_fulfiller_id_valid = True
 
     shop_order_match_query = database.session.query(sql_tables.Shop_order).filter(
-        sql_tables.Shop_order.id == data_loaded["shop_order_id"]
-    )
+        sql_tables.Shop_order.id == data_loaded["shop_order_id"])
 
     if shop_order_match_query.count() == 0:
         shop_order_id_valid = False
-    elif shop_order_match_query[0].completed == True:
+    elif shop_order_match_query[0].completed:
         shop_order_not_completed = False
     else:
         order_paid = shop_order_match_query[0].price_paid
 
-    if (
-        database.session.query(sql_tables.Sys_user)
-        .filter(sql_tables.Sys_user.id == data_loaded["order_fulfiller_id"])
-        .count()
-        == 0
-    ):
+    sys_user_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.id == data_loaded["order_fulfiller_id"])
 
+    if sys_user_query.count() == 0:
         order_fulfiller_id_valid = False
 
     if order_fulfiller_id_valid:
@@ -870,8 +862,8 @@ def update_shop_order_delivered(database, data):
         return 2
 
     response = {
-            "data": response_inner
-        }
+        "data": response_inner
+    }
 
     database.session.close()
 
@@ -881,7 +873,7 @@ def update_shop_order_delivered(database, data):
 def goal_order_taker(database, data):
     """
     Returns goal data for an order taker based on JSON data
-    
+
     return values and what they mean:
 
     0: invalid sys_user id
@@ -920,7 +912,6 @@ def goal_order_taker(database, data):
         if goal_query.count() == 0:
             return 2
         else:
-            order_taker_entry = sys_user_query.all()[0]
             goal_entry = goal_query.all()[0]
 
             orders_total = 0
@@ -980,7 +971,7 @@ def goal_order_taker(database, data):
 def goal_order_taker_new(database, data):
     """
     Returns goal data for an order taker based on JSON data
-    
+
     return values and what they mean:
 
     0: invalid sys_user id
@@ -1011,8 +1002,6 @@ def goal_order_taker_new(database, data):
         current_date = datetime.datetime.now(datetime.timezone.utc)
         current_month = current_date.month
         current_year = current_date.year
-        
-        order_taker_entry = sys_user_query.all()[0]
 
         goal_query = database.session.query(sql_tables.Order_taker_goal).filter(
             sql_tables.Order_taker_goal.order_taker == order_taker_id,
@@ -1045,7 +1034,7 @@ def goal_order_taker_new(database, data):
 def inventory_update(database, data):
     """
     Updates inventory data based on JSON data
-    
+
     return values and what they mean:
 
     0: company product ids are not valid
@@ -1060,12 +1049,12 @@ def inventory_update(database, data):
 
     for item in inventory_data:
         item_found = False
-        
+
         for entry in company_product_query:
             if item["company_product_id"] == entry.id:
                 item_found = True
                 break
-        
+
         if not item_found:
             products_valid = False
             break
