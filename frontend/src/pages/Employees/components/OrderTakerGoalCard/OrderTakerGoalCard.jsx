@@ -55,13 +55,13 @@ export default function OrderTakerGoalCard(props) {
 
                 setGoals(rawGoals);
             }).catch(function (error) {
-                alert(error);
                 const rawGoals = {
-                    goal: 0,
-                    current: 0,
-                    order: 0
+                    goal: "N/A",
+                    current: "N/A",
+                    order: "N/A"
                 }
                 setGoals(rawGoals);
+                alert(`${props.name} does not currently have a goal for this month.\nSet an order goal`);
             }).then(function () {
                 setLoading(false);
             });

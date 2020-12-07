@@ -69,7 +69,7 @@ export default function SetGoalForm({ reload, id, name }) {
             onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setSubmitting(true);
                 try {
-                    let response = await axios.post('/goal/order_taker/new', {
+                    let response = await axios.post('/create/goal/order_taker', {
                         data: {
                             order_taker_id: values[ID],
                             goal_total: values[GOAL],
@@ -103,6 +103,7 @@ export default function SetGoalForm({ reload, id, name }) {
                                         name={ID}
                                         label="Id"
                                         className={classes.formField}
+                                        value={id}
                                         required
                                         InputProps={{
                                             readOnly: true,
