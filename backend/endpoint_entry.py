@@ -67,7 +67,7 @@ def user_authenticate_fb(auth_user_fb):
 
     if isinstance(response, int):
         if response == 0:
-            return "Unauthorized", 401
+            return "Failed Authentication", 401
 
         return "Bad Request", 400
 

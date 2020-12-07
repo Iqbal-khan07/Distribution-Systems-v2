@@ -21,7 +21,7 @@ def authenticate_email_google():
     Generates mock JSON data for the /authenticate/google endpoint
     """
 
-    jsonmock = {"data": {"email": "order_taker@gmail.com"}}
+    jsonmock = {"data": {"email": "order_taker@gmail.com1"}}
 
     return json.dumps(jsonmock, indent=4)
 
@@ -31,7 +31,7 @@ def authenticate_email_facebook():
     Generates mock JSON data for the /authenticate/facebook endpoint
     """
 
-    jsonmock = {"data": {"email": "order_taker@other.com"}}
+    jsonmock = {"data": {"email": "order_taker@other.com1"}}
 
     return json.dumps(jsonmock, indent=4)
 
@@ -164,7 +164,7 @@ def create_company():
 
     jsonmock = {
         "data": {
-            "name": "test_created_company3",
+            "name": "test_created_company12341234",
             "image_url": "https://upload.wikimedia.org/wikipedia/commons" +
                          "/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg." +
                          "png",
@@ -193,7 +193,7 @@ def goal_order_taker():
     """
 
     jsonmock = {
-        "data": {"order_taker_id": 4}
+        "data": {"order_taker_id": 555}
     }
 
     return json.dumps(jsonmock, indent=4)

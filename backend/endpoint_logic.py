@@ -23,27 +23,29 @@ def authenticate_default(database, data):
     username_login = data_loaded["data"]["username"]
     password_login = data_loaded["data"]["password"]
 
-    query_result = (
-        database.session.query(sql_tables.Sys_user)
-        .filter(
-            sql_tables.Sys_user.sys_username == username_login,
-            sql_tables.Sys_user.password == password_login
-        )
-        .all()
-    )
+    user_match = True
 
-    if query_result:
-        response_inner = query_result[0].request_sys_user_info(database)
-    else:
-        return 0
+    query_result = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.sys_username == username_login,
+        sql_tables.Sys_user.password == password_login)
 
-    response = {
-        "data": response_inner
-    }
+    if query_result.count() == 0:
+        user_match = False
 
     database.session.close()
 
-    return response
+    if not user_match:
+        return 0
+    else:
+        response_inner = query_result[0].request_sys_user_info(database)
+
+        response = {
+            "data": response_inner
+        }
+
+        database.session.close()
+
+        return response
 
 
 def authenticate_email(database, data, google):
@@ -63,21 +65,24 @@ def authenticate_email(database, data, google):
 
     email_login = data_loaded["data"]["email"]
 
-    if google:
-        query_result = (
-            database.session.query(sql_tables.Sys_user).filter(
-                sql_tables.Sys_user.email_google == email_login).all()
-        )
-    else:
-        query_result = (
-            database.session.query(sql_tables.Sys_user).filter(
-                sql_tables.Sys_user.email_fb == email_login).all()
-        )
+    user_match = True
 
-    if query_result:
-        response_inner = query_result[0].request_sys_user_info(database)
+    if google:
+        query_result = database.session.query(sql_tables.Sys_user).filter(
+            sql_tables.Sys_user.email_google == email_login)
     else:
+        query_result = database.session.query(sql_tables.Sys_user).filter(
+            sql_tables.Sys_user.email_fb == email_login)
+
+    if query_result.count() == 0:
+        user_match = False
+
+    database.session.close()
+
+    if not user_match:
         return 0
+    else:
+        response_inner = query_result[0].request_sys_user_info(database)
 
     response = {
         "data": response_inner
@@ -315,63 +320,69 @@ def create_shop(database, data):
         if shop_category_query.count() == 0:
             shop_category_valid = False
 
+    database.session.close()
+
     for zone in data_loaded["zones"]:
         zone_query = database.session.query(sql_tables.Zone).filter(
             sql_tables.Zone.id == zone["id"])
 
         if zone_query.count() == 0:
             zones_valid = False
+            database.session.close()
             break
 
-    # handle response
-    if shop_category_valid:
-        if zones_valid:
-            # new Shop object
-            new_shop = sql_tables.Shop(
-                data_loaded["name"],
-                data_loaded["email"],
-                data_loaded["image_url"],
-                data_loaded["phone_number"],
-                data_loaded["category"],
-                data_loaded["street"],
-                data_loaded["city"],
-                data_loaded["providence"],
-                data_loaded["zip_4"],
-            )
+        database.session.close()
 
-            # add, commit, then refresh Shop object to update with commit
-            database.session.add(new_shop)
-            database.session.commit()
-            database.session.refresh(new_shop)
-
-            # add new shop_zone entries to session
-            for zone in data_loaded["zones"]:
-                # account for possible duplicate zone entries in request
-                shop_zone_query = database.session.query(sql_tables.Shop_zone).filter(
-                    sql_tables.Shop_zone.shop == new_shop.id,
-                    sql_tables.Shop_zone.zone == zone["id"])
-
-                if shop_zone_query.count() != 0:
-                    continue
-
-                database.session.add(sql_tables.Shop_zone(new_shop.id, zone["id"]))
-
-            # commit new shop_zone entries
-            database.session.commit()
-
-            response_inner = new_shop.request_shop_info(database)
-        else:
-            return 0
-    else:
+    if not zones_valid:
+        return 0
+    elif not shop_category_valid:
         return 1
+    else:
+        # new Shop object
+        new_shop = sql_tables.Shop(
+            data_loaded["name"],
+            data_loaded["email"],
+            data_loaded["image_url"],
+            data_loaded["phone_number"],
+            data_loaded["category"],
+            data_loaded["street"],
+            data_loaded["city"],
+            data_loaded["providence"],
+            data_loaded["zip_4"],
+        )
 
-    response = {
-        "data": response_inner
-    }
+        # add, commit, then refresh Shop object to update with commit
+        database.session.add(new_shop)
+        database.session.commit()
+        database.session.refresh(new_shop)
 
-    database.session.close()
+        shop_id = new_shop.id
+        database.session.close()
 
-    return response
+        # add new shop_zone entries to session
+        for zone in data_loaded["zones"]:
+            # account for possible duplicate zone entries in request
+            shop_zone_query = database.session.query(sql_tables.Shop_zone).filter(
+                sql_tables.Shop_zone.shop == shop_id,
+                sql_tables.Shop_zone.zone == zone["id"])
+
+            if shop_zone_query.count() != 0:
+                database.session.close()
+                continue
+
+            database.session.add(sql_tables.Shop_zone(shop_id, zone["id"]))
+            database.session.commit()
+            database.session.close()
+
+        response_inner = new_shop.request_shop_info(database)
+
+        response = {
+            "data": response_inner
+        }
+
+        database.session.close()
+
+        return response
 
 
 def create_zone(database, data):
@@ -394,7 +405,11 @@ def create_zone(database, data):
     if zone_query.count() != 0:
         zone_name_valid = False
 
-    if zone_name_valid:
+    database.session.close()
+
+    if not zone_name_valid:
+        return 0
+    else:
         # create new Zone object
         new_zone = sql_tables.Zone(data_loaded["name"])
 
@@ -404,16 +419,14 @@ def create_zone(database, data):
         database.session.refresh(new_zone)
 
         response_inner = new_zone.request_zone_info()
-    else:
-        return 0
 
-    response = {
-        "data": response_inner
-    }
+        response = {
+            "data": response_inner
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def create_shop_category(database, data):
@@ -436,7 +449,11 @@ def create_shop_category(database, data):
     if shop_category_query.count() != 0:
         shop_category_type_valid = False
 
-    if shop_category_type_valid:
+    database.session.close()
+
+    if not shop_category_type_valid:
+        return 0
+    else:
         # create new Shop_category object
         new_shop_category = sql_tables.Shop_category(data_loaded["type"])
 
@@ -446,16 +463,14 @@ def create_shop_category(database, data):
         database.session.refresh(new_shop_category)
 
         response_inner = new_shop_category.request_category_info()
-    else:
-        return 0
 
-    response = {
-        "data": response_inner
-    }
+        response = {
+            "data": response_inner
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def create_shop_order(database, data):
@@ -487,14 +502,18 @@ def create_shop_order(database, data):
     shop_query = database.session.query(sql_tables.Shop).filter(
         sql_tables.Shop.id == data_loaded["shop_id"])
 
-    sys_user_query = database.session.query(sql_tables.Sys_user).filter(
-        sql_tables.Sys_user.id == data_loaded["order_taker_id"])
-
     if shop_query.count() == 0:
         shop_id_valid = False
 
+    database.session.close()
+
+    sys_user_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.id == data_loaded["order_taker_id"])
+
     if sys_user_query.count() == 0:
         order_taker_valid = False
+
+    database.session.close()
 
     if deliver_days_from_today < 0:
         delivery_date_valid = False
@@ -508,16 +527,19 @@ def create_shop_order(database, data):
 
         if product_entries.count() == 0:
             shop_order_items_valid = False
+            database.session.close()
             break
         else:
             if product_entries[0].stock < item["quantity_units"]:
                 stock_valid = False
+                database.session.close()
                 break
             else:
                 # calculate total price of order
                 price_total += float(
                     (product_entries[0].price_sell / product_entries[0].units_per_price)
                     * item["quantity_units"])
+                database.session.close()
 
     # Validate no duplicate item ids in order_item
     for pos, item in enumerate(data_loaded["order_items"], start=0):
@@ -584,13 +606,13 @@ def create_shop_order(database, data):
 
         response_inner = new_shop_order.request_shop_order(database)
 
-    response = {
-        "data": response_inner
-    }
+        response = {
+            "data": response_inner
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def create_user(database, data):
@@ -616,26 +638,34 @@ def create_user(database, data):
     username_query = database.session.query(sql_tables.Sys_user).filter(
         sql_tables.Sys_user.sys_username == data_loaded["sys_username"])
 
-    gmail_query = database.session.query(sql_tables.Sys_user).filter(
-        sql_tables.Sys_user.email_google == data_loaded["email_google"])
-
-    fbemail_query = database.session.query(sql_tables.Sys_user).filter(
-        sql_tables.Sys_user.email_fb == data_loaded["email_fb"])
-
-    role_query = database.session.query(sql_tables.Sys_user_role).filter(
-        sql_tables.Sys_user_role.id == data_loaded["role"])
-
     if username_query.count() != 0:
         username_valid = False
+
+    database.session.close()
+
+    gmail_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.email_google == data_loaded["email_google"])
 
     if gmail_query.count() != 0:
         gmail_valid = False
 
+    database.session.close()
+
+    fbemail_query = database.session.query(sql_tables.Sys_user).filter(
+        sql_tables.Sys_user.email_fb == data_loaded["email_fb"])
+
     if fbemail_query.count() != 0:
         fbemail_valid = False
 
+    database.session.close()
+
+    role_query = database.session.query(sql_tables.Sys_user_role).filter(
+        sql_tables.Sys_user_role.id == data_loaded["role"])
+
     if role_query.count() == 0:
         role_valid = False
+
+    database.session.close()
 
     if not username_valid:
         return 0
@@ -664,13 +694,13 @@ def create_user(database, data):
 
         response_inner = new_sys_user.request_sys_user_info(database)
 
-    response = {
-        "data": response_inner
-    }
+        response = {
+            "data": response_inner
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def create_company_product(database, data):
@@ -692,19 +722,23 @@ def create_company_product(database, data):
     company_query = database.session.query(sql_tables.Company).filter(
         sql_tables.Company.id == data_loaded["company"])
 
+    if company_query.count() == 0:
+        company_valid = False
+
+    database.session.close()
+
     product_query = database.session.query(sql_tables.Company_product).filter(
         sql_tables.Company_product.company == data_loaded["company"],
         sql_tables.Company_product.name == data_loaded["name"])
 
-    if company_query.count() == 0:
-        company_valid = False
-
     if product_query.count() != 0:
         product_not_duplicate = False
 
+    database.session.close()
+
     if not company_valid:
         return 0
-    if not product_not_duplicate:
+    elif not product_not_duplicate:
         return 1
     else:
         new_company_product = sql_tables.Company_product(
@@ -724,13 +758,13 @@ def create_company_product(database, data):
 
         response_inner = new_company_product.request_company_product_info(database)
 
-    response = {
-        "data": response_inner
-    }
+        response = {
+            "data": response_inner
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def create_company(database, data):
@@ -755,17 +789,22 @@ def create_company(database, data):
     if company_query.count() != 0:
         name_valid = False
 
+    database.session.close()
+
     for zone in data_loaded["zones"]:
         zone_query = database.session.query(sql_tables.Zone).filter(
             sql_tables.Zone.id == zone["id"])
 
         if zone_query.count() == 0:
             zones_valid = False
+            database.session.close()
             break
+        
+        database.session.close()
 
     if not name_valid:
         return 0
-    if not zones_valid:
+    elif not zones_valid:
         return 1
     else:
         new_company = sql_tables.Company(
@@ -777,29 +816,32 @@ def create_company(database, data):
         database.session.commit()
         database.session.refresh(new_company)
 
+        company_id = new_company.id
+        database.session.close()
+
         for zone in data_loaded["zones"]:
             # account for possible duplicate zone entries in request
             zone_query = database.session.query(sql_tables.Company_zone).filter(
-                sql_tables.Company_zone.company == new_company.id,
+                sql_tables.Company_zone.company == company_id,
                 sql_tables.Company_zone.zone == zone["id"])
 
             if zone_query.count() != 0:
+                database.session.close()
                 continue
 
-            database.session.add(sql_tables.Company_zone(new_company.id, zone["id"]))
-
-            # commit new company_zone entries
+            database.session.add(sql_tables.Company_zone(company_id, zone["id"]))
             database.session.commit()
+            database.session.close()
 
         response_inner = new_company.request_company_info(database)
 
-    response = {
-        "data": response_inner
-    }
+        response = {
+            "data": response_inner
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def update_shop_order_delivered(database, data):
@@ -830,44 +872,46 @@ def update_shop_order_delivered(database, data):
     else:
         order_paid = shop_order_match_query[0].price_paid
 
+    database.session.close()
+
     sys_user_query = database.session.query(sql_tables.Sys_user).filter(
         sql_tables.Sys_user.id == data_loaded["order_fulfiller_id"])
 
     if sys_user_query.count() == 0:
         order_fulfiller_id_valid = False
 
-    if order_fulfiller_id_valid:
-        if shop_order_id_valid:
-            if shop_order_not_completed:
-                current_time_utc = datetime.datetime.now(datetime.timezone.utc)
-
-                shop_order_match_query[0].price_paid = True
-                shop_order_match_query[0].date_delivered = current_time_utc
-                shop_order_match_query[0].order_fulfiller = data_loaded[
-                    "order_fulfiller_id"
-                ]
-                shop_order_match_query[0].completed = True
-
-                database.session.commit()
-
-                if order_paid:
-                    response_inner = {"request_payment": False}
-                else:
-                    response_inner = {"request_payment": True}
-            else:
-                return 0
-        else:
-            return 1
-    else:
-        return 2
-
-    response = {
-        "data": response_inner
-    }
-
     database.session.close()
 
-    return response
+    if not shop_order_not_completed:
+        return 0
+    elif not shop_order_id_valid:
+        return 1
+    elif not order_fulfiller_id_valid:
+        return 2
+    else:
+        current_time_utc = datetime.datetime.now(datetime.timezone.utc)
+
+        shop_order_match_query[0].price_paid = True
+        shop_order_match_query[0].date_delivered = current_time_utc
+        shop_order_match_query[0].order_fulfiller = data_loaded[
+            "order_fulfiller_id"
+        ]
+        shop_order_match_query[0].completed = True
+
+        database.session.commit()
+
+        if order_paid:
+            response_inner = {"request_payment": False}
+        else:
+            response_inner = {"request_payment": True}
+
+        response = {
+            "data": response_inner
+        }
+
+        database.session.close()
+
+        return response
 
 
 def goal_order_taker(database, data):
@@ -895,6 +939,8 @@ def goal_order_taker(database, data):
     elif sys_user_query.all()[0].role != 1:
         order_taker_valid = False
 
+    database.session.close()
+
     if not sys_user_valid:
         return 0
     elif not order_taker_valid:
@@ -910,9 +956,11 @@ def goal_order_taker(database, data):
             sql_tables.Order_taker_goal.year == current_year)
 
         if goal_query.count() == 0:
+            database.session.close()
             return 2
         else:
             goal_entry = goal_query.all()[0]
+            database.session.close()
 
             orders_total = 0
             current_value_total = 0
@@ -941,6 +989,8 @@ def goal_order_taker(database, data):
                         orders_completed += 1
                         current_value_completed += entry.price_due
 
+            database.session.close()
+
             response_inner = {
                 "num_orders_total": orders_total,
                 "current_value_total": current_value_total,
@@ -959,13 +1009,13 @@ def goal_order_taker(database, data):
                 }
             }
 
-    response = {
-        "data": response_inner
-    }
+        response = {
+            "data": response_inner
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def goal_order_taker_new(database, data):
@@ -994,6 +1044,8 @@ def goal_order_taker_new(database, data):
     elif sys_user_query.all()[0].role != 1:
         order_taker_valid = False
 
+    database.session.close()
+
     if not sys_user_valid:
         return 0
     elif not order_taker_valid:
@@ -1009,8 +1061,11 @@ def goal_order_taker_new(database, data):
             sql_tables.Order_taker_goal.year == current_year)
 
         if goal_query.count() != 0:
+            database.session.close()
             return 2
         else:
+            database.session.close()
+
             otg_new = sql_tables.Order_taker_goal(
                 order_taker_id,
                 current_month,
@@ -1022,13 +1077,13 @@ def goal_order_taker_new(database, data):
             database.session.commit()
             database.session.refresh(otg_new)
 
-    response = {
-        "data": otg_new.request_order_taker_goal_info()
-    }
+        response = {
+            "data": otg_new.request_order_taker_goal_info()
+        }
 
-    database.session.close()
+        database.session.close()
 
-    return response
+        return response
 
 
 def inventory_update(database, data):
@@ -1067,7 +1122,8 @@ def inventory_update(database, data):
                 if item["company_product_id"] == entry.id:
                     entry.stock += item["stock_delta"]
 
-        database.session.commit()
+    database.session.commit()
+    database.session.close()
 
     updated_query = database.session.query(sql_tables.Company_product).all()
 
