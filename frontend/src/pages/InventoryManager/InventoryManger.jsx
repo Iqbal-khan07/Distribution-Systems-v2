@@ -23,8 +23,9 @@ import AddProductForm from "./components/AddProductForm/AddProductForm";
 export default function InventoryManager () {
     const [loading, setLoading] = useState(true)
     const [inventory, setInventory] = useState([]);
+    const [company, setCompany] = useState([]);
     const [showProductForm, setShowProductForm] = useState(false);
-    const [reload, setReload] = useState(true)
+    const [reload, setReloading] = useState(true)
     const {user} = useContext(UserContext);
 
     useEffect(() => {
@@ -42,6 +43,18 @@ export default function InventoryManager () {
                     sellingPrice: p.price_sell
                 }
             ))
+
+            response = await axios.get('/company');
+            body = response.data;
+
+            const companyData = body.data.map((c) => (
+                {
+                    id: c.id,
+                    name: c.name
+                }
+            ))
+
+            setCompany(companyData);
             setInventory(inventoryData);
             setLoading(false);
         }
@@ -62,7 +75,7 @@ export default function InventoryManager () {
                 <>
                     <InventoryTable
                         inventory={inventory}
-                        reload={setReload}
+                        reload={setReloading}
                         role={user.role}
                         onAddNewProduct={onFormShowHandler}
                     />
@@ -70,11 +83,8 @@ export default function InventoryManager () {
                         <AddProductForm
                             showForm={showProductForm}
                             onCloseButtonHandler={onFormCloseHandler}
-                            companies={[]}
-                            // initialInventory={initialInventory}
-                            // shops={shopOptions}
-                            // products={productOptions}
-                            // reload={setReloading}
+                            companies={company}
+                            reload={setReloading}
                         />
                     ) : null}
                 </>
