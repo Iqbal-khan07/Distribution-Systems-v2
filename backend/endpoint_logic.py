@@ -799,7 +799,7 @@ def create_company(database, data):
             zones_valid = False
             database.session.close()
             break
-        
+
         database.session.close()
 
     if not name_valid:
