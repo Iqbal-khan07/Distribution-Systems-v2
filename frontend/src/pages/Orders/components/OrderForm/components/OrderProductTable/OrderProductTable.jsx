@@ -17,11 +17,12 @@ import DataDisplayUtils from "../../../../../../utils/DataDisplayUtils";
 
 const useStyles = makeStyles(() => ({
     table: {
+        maxHeight: '50vh',
         minWidth: 650,
         border: "1px solid",
         borderColor: "#534e4e",
         borderBottom: "0px solid",
-        borderRadius: 10,
+        borderRadius: '0px 0px 0px 0px'
     },
     tableRowCell: {
         fontWeight: "bold",
@@ -149,8 +150,8 @@ export default function OrderProductTable({products, value, inventory, itemsQuan
 
     return (
         <div>
-            <TableContainer component={Paper} className={classes.table}>
-              <Table size={"small"}>
+            <TableContainer component={Paper} className={classes.table} style={{borderRadius: '10px 10px 0 0'}}>
+              <Table size={"small"} stickyHeader >
                 <TableHead>
                   <TableRow>
                     <TableCell className={classes.tableRowCell}>Products</TableCell>
@@ -180,23 +181,29 @@ export default function OrderProductTable({products, value, inventory, itemsQuan
                       </TableCell>
                     </TableRow>
                   ))}
-                  <TableRow>
-                      <TableCell className={classes.noUnderLine} colSpan={3} />
-                      <TableCell className={classes.tableCell} colSpan={1}>Subtotal</TableCell>
-                      <TableCell className={classes.tableCell} align="right">{calculateSubTotal(products, value)}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell className={classes.noUnderLine} colSpan={3} />
-                      <TableCell className={classes.tableCell} colSpan={1}>Delivery Fee</TableCell>
-                      <TableCell className={classes.tableCell} align="right">{DataDisplayUtils.displayMoneyValue(0)}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell className={classes.noUnderLine} colSpan={3} />
-                      <TableCell className={classes.tableCell} colSpan={1}>Grand Total</TableCell>
-                      <TableCell className={classes.tableCell} align="right">{calculateSubTotal(products, value)}</TableCell>
-                  </TableRow>
                 </TableBody>
               </Table>
+            </TableContainer>
+            <TableContainer component={Paper} className={classes.table} style={{borderTop: "0px solid", borderRadius: '0 0 10px 10px'}}>
+                <Table size={"small"}>
+                    <TableBody>
+                        <TableRow>
+                            {[1, 2, 3, 4].map((v) => (<TableCell key={v} className={classes.noUnderLine} colSpan={3}/>))}
+                            <TableCell className={classes.tableCell} >Subtotal</TableCell>
+                            <TableCell className={classes.tableCell} align="right">{calculateSubTotal(products, value)}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            {[1, 2, 3, 4].map((v) => (<TableCell key={v} className={classes.noUnderLine} colSpan={3}/>))}
+                            <TableCell className={classes.tableCell} >Delivery Fee</TableCell>
+                            <TableCell className={classes.tableCell} align="right">{DataDisplayUtils.displayMoneyValue(0)}</TableCell>
+                        </TableRow>
+                          <TableRow>
+                              {[1, 2, 3, 4].map((v) => (<TableCell key={v} className={classes.noUnderLine} colSpan={3}/>))}
+                              <TableCell className={classes.tableCell}>Grand Total</TableCell>
+                              <TableCell className={classes.tableCell} align="right">{calculateSubTotal(products, value)}</TableCell>
+                          </TableRow>
+                    </TableBody>
+                </Table>
             </TableContainer>
         </div>
     )

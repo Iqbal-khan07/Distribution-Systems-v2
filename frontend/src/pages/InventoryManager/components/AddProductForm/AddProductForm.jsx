@@ -98,6 +98,7 @@ const IMAGE_URL = 'image_url'
 const DESCRIPTION = 'description'
 const BUYING = 'buying'
 const SELLING = 'selling'
+const QUANTITY = 'quantity'
 
 
 const validationSchema = Yup.object({
@@ -107,6 +108,7 @@ const validationSchema = Yup.object({
     [DESCRIPTION]: Yup.string(),
     [BUYING]: Yup.number().min(0, "Value should be greater than zero").required(),
     [SELLING]: Yup.number().min(0, "Value should be greater than zero").required(),
+    [QUANTITY]: Yup.number().min(0, "Quantity per Unit is required").required(),
 })
 
 export default function AddProductForm({reload, onCloseButtonHandler, showForm, companies}) {
@@ -122,29 +124,24 @@ export default function AddProductForm({reload, onCloseButtonHandler, showForm, 
                 [DESCRIPTION]: '',
                 [BUYING]: '',
                 [SELLING]: '',
+                [QUANTITY]: ''
             }}
             validationSchema={validationSchema}
             onSubmit={async (values, {setSubmitting, resetForm}) => {
-                setSubmitting(true)
                 try {
-                    // await axios.post('/create/shop', {
-                    //     data: {
-                    //         name: values[SHOP_NAME],
-                    //         email: values[EMAIL],
-                    //         image_url: values[IMAGE_URL],
-                    //         phone_number: values[PHONE],
-                    //         category: values[CATEGORY],
-                    //         street: values[STREET],
-                    //         city: values[CITY],
-                    //         providence: values[PROVINCE],
-                    //         zip_4: values[ZIP],
-                    //         zones: [
-                    //             {
-                    //                 id: values[ZONE]
-                    //             }
-                    //         ]
-                    //     }
-                    // })
+                    setSubmitting(true)
+                    await axios.post('/create/company_product', {
+                        data: {
+                            company: Number(values[COMPANY]),
+                            name: values[NAME],
+                            image_url: values[IMAGE_URL],
+                            description: values[DESCRIPTION],
+                            stock: 0,
+                            price_buy: Number(values[BUYING]),
+                            price_sell: Number(values[SELLING]),
+                            units_per_price: Number(values[QUANTITY])
+                        }
+                    })
                     setANotification('Added Product Successfully', SUCCESSFUL)
                     reload();
                     setSubmitting(false)
@@ -180,7 +177,7 @@ export default function AddProductForm({reload, onCloseButtonHandler, showForm, 
                                                 Product Image
                                             </Avatar>
                                         </Grid>
-                                        <Grid item direction={"column"} xs={7}>
+                                        <Grid item container direction={"column"} xs={7}>
                                             <Grid item>
                                                 <Field
                                                      error={errors[NAME] && touched[NAME]}
@@ -252,6 +249,21 @@ export default function AddProductForm({reload, onCloseButtonHandler, showForm, 
                                                  type={"text"}
                                                  name={SELLING}
                                                  label="Selling Price"
+                                                 className={classes.formField}
+                                                 fullWidth
+                                                 required
+                                            />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid item container direction={"row"}>
+                                        <Grid item sm={6}>
+                                            <Field
+                                                 error={errors[QUANTITY] && touched[QUANTITY]}
+                                                 component={TextField}
+                                                 type={"text"}
+                                                 name={QUANTITY}
+                                                 label="Units per Item"
                                                  className={classes.formField}
                                                  fullWidth
                                                  required
