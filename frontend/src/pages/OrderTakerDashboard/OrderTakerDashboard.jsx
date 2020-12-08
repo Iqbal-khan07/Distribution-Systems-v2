@@ -33,7 +33,6 @@ export default function OrderTakerDashboard() {
                 orders_pending: body.orders_unpaid.num_orders
             };
 
-             console.log(orderOptions);
 
             setGoalInfo(orderOptions);
             const salesLeft = orderOptions.goal - orderOptions.current < 0 ? 0 : orderOptions.goal - orderOptions.current;
