@@ -121,7 +121,7 @@ def create_user():
             "name_last": "Rengesh",
             "sys_username": "shresht_rengesh",
             "password": "sr1234",
-            "email_google": "?",
+            "email_google": "shresht@gmail.com",
             "email_fb": "?",
             "image_url": "https://ca.slack-edge.com/T017" +
                          "JP7PHFY-U018FALKD5E-266eb5ee45" +
@@ -206,7 +206,7 @@ def goal_order_taker_new():
 
     jsonmock = {
         "data": {
-            "order_taker_id": 4,
+            "order_taker_id": 8,
             "goal_total": 300000.12
         }
     }
