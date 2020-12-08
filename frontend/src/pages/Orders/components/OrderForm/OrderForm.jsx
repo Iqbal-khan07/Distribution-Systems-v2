@@ -287,7 +287,7 @@ export default function OrderForm({ showForm, onCloseButtonHandler, products, sh
                                     <Grid item>
                                         <MultiLineInput
                                             name={MEMO}
-                                            rows={3}
+                                            rows={2}
                                             placeholder={'Memo'}
                                         />
                                     </Grid>
