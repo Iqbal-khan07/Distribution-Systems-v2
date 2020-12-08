@@ -52,14 +52,13 @@ export default function OrderTakerGoalCard(props) {
                     current: body.current_value_total,
                     order: body.num_orders_total
                 };
-
                 setGoals(rawGoals);
             }).catch(function (error) {
                 const rawGoals = {
                     goal: "N/A",
                     current: "N/A",
                     order: "N/A"
-                }
+                };
                 setGoals(rawGoals);
                 alert(`${props.name} does not currently have a goal for this month.\nSet an order goal`);
             }).then(function () {

@@ -68,21 +68,25 @@ export default function SetGoalForm({ reload, id, name }) {
             validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
                 setSubmitting(true);
-                try {
-                    let response = await axios.post('/create/goal/order_taker', {
-                        data: {
-                            order_taker_id: values[ID],
-                            goal_total: values[GOAL],
-                        }
-                    });
+                await axios.post('/create/goal/order_taker', {
+                    data: {
+                        order_taker_id: values[ID],
+                        goal_total: values[GOAL],
+                    }
+                })
+                .then( () => {
                     setANotification(`Monthly goal for ${name} has been set successfully!`, SUCCESSFUL);
-                    reload(prevCheck => prevCheck + 1);
-                    resetForm();
-                } catch (error) {
-                    setANotification(`Failed to set the monthly goal! ${error.response.data}`, ERROR);
-                } finally {
+                    reload();
                     setSubmitting(false);
-                }
+                    resetForm();  
+                })
+                .catch (error => {
+                    let detailMessage = "";
+                    if (error.response) {
+                        detailMessage = error.response.data;
+                    }
+                    setANotification(`Failed to set the monthly goal! ${detailMessage}`, ERROR);
+                });
             }}
         >
             {({ submitForm, isSubmitting, touched, errors, values }) => (
@@ -91,7 +95,7 @@ export default function SetGoalForm({ reload, id, name }) {
                         <Grid container justify="center">
                             <Grid item xs={12}>
                                 <Typography className={classes.title} variant={"h5"} align="center">
-                                    Set Order Goal <br></br> For this Month 
+                                    Set Order Goal <br></br> For this Month
                                 </Typography>
                             </Grid>
                             <Form style={{ width: 600 }}>
@@ -107,7 +111,7 @@ export default function SetGoalForm({ reload, id, name }) {
                                         required
                                         InputProps={{
                                             readOnly: true,
-                                          }}
+                                        }}
                                     />
                                 </Grid>
                                 <Grid item align="center" xs={12}>
