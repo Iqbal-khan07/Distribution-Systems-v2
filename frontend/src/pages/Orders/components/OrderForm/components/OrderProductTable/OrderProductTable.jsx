@@ -17,7 +17,7 @@ import DataDisplayUtils from "../../../../../../utils/DataDisplayUtils";
 
 const useStyles = makeStyles(() => ({
     table: {
-        maxHeight: '50vh',
+        maxHeight: '40vh',
         minWidth: 650,
         border: "1px solid",
         borderColor: "#534e4e",
