@@ -186,7 +186,7 @@ export default function AddEmployeeForm({ showForm, onCloseButtonHandler, roles,
                                         <Grid item xs={4}>
                                             <Avatar variant="square" className={classes.cover} src={values[IMAGE_URL]} />
                                         </Grid>
-                                        <Grid item direction={"column"} xs={7}>
+                                        <Grid item xs={7}>
                                             <Grid item>
                                                 <Field
                                                      error={errors[FIRST_NAME] && touched[FIRST_NAME]}

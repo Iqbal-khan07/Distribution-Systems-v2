@@ -63,7 +63,7 @@ export default function SetGoalForm({ reload, id, name }) {
         <Formik
             initialValues={{
                 [ID]: id,
-                [GOAL]: null,
+                [GOAL]: "",
             }}
             validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -78,8 +78,8 @@ export default function SetGoalForm({ reload, id, name }) {
                     setANotification(`Monthly goal for ${name} has been set successfully!`, SUCCESSFUL);
                     reload(prevCheck => prevCheck + 1);
                     resetForm();
-                } catch (e) {
-                    setANotification('Failed to set the monthly goal! Please try again', ERROR);
+                } catch (error) {
+                    setANotification(`Failed to set the monthly goal! ${error.response.data}`, ERROR);
                 } finally {
                     setSubmitting(false);
                 }
@@ -119,7 +119,7 @@ export default function SetGoalForm({ reload, id, name }) {
                                         label="Goal"
                                         className={classes.formField}
                                         required
-                                        disable={isSubmitting}
+                                        disabled={isSubmitting}
                                         min={0}
                                         inputProps={{
                                             min: 0,
