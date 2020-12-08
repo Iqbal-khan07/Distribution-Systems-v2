@@ -58,7 +58,6 @@ export default function OrderInfoPage({ details }) {
                             </Grid>
                             <Grid item lg className={classes.top}>
                                 <Typography>
-                                    INSERT LOGO HERE
                                 </Typography>
                             </Grid>
                         </Grid>
