@@ -30,8 +30,10 @@ export default function OrderTakerDashboard() {
                 current: body.current_value_total,
                 orders: body.num_orders_total,
                 orders_paid: body.orders_paid.num_orders,
-                orders_pending: body.orders_pending.num_orders
+                orders_pending: body.orders_unpaid.num_orders
             };
+
+
             setGoalInfo(orderOptions);
             const salesLeft = orderOptions.goal - orderOptions.current < 0 ? 0 : orderOptions.goal - orderOptions.current;
             setSalesSeries([orderOptions.current, salesLeft]);
