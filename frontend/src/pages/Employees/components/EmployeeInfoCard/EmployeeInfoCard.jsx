@@ -11,7 +11,6 @@ import React from "react";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        marginTop: 40,
         minWidth: 300,
         maxWidth: 500,
         backgroundColor: '#BFD7DC',
@@ -54,11 +53,13 @@ export default function EmployeeInfoCard({ employee }) {
                     <Grid container spacing={3}>
                         <Grid item>
                             <Grid container justify="center">
-                                <Avatar alt="Employee Photo" src={employee.pic} className={classes.cover} />
+                                <Avatar alt="Employee Photo" src={employee.image} className={classes.cover}>
+                                    No Image
+                                </Avatar>
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Typography variant="h5" color="primary">{employee.name}</Typography>
+                            <Typography variant="h5" color="primary">{`${employee.first} ${employee.last}`}</Typography>
                             <Typography><b>Role:</b> {employee.role}</Typography>
                             <Typography><b>Id:</b> {employee.id}</Typography>
                         </Grid>

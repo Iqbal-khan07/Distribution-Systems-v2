@@ -140,7 +140,7 @@ export default function EmployeeTable({ rows, employeeShowDetailHandler }) {
                 {row.id}
               </TableCell>
               <TableCell>
-                {row.name}
+                {`${row.first} ${row.last}`}
               </TableCell>
               <TableCell>
                 {row.userName}
