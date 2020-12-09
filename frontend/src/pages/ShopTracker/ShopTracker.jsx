@@ -45,8 +45,7 @@ const ShopTracker = () => {
     const [selectedShop, setSelectedShop] = useState(null);
     const [zones, setZones] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [reload, setReload] = useState(false);
-
+    const [reload, setReloading] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -92,7 +91,9 @@ const ShopTracker = () => {
         fetchData().then()
     }, [reload])
 
-
+    const handleReload = () => {
+        setReloading((p) => !p);
+    }
 
     const shopShowDetailHandler = (shopId) => {
         const selectedShopRaw = shops.filter((o) => o.id === shopId);
@@ -159,7 +160,7 @@ const ShopTracker = () => {
                             onCloseButtonHandler={onFormCloseHandler}
                             zones={zones}
                             categories={categories}
-                            reload={setReload}
+                            reload={handleReload}
                         />
                     ) : null}
                 </>

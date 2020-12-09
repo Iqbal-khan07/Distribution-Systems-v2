@@ -69,6 +69,10 @@ export default function InventoryManager () {
         setShowProductForm(false)
     }
 
+    const handleReload = () => {
+        setReloading((p) => !p);
+    }
+
     return (
         <WithSignedInSkeleton title={user.role === SUPER_USER ? "Inventory Manager": 'Inventory'}>
             {!loading ? (
@@ -84,7 +88,7 @@ export default function InventoryManager () {
                             showForm={showProductForm}
                             onCloseButtonHandler={onFormCloseHandler}
                             companies={company}
-                            reload={setReloading}
+                            reload={handleReload}
                         />
                     ) : null}
                 </>

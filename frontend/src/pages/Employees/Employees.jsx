@@ -98,6 +98,10 @@ const Employees = () => {
         setShowEmployeeForm(true)
     }
 
+    const handleReload = () => {
+        setReload((p) => !p);
+    }
+
     return (
         <WithSignedInSkeleton title={'Employees'}>
             {!loading ? (
@@ -138,7 +142,7 @@ const Employees = () => {
                             showForm={showEmployeeForm}
                             onCloseButtonHandler={onFormCloseHandler}
                             roles={roles}
-                            reload={setReload}
+                            reload={handleReload}
                         />
                     ) : null}
 

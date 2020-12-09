@@ -168,6 +168,10 @@ const Orders = () => {
         setSelectedOrder(selectedShop[0])
     }
 
+    const handleReload = () => {
+        setReloading((p) => !p);
+    }
+
     return (
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
@@ -217,7 +221,7 @@ const Orders = () => {
                             initialInventory={initialInventory}
                             shops={shopOptions}
                             products={productOptions}
-                            reload={setReloading}
+                            reload={handleReload}
                         />
                     ) : null}
                 </>
