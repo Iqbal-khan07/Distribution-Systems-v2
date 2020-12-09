@@ -24,20 +24,20 @@ export default function OrderTakerDashboard() {
                 }
             });
             let body = response.data.data;
-
+            console.log(body);
             const orderOptions = {
                 goal: body.goal_total,
                 current: body.current_value_total,
                 orders: body.num_orders_total,
                 orders_paid: body.orders_paid.num_orders,
-                orders_pending: body.orders_unpaid.num_orders
+                orders_pending: body.orders_unpaid.num_orders,
+                orders_delivered: body.orders_completed.num_orders
             };
-
 
             setGoalInfo(orderOptions);
             const salesLeft = orderOptions.goal - orderOptions.current < 0 ? 0 : orderOptions.goal - orderOptions.current;
             setSalesSeries([orderOptions.current, salesLeft]);
-            setOrderSeries([0, orderOptions.orders_paid, orderOptions.orders_pending]);
+            setOrderSeries([orderOptions.orders_delivered, orderOptions.orders_paid, orderOptions.orders_pending]);
             setLoading(false);
         }
         fetchData().then()
