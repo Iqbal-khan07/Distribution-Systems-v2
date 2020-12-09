@@ -13,7 +13,8 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 
-sys.path.insert(1, '/home/ec2-user/environment/Distribution-System-CS490/backend')
+sys.path.insert(1, '/home/ec2-user/environment/Distribution-System-CS490/backend/endpoint_logic.py')
+sys.path.insert(1, '/home/ec2-user/environment/Distribution-System-CS490/backend/json_mock.py')
 import endpoint_logic
 import json_mock
 
