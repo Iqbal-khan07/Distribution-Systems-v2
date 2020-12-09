@@ -30,10 +30,6 @@ jobs:
         sudo pip install flask-socketio
         sudo pip install eventlet
         sudo pip install Flask-SQLAlchemy==2.1
-        sudo pip install requests
-        sudo pip install -U flask-cors
-        sudo pip install connexion
-        sudo pip install connexion[swagger-ui]
     - name: Testing test_sql_tables.py
       run: |
         sudo python backend/unit_tests/test_sql_tables.py
