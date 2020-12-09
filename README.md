@@ -1,5 +1,5 @@
 # Backend Heroku Link: https://immense-retreat-89767.herokuapp.com/
-# Frontend Heroku Link: https://commercial-distribution-soln.herokuapp.com/
+# Frontend Heroku Link: https://commercial-distribution-soln-2.herokuapp.com/
 
 # Project Description
 This project was created by four individuals:
