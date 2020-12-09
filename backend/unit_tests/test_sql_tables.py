@@ -6,7 +6,6 @@ test_sql_tables.py: unit test file for sql_tables.py
 import sys
 import datetime
 import json
-import json_mock
 import flask
 import flask_sqlalchemy
 import unittest
