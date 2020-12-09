@@ -4,7 +4,20 @@
 
 This frontend project currently uses React, Facebook and Google OAuth, and several react modules like Materials UI, Formik and Apex Charts along with Heroku to deploy this web application. Commercial Distribution Solutions is a distribution center management system that allows authorized users to sign in and perform the tasks that correpond to their role as either order taker or order fulfillers. Such tasks include viewing all invoices, placing an order, and viewing registered shops (customers) in the system.
 
-## What is Currently Working in the Frontend for the MVP
+## What is Currently Working in Frontend
+
+**To properly interract with the application, you will need the following log-in information**
+**Administrator**
+username: admin
+password: root
+
+**Order-Taker:**
+username: order_taker
+password: ot1234
+
+**Order-Fulfiller:**
+username: order_fulfiller
+password: of1234
 
 Our application, in its current standing for the MVP contains the following features:
 
@@ -15,17 +28,37 @@ Our application, in its current standing for the MVP contains the following feat
 - A log-in Screen:
   1. The user can be signed in with either Facebook or Google OAuth.
   2. The user can input and email and password.
-  3. The user is redirected to the Order page when logged in.
+  3. The user is redirected to their logged-in Dashboard as it corresponds to their role.
 - An Orders Page (Signed-In Page):
   1. A list of all orders is displayed in a table.
   2. The user can get more info on a shop by clicking the info icon from an order on the table.
-  3. The user can press a button to place an order.
+  3. The user can place an order.
   4. An order status card is displayed that shows the number of orders that are delivered, pending, paid, and
      credited.
+  5. Current stock is displayed in an order.  An order can only be placed if there is enough items in stock.
 - A Shop-Tracker Page (Signed-In Page):
   1. A list of all registered shops (clients) is displayed in a table.
   2. The user can press a button to add a shop.
   3. A 'total shops' card is displayed that shows the total number of registered shops.
+- An Inventory Manager Page (Signed-In Page):
+  1. A list of all products and the stock inventory detail
+  2. The user can add a product to the distribution center by filling in a form.
+  3. The user can update the stock value.
+- An Employee Page (Signed-In Page):
+  1. A list of all employees is displayed in a table.
+  2. The user can get more info on an employee by clicking the info icon next to the employee's entry.
+  3. If the selected user is an order-fulfiller, a card with the number of orders delivered today will display.
+  4. If the selected user is an order-taker, a card with the goal details of the order-taker will display.
+  5. A monthly goal can be set for a selected-order taker by submitting a form.
+  6. The user can add an employee by clicking on the button and filling out the form.
+- Order-Fulfiller Dashboard
+  1. A display of the aggregate sum of products that are needed for today's deliveries is displayed in a table.
+  2. All delivery cards with the delivery address, and order details is displayed.
+  3. The user can mark an order as delivered, which is then confirmed.
+- Order-Taker Dashboard
+  1. A display of the goal detail for the month is displayed.
+  2. The user can see the amount of orders they've taken, the amount in sales they've made, and their target goal for the month
+
 
 ## Setup
 
@@ -195,7 +228,31 @@ Implementation for the frontend project includes the following:
    - Total Shops card
 8. Pushed app to Heroku
 
-## Authors
+------- MVP 2 ----------
+1. Implemented the page and its components of Admin Dashboard
+    - Buttons with links to the different pages
+2. Connected Order-Taker Dashboard to backend
+    - Connect the several components with backend
+    - Populated the chart and graph with the data
+3. Implemented the page and the components for Order-Fulfiller Dashboard
+    - Connected page and components to backend
+    - Implemented the functionality to add an order as delivered and send info to backend
+    - Created aggregated data of products that need to be put in truck for the all deliveries for the day
+4. Implemented the page and the components for Employee Page
+    - Connected page and components to backend
+    - Created table to display all employees
+    - Created form to add an employee
+    - Created form to add an order-taker goal
+    - Created employee detail card that's injected the info of the selected employee
+    - Created the displays of the role-dependent stats.
+5. Created mocks to be refered to throughout the entire project
+6. Improved forms by allowing the picture to be previewed as soon as the link is entered.
+7. Fixed various bugs and syling problems in the application.
+8. Pushed app to Heroku
 
-Zoraiz Naeem
+
+
+## Authors
+Abdul-Quddus Adeniji
 Denisse Mendoza
+Zoraiz Naeem
