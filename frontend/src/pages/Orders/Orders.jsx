@@ -65,7 +65,7 @@ const mapOrdersToOrderOptions = (orders) => {
             date: o.date,
             amount: calculateTotalAmountFromOrderItems(o.orderItems),
             memo: o.memo,
-            status: 'Pending'
+            status: `${o.amountDue === 0? 'Paid': 'Pending'}`
         }
     })
 }
@@ -97,6 +97,7 @@ const Orders = () => {
 
             response = await axios.get("/orders/not_delivered");
             body = response.data;
+            console.log(body);
 
             const orders = body.data.map((o) => {
                 const orderItems = o.shop_order_items.map((item) => {
@@ -121,7 +122,8 @@ const Orders = () => {
                     phone: o.shop.phone_number,
                     email: o.shop.email,
                     orderItems: orderItems,
-                    memo: o.memo
+                    memo: o.memo,
+                    amountDue: o.price_due,
                 }
             })
 
