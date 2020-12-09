@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import React from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
-import { AppBar, Toolbar, Button, Grid, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
 
@@ -19,59 +18,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SuperDashboard() {
-    const [loading, setLoading] = useState(false);
     const classes = useStyles();
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
-            {!loading ? (
-                <>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} align="center">
-                            <Typography variant="h3">
-                                What would you like to do today?
-                            </Typography>
+            <Grid container spacing={2}>
+                <Grid item xs={12} align="center">
+                    <Typography variant="h3">
+                        What would you like to do today?
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container>
+                        <Grid item xs={12} md={6} align="center">
+                            <Button className={classes.button} component={Link} to="/shoptracker">
+                                <Typography variant="h5">
+                                    Check on Shops
+                                </Typography>
+                            </Button>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Grid container>
-                                <Grid item xs={6} align="center">
-                                    <Button className={classes.button} component={Link} to="/shoptracker">
-                                        <Typography variant="h5">
-                                        Check on Shops
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={6} align="center">
-                                    <Button className={classes.button} component={Link} to="/orders">
-                                        <Typography variant="h5">
-                                        Manage Orders
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container>
-                                <Grid item xs={6} align="center">
-                                    <Button className={classes.button} component={Link} to="/inventory">
-                                        <Typography variant="h5">
-                                        Manage Inventory
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={6} align="center">
-                                    <Button className={classes.button} component={Link} to="/employees">
-                                        <Typography variant="h5">
-                                        Check Employee Status
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                            </Grid>
+                        <Grid item xs={12} md={6} align="center">
+                            <Button className={classes.button} component={Link} to="/orders">
+                                <Typography variant="h5">
+                                    Manage Orders
+                                </Typography>
+                            </Button>
                         </Grid>
                     </Grid>
-                </>
-            ) : <CircularProgress />
-
-            }
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container>
+                        <Grid item xs={12} md={6} align="center">
+                            <Button className={classes.button} component={Link} to="/inventory">
+                                <Typography variant="h5">
+                                    Manage Inventory
+                                </Typography>
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12} md={6} align="center">
+                            <Button className={classes.button} component={Link} to="/employees">
+                                <Typography variant="h5">
+                                    Check Employee Status
+                                </Typography>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
         </WithSignedInSkeleton>
     )
 }
