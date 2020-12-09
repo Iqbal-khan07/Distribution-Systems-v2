@@ -5,7 +5,7 @@ name: Python package
 
 on:
   push:
-    branches: [ master, backend_master ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -26,7 +26,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Test with pytest
+    - name: Testing test_endpoint_logic.py
       run: |
-        backend/unit_tests/test_endpoint_logic.py
-        backend/unit_tests/test_sql_tables
+        sudo python backend/unit_tests/test_endpoint_logic.py
+    - name: Testing test_sql_tables.py
+      run: |
+        sudo python backend/unit_tests/test_sql_tables.py
