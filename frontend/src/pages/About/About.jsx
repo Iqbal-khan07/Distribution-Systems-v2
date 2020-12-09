@@ -127,6 +127,28 @@ const About = () => {
                 <h1 className={classes.title}>Tools to run your distribution center</h1>
             </div>
             <div className={classes.content}>
+
+                <div className={classes.infoSection}>
+                    <h2 className={classes.sectionTitle}>What is Commercial Distribution Solutions?</h2>
+                    <p className={classes.sectionBody}>
+                        {Intro}
+                    </p>
+                </div>
+
+                <div className={classes.infoSection}>
+                    <h2 className={classes.sectionTitle}>How Did We Make CDS?</h2>
+                    <p className={classes.sectionBody}>
+                        {Technologies}
+                    </p>
+                </div>
+
+                <div className={classes.infoSection}>
+                    <h2 className={classes.sectionTitle}>Purpose</h2>
+                    <p className={classes.sectionBody}>
+                        {Purpose}
+                    </p>
+                </div>
+
                 <div className={classes.infoSection}>
                     <h2 className={classes.sectionTitle}>Our Team</h2>
                     <div className={classes.sectionBody}>
@@ -163,26 +185,6 @@ const About = () => {
                     </div>
                 </div>
 
-                <div className={classes.infoSection}>
-                    <h2 className={classes.sectionTitle}>What is Commercial Distribution Solutions?</h2>
-                    <p className={classes.sectionBody}>
-                        {Intro}
-                    </p>
-                </div>
-
-                <div className={classes.infoSection}>
-                    <h2 className={classes.sectionTitle}>How Did We Make CDS?</h2>
-                    <p className={classes.sectionBody}>
-                        {Technologies}
-                    </p>
-                </div>
-
-                <div className={classes.infoSection}>
-                    <h2 className={classes.sectionTitle}>Purpose</h2>
-                    <p className={classes.sectionBody}>
-                        {Purpose}
-                    </p>
-                </div>
             </div>
         </div>
     );
