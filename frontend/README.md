@@ -2,7 +2,7 @@
 
 ## Description
 
-This frontend project currently uses React, Facebook and Google OAuth, and several react modules like Materials UI along with Heroku to deploy this web application. Commercial Distribution Solutions is a distribution center management system that allows authorized users to sign in and perform the tasks that correpond to their role as either order taker or order fulfillers. Such tasks include viewing all invoices, placing an order, and viewing registered shops (customers) in the system.
+This frontend project currently uses React, Facebook and Google OAuth, and several react modules like Materials UI, Formik and Apex Charts along with Heroku to deploy this web application. Commercial Distribution Solutions is a distribution center management system that allows authorized users to sign in and perform the tasks that correpond to their role as either order taker or order fulfillers. Such tasks include viewing all invoices, placing an order, and viewing registered shops (customers) in the system.
 
 ## What is Currently Working in the Frontend for the MVP
 
@@ -136,8 +136,10 @@ Implementation for the frontend project includes the following:
 
 - styling the creating and styling the components
 - configuring routing
-- writing the frotend scripts
+- writing the frontend scripts
 - wiring the various components to work together
+- form validations
+- handing login/logout functionality
 - making api calls to the backend
 - display information from these calls to the user.
 
@@ -159,6 +161,23 @@ Implementation for the frontend project includes the following:
     - 'Total shops' card
     - Order List and Shop List tables
     - Shop Info and Order Info
+    
+------- MVP 2 ----------
+1. Implemented the page and its components of Inventory Manager
+    - Added the Add new Product form
+    - Add the inventory display table
+    - Logic to update the inventory
+2. Implemented the persisted login functional; and logout functionality
+3. Implemented the Order Taker Dashboard.
+    - Implemented the graphical components.
+4. Improved the Order Taking form.
+    - Add the inventory amount of each product and added guards for what can be added to the order.
+    - Made the Form more friendly as the number of products grow.
+5. Added the notification showing framework.
+6. Added framework for conditional rendering based on the user role.
+    - Also added conditional Rendering to the Inventory Manager and the side bar.
+7. Added Add new shop form.
+8. Fixed various bugs in the application.
 
 ### Denisse Mendoza
 
@@ -175,12 +194,6 @@ Implementation for the frontend project includes the following:
    - Shop Info Paper
    - Total Shops card
 8. Pushed app to Heroku
-
-## Work Left Incomplete
-
-1. The login form is not currently connected to the backend. Basically, the OAuth for Google and Facebook is setup but we could not relay that information to the backend via a Post Request
-2. The order taking form collectes all the inputed data, but the data is not sent back to the backend via a Post Request
-   **Note:** Both of these things simply lack a mino POST request implementation.
 
 ## Authors
 
