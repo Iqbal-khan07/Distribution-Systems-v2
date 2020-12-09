@@ -38,9 +38,9 @@ export default function OrdersFulfilledCard(props) {
         <Card raised className={classes.card}>
             <CardContent className={classes.root}>
                 <Typography variant="h6" className={classes.title} align="center">
-                    {props.name}'s Delivery Progress
+                    Deliveries Made Today <br></br>{props.name}
                 </Typography>
-                <Avatar className={classes.display}>{props.delivered}/{props.total}</Avatar>
+                <Avatar className={classes.display}>{props.delivered}</Avatar>
             </CardContent>
         </Card>
     );
