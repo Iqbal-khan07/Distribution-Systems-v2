@@ -25,7 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install flake8 pytest
-        pip install -r /backend/requirements.txt;
+        pip install -r ../backend/requirements.txt;
     - name: Testing test_sql_tables.py
       run: |
         sudo python backend/unit_tests/test_sql_tables.py
