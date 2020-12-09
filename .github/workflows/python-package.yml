@@ -5,7 +5,7 @@ name: Python package
 
 on:
   push:
-    branches: [ master, backend_master ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Testing test_endpoint_logic.py
       run: |
-        ../backend/unit_tests/test_endpoint_logic.py
+        backend/unit_tests/test_endpoint_logic.py
     - name: Testing test_sql_tables.py
       run: |
-        ../backend/unit_tests/test_sql_tables.py
+        backend/unit_tests/test_sql_tables.py
