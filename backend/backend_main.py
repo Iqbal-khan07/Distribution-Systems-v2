@@ -1,66 +1,73 @@
-"""main.py: all fundamental server logic"""
+"""
+main.py: all fundamental server logic
+"""
 
-import sql_related
+
+import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-import requests
-import os
+from flask_cors import CORS
 import flask
 import flask_sqlalchemy
-import json
 import connexion
-from flask_cors import CORS
-import json_mock
+import sql_tables
 
 
-dotenv_path = join(dirname(__file__), "sql.env")
-load_dotenv(dotenv_path)
-database_uri = os.environ["DATABASE_URL"]
+DOTENV_PATH = join(dirname(__file__), "sql.env")
+load_dotenv(DOTENV_PATH)
+DATABASE_URI = os.environ["DATABASE_URL"]
 
-# Flask SQLAlchemy Setup
-app_flask = flask.Flask(__name__)
-app_flask.config["SQLALCHEMY_DATABASE_URI"] = database_uri
-app_flask.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+APP_FLASK = flask.Flask(__name__)
+APP_FLASK.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
+APP_FLASK.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
-app_connexion = connexion.App(__name__, specification_dir="./")
+APP_CONNEXION = connexion.App(__name__, specification_dir="./")
 
-db = flask_sqlalchemy.SQLAlchemy(app_flask)
-db.init_app(app_flask)
-db.app = app_flask
-
-
-# import sql_related here to prevent circular dependacies
+DB = flask_sqlalchemy.SQLAlchemy(APP_FLASK)
+DB.init_app(APP_FLASK)
+DB.app = APP_FLASK
 
 
 def db_bootstrap():
+    """
+    Auto populates the database at DATABASE_URI with
+    sql_tables.database_bootstrap if the database is empty
+    """
+
     try:
-        db.session.query(sql_related.Sys_user).all()
-    except BaseException:
-        print("Error in Database")
+        DB.session.query(sql_tables.Sys_user).all()
+    except flask_sqlalchemy.sqlalchemy.orm.exc.NoResultFound:
+        print("Database tables not found.")
         return
-    users = db.session.query(sql_related.Sys_user).all()
-    dataCheck = [db_name.name_first for db_name in users]
 
-    if dataCheck != []:
-        print("Items exist in Database")
+    users = DB.session.query(sql_tables.Sys_user).all()
+    data_check = [db_name.name_first for db_name in users]
+
+    if data_check == []:
+        print("Database tables empty, populating.")
+        sql_tables.database_bootstrap(DB)
         return
-    sql_related.database_bootstrap(db)
 
 
-def restEndpoint():
-    # Create Connexion Application Instance
-    global app_connexion
-    app_connexion = connexion.App(__name__, specification_dir="./")
-    CORS(app_connexion.app)
-    # Read the swagger.yml file to configure the endpoints
-    app_connexion.add_api("swagger.yml")
+def endpoint_init():
+    """
+    Launches connexion to accept http connections on
+    endpoints defined in swagger.yml
+    """
+
+    global APP_CONNEXION
+
+    APP_CONNEXION = connexion.App(__name__, specification_dir="./")
+    CORS(APP_CONNEXION.app)
+    APP_CONNEXION.add_api("swagger.yml", validate_responses=True)
 
 
 if __name__ == "__main__":
     db_bootstrap()
-    restEndpoint()
-    app_connexion.run(
-        port=int(
-            os.getenv(
-                "PORT", 8080)), host=os.getenv(
-            "IP", "0.0.0.0"), debug=False)
+    endpoint_init()
+
+    APP_CONNEXION.run(
+        port=int(os.getenv("PORT", 8080)),
+        host=os.getenv("IP", "0.0.0.0"),
+        debug=False
+    )

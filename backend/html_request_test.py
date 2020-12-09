@@ -1,144 +1,319 @@
-import json_mock
-import requests
+"""
+html_request_test.py: functions that send mocked data as HTTP requests to test endpoints go here
+"""
+
+
 import json
+import requests
+import json_mock
 
-base_url = "http://localhost:8080/api"
 
-authenticate_default = "/user/authenticate/default"
-authenticate_gmail = "/user/authenticate/google"
-authenticate_facebook = "/user/authenticate/facebook"
+BASE_URL = "http://localhost:8080/api"
+#BASE_URL = "https://arcane-scrubland-51912.herokuapp.com/api"
 
-get_company_product = "/company_product/request/all"
-get_shop_order_not_delivered = "/shop/request/not_delivered"
-get_shop = "/shop/request/all"
-get_zone = "/zone/request/all"
-get_shop_category = "/shop_category/request/all"
+AUTH_DEFAULT = "/authenticate/default"
+AUTH_GOOGLE = "/authenticate/google"
+AUTH_FB = "/authenticate/facebook"
 
-create_shop = "/shop/create"
-create_zone = "/zone/create"
-create_shop_category = "/shop_category/create"
-create_shop_order = "/shop_order/create"
+GET_COMP_PROD = "/inventory"
+INV_UPDATE = "/inventory/update"
 
-update_shop_order_delevered = "/shop_order/update/delivered"
+GET_SO_NOT_DELIVERED = "/orders/not_delivered"
+GET_SO_TODAY = "/orders/today"
+GET_SHOP = "/shops/all"
+GET_ZONE = "/zones/all"
+GET_SHOP_CAT = "/shop_categories/all"
+GET_USERS = "/users/all"
+GET_USER_ROLE = "/users/roles/all"
+GET_COMP = "/company"
+
+CREATE_SHOP = "/create/shop"
+CREATE_ZONE = "/create/zone"
+CREATE_SHOP_CAT = "/create/shop_category"
+CREATE_SO = "/create/shop_order"
+CREATE_USER = "/create/user"
+CREATE_COMP_PROD = "/create/company_product"
+CREATE_COMP = "/create/company"
+
+UPDATE_SO_DELIVERED = "/deliver/shop_order"
+
+GOAL_OT = "/goal/order_taker"
+CREATE_GOAL_OT = "/create/goal/order_taker"
 
 
 def spacer():
+    """
+    Prints line spacer for readability
+    """
+
     print("___________________________________________________________")
 
 
 def auth_default():
-    print(
-        requests.post(
-            url=(base_url + authenticate_default),
-            json=json.loads(json_mock.authenticate_default()),
-        ).json()
-    )
+    """
+    Tests the default authentication endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + AUTH_DEFAULT), json=
+                        json.loads(json_mock.authenticate_default())).json())
+
     spacer()
 
 
 def auth_gmail():
-    print(
-        requests.post(
-            url=(base_url + authenticate_gmail),
-            json=json.loads(json_mock.authenticate_email_google()),
-        ).json()
-    )
+    """
+    Tests the google authentication endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + AUTH_GOOGLE), json=
+                        json.loads(json_mock.authenticate_email_google())).json())
+
     spacer()
 
 
 def auth_fb():
-    print(
-        requests.post(
-            url=(base_url + authenticate_facebook),
-            json=json.loads(json_mock.authenticate_email_facebook()),
-        ).json()
-    )
+    """
+    Tests the facebook authentication endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + AUTH_FB), json=
+                        json.loads(json_mock.authenticate_email_facebook())).json())
+
     spacer()
 
 
 def get_comp_prod():
-    print(requests.get(url=(base_url + get_company_product)).json())
+    """
+    Tests the get all company_product endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_COMP_PROD)).json())
+
     spacer()
 
 
-def get_sond():
-    print(requests.get(url=(base_url + get_shop_order_not_delivered)).json())
+def get_so_nd():
+    """
+    Tests the get all shop_order not delivered endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_SO_NOT_DELIVERED)).json())
+
+    spacer()
+
+
+def get_so_t():
+    """
+    Tests the get all shop_order for today endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_SO_TODAY)).json())
+
     spacer()
 
 
 def get_sh():
-    print(requests.get(url=(base_url + get_shop)).json())
+    """
+    Tests the get all shop endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_SHOP)).json())
+
     spacer()
 
 
 def get_z():
-    print(requests.get(url=(base_url + get_zone)).json())
+    """
+    Tests the get all zone endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_ZONE)).json())
+
     spacer()
 
 
 def get_s_c():
-    print(requests.get(url=(base_url + get_shop_category)).json())
+    """
+    Tests the get all shop_category endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + CREATE_SHOP_CAT)).json())
+
+    spacer()
+
+
+def get_u():
+    """
+    Tests the get all sys_user endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_USERS)).json())
+
+    spacer()
+
+
+def get_u_r():
+    """
+    Tests the get all sys_user_role endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_USER_ROLE)).json())
+
+    spacer()
+
+
+def get_c():
+    """
+    Tests the get all company endpoint
+    """
+
+    print(requests.get(url=(BASE_URL + GET_COMP)).json())
+
     spacer()
 
 
 def create_s():
-    print(
-        requests.post(
-            url=(base_url + create_shop), json=json.loads(json_mock.create_shop())
-        ).json()
-    )
+    """
+    Tests the create shop endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_SHOP), json=
+                        json.loads(json_mock.create_shop())).json())
+
     spacer()
 
 
 def create_z():
-    print(
-        requests.post(
-            url=(base_url + create_zone), json=json.loads(json_mock.create_zone())
-        ).json()
-    )
+    """
+    Tests the create zone endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_ZONE), json=
+                        json.loads(json_mock.create_zone())).json())
+
     spacer()
 
 
 def create_s_c():
-    print(
-        requests.post(
-            url=(base_url + create_shop_category),
-            json=json.loads(json_mock.create_shop_category()),
-        ).json()
-    )
+    """
+    Tests the create shop_category endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_SHOP_CAT), json=
+                        json.loads(json_mock.create_shop_category())).json())
+
     spacer()
 
 
 def create_s_o():
-    print(
-        requests.post(
-            url=(base_url + create_shop_order),
-            json=json.loads(json_mock.create_shop_order()),
-        ).json()
-    )
+    """
+    Tests the create shop_order endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_SO), json=
+                        json.loads(json_mock.create_shop_order())).json())
+
+    spacer()
+
+
+def create_u():
+    """
+    Tests the create sys_user endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_USER), json=
+                        json.loads(json_mock.create_user())).json())
+
+    spacer()
+
+
+def create_c_p():
+    """
+    Tests the create company_product endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_COMP_PROD), json=
+                        json.loads(json_mock.create_company_product())).json())
+
+    spacer()
+
+
+def create_c():
+    """
+    Tests the create company endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_COMP), json=
+                        json.loads(json_mock.create_company())).json())
+
     spacer()
 
 
 def update_sod():
-    print(
-        requests.post(
-            url=(base_url + update_shop_order_delevered),
-            json=json.loads(json_mock.update_shop_order_delivered()),
-        ).json()
-    )
+    """
+    Tests the update shop_order as delivered endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + UPDATE_SO_DELIVERED), json=
+                        json.loads(json_mock.update_shop_order_delivered())).json())
+
     spacer()
 
 
-if __name__ == "__main__":
+def g_ot():
+    """
+    Tests the get order_taker goal for current month endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + GOAL_OT), json=
+                        json.loads(json_mock.goal_order_taker())).json())
+
+    spacer()
+
+
+def g_ot_n():
+    """
+    Tests the create order_taker goal for current month endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + CREATE_GOAL_OT), json=
+                        json.loads(json_mock.goal_order_taker_new())).json())
+
+    spacer()
+
+
+def i_u():
+    """
+    Tests the inventory update endpoint
+    """
+
+    print(requests.post(url=(BASE_URL + INV_UPDATE), json=
+                        json.loads(json_mock.inventory_update())).json())
+
+    spacer()
+
+
+if __name__ == '__main__':
     auth_default()
     auth_gmail()
     auth_fb()
-    get_sond()
+    get_comp_prod()
+    get_so_nd()
+    get_so_t()
     get_sh()
     get_z()
     get_s_c()
+    get_u()
+    get_u_r()
+    get_c()
     create_s()
     create_z()
     create_s_c()
     create_s_o()
+    create_u()
+    create_c_p()
+    create_c()
     update_sod()
+    g_ot()
+    g_ot_n()
+    i_u()

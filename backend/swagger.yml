@@ -1,590 +1,507 @@
 swagger: "2.0"
 info:
-  description: This is the swagger file that goes with our server code
+  description: Endpoint definitions for backend_main.py
   version: "1.0.0"
   title: Swagger REST Article
 consumes:
   - "application/json"
 produces:
   - "application/json"
-
 basePath: "/api"
+
 
 #Global API Key Security
 #security:
 #  - APIKeyHeader: []
 
-#Change definitions soon
-# Paths supported by the server application
+
 paths:
-  /user/authenticate/default:
+# Sys_user related endpoints
+  /authenticate/default:
     post:
-      operationId: api.user_authenticate_default
+      operationId: endpoint_entry.user_authenticate_default
       tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+        - sys_user
+      summary: Authentication
+      description: Authenticate user with username and password
       parameters:
         - name: auth_user_default
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              authenticate_default:
+              data:
                 type: object
                 properties:
                   username:
                     type: string
-                    description: Email of user to create
+                    description: User username
                   password:
                     type: string
-                    description: Email of user to create    
+                    description: User password
+                required:
+                  - username
+                  - password
+            required:
+              - data
       responses:
         200:
-          description: Successful read user list operation
+          description: Successful authentication
           schema:
             type: object
             properties:
-              authenticate_default_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string
-                  name_first:
-                    type: string
-                  name_last:
-                    type: string
-                  sys_username:
-                    type: string
-                  email_google:
-                    type: string
-                  email_fb:
-                    type: string
-                  phone_number:
-                    type: string
-                  sys_user_role:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
 
-  /user/authenticate/google:
+
+  /authenticate/google:
     post:
-      operationId: api.user_authenticate_gmail
+      operationId: endpoint_entry.user_authenticate_gmail
       tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+        - sys_user
+      summary: Authentication
+      description: Authenticate user with google email
       parameters:
         - name: auth_user_gmail
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              authenticate_default:
+              data:
                 type: object
                 properties:
-                  username:
+                  email:
                     type: string
-                    description: Email of user to create
-                  password:
-                    type: string
-                    description: Email of user to create    
+                    description: User gmail
+                required:
+                 - email
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list operation
+          description: Successful authentication
           schema:
             type: object
             properties:
-              authenticate_default_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string
-                  name_first:
-                    type: string
-                  name_last:
-                    type: string
-                  sys_username:
-                    type: string
-                  email_google:
-                    type: string
-                  email_fb:
-                    type: string
-                  phone_number:
-                    type: string
-                  sys_user_role:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
 
-  /user/authenticate/facebook:
+
+  /authenticate/facebook:
     post:
-      operationId: api.user_authenticate_fb
+      operationId: endpoint_entry.user_authenticate_fb
       tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+        - sys_user
+      summary: Authentication
+      description: Authenticate user with facebook email
       parameters:
         - name: auth_user_fb
           in: body
-          description: User to create
+          description: Data wrapper
           required: True
           schema:
             type: object
             properties:
-              authenticate_default:
+              data:
                 type: object
                 properties:
-                  username:
+                  email:
                     type: string
-                    description: Email of user to create
-                  password:
-                    type: string
-                    description: Email of user to create    
+                    description: User facebook email
+                required:
+                 - email
+            required:
+             - data    
       responses:
         200:
-          description: Successful read user list operat
+          description: Successful authentication
           schema:
             type: object
             properties:
-              authenticate_default_response:
+              data:
+                type: object
+
+
+  /users/all:
+    get:
+      operationId: endpoint_entry.get_all_users
+      description: Return all sys_users in the database
+      responses:
+        200:
+          description: List of all sys_users
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /users/roles/all:
+    get:
+      operationId: endpoint_entry.get_all_user_roles
+      description: Return all sys_user_roles in the database
+      responses:
+        200:
+          description: List of all sys_user_roles
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /create/user:
+    post:
+      operationId: endpoint_entry.user_create
+      description: Create a new sys_user with JSON data
+      parameters:
+        - name: new_user
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
                 type: object
                 properties:
-                  id:
-                    type: string
                   name_first:
                     type: string
+                    description: First name of new user
                   name_last:
                     type: string
+                    description: Last name of new user
                   sys_username:
                     type: string
+                    description: Username of new user
+                  password:
+                    type: string
+                    description: Password of new user
                   email_google:
                     type: string
+                    description: Google email of new user
                   email_fb:
                     type: string
+                    description: Facebook email of new user
+                  image_url:
+                    type: string
+                    description: Profile image of new user
                   phone_number:
                     type: string
-                  sys_user_role:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-  
-  /company_product/request/all:
-    get:
-      operationId: api.get_company_product
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
+                    x-nullable: true
+                    description: Phone number of new user
+                  role:
+                    type: integer
+                    description: Sys_user_role database id of new user's role
+                required:
+                 - name_first
+                 - name_last
+                 - sys_username
+                 - password
+                 - email_google
+                 - email_fb
+                 - image_url
+                 - phone_number
+                 - role
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list 
+          description: Return data for newly created shop order 
           schema:
             type: object
             properties:
-              request_company_product_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string
-                  company:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-                      zones:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                      name:
-                        type: string
-                      price_buy:
-                        type: string
-                      price_sell:
-                        type: string
-                      units_per_price:
-                        type: string
-                      price_sell_per_unit:
-                        type: string
-                      description:
-                        type: string
-  
-  /shop/request/not_delivered:
-    get:
-      operationId: api.get_order_not_delivered
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
-      responses:
-        200:
-          description: Successful read user list 
-          schema:
-            type: object
-            properties:
-              request_shop_order_not_delivered_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  shop:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name:
-                        type: string
-                      email:
-                        type: string
-                      phone_number:
-                        type: string
-                      category:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          type:
-                            type: string
-                      zones:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                      street:
-                        type: string
-                      city:
-                        type: string
-                      providence:
-                        type: string
-                      zip_4:
-                        type: string
-                  price_due:
-                    type: string
-                  price_paid:
-                    type: string
-                  date_ordered:
-                    type: string
-                  date_delivered_projected:
-                    type: string
-                  date_delivered:
-                    type: string
-                  order_taker:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      name_first:
-                        type: string
-                      name_last:
-                        type: string
-                      sys_username:
-                        type: string
-                      email_google:
-                        type: string
-                      email_fb:
-                        type: string
-                      phone_number:
-                        type: string
-                      sys_user_role:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          name:
-                            type: string
-                  order_fulfiller:
-                    type: string
-                  completed:
-                    type: string
-                  shop_order_items:
-                    type: object
-                    properties:
-                      company_product:
-                        type: object
-                        properties:
-                          id:
-                            type: string
-                          company:
-                            type: object
-                            properties:
-                              id:
-                                type: string
-                              name:
-                                type: string
-                              zones:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                  name:
-                                    type: string
-                              name:
-                                type: string
-                              price_buy:
-                                type: string
-                              price_sell:
-                                type: string
-                              price_sell_per_unit:
-                                type: string
-                              description:
-                                type: string
-                          quantity_units:
-                            type: string
-   
-  /shop/request/all:
-    get:
-      operationId: api.get_all_shops
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
-      responses:
-        200:
-          description: Successful read user list 
-          schema:
-            type: object
-            properties:
-              request_shop_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-  
-  /zone/request/all:
-    get:
-      operationId: api.get_all_zones
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
-      responses:
-        200:
-          description: Successful read user list 
-          schema:
-            type: object
-            properties:
-              request_zone_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-  
-  /shop_category/request/all:
-    get:
-      operationId: api.get_all_shop_category
-      tags:
-        - Shops
-      summary: The user data structure supported by the server application
-      description: Read the list of users
-      responses:
-        200:
-          description: Successful read user list 
-          schema:
-            type: object
-            properties:
-              request_shop_category_response:
-                type: object
-                properties:
-                  id:
-                    type: string
-  
-  /shop/create:
+
+
+# Order_taker_goal related endpoints
+  /goal/order_taker:
     post:
-      operationId: api.shop_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+      operationId: endpoint_entry.goal_order_taker
+      description: Get the goal data for a order taker for this month with JSON data
       parameters:
-        - name: new_shop
+        - name: order_taker_info
           in: body
-          description: User to create
+          description: order_taker to get data for
           required: True
           schema:
             type: object
             properties:
-              name:
-                type: string
-                description: Email of user to create
-              email:
-                type: string
-                x-nullable: true
-                description: Email of user to create
-              phone_number:
-                type: string
-                description: Email of user to create
-              category:
-                type: string
-                description: Email of user to create
-              zone:
+              data:
                 type: object
-                description: Email of user to create
+                description: Data wrapper
                 properties:
-                  id:
-                    type: string
-              street:
-                type: string
-              city:
-                type: string
-              providence:
-                type: string
-              zip_4:
-                type: string
+                  order_taker_id:
+                    type: integer
+                    description: Database id of order taker
+                required:
+                 - order_taker_id
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list 
+          description: goal_order_taker data 
           schema:
             type: object
             properties:
-              create_shop_response:
+              data:
                 type: object
-                properties:
-                  id:
-                    type: string
-  
-  /zone/create:
+
+
+  /create/goal/order_taker:
     post:
-      operationId: api.zone_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+      operationId: endpoint_entry.goal_order_taker_new
+      description: Create goal data for a order taker for this month with JSON data
       parameters:
-        - name: new_zone
+        - name: goal_info
           in: body
-          description: User to create
+          description: order_taker to get data for
           required: True
           schema:
             type: object
             properties:
-              create_zone:
+              data:
                 type: object
-                description: Email of user to create
+                description: Data wrapper
+                properties:
+                  order_taker_id:
+                    type: integer
+                    description: Database id of order taker
+                  goal_total:
+                    type: number
+                    minimum: 0
+                    description: Money value of goal
+                required:
+                 - order_taker_id
+                 - goal_total
+            required:
+             - data
+      responses:
+        200:
+          description: goal_order_taker data 
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+
+# Company related endpoints
+  /company:
+    get:
+      operationId: endpoint_entry.get_all_company
+      description: Return all companies in the database
+      responses:
+        200:
+          description: List of all companies 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /create/company:
+    post:
+      operationId: endpoint_entry.company_create
+      description: Create a new company with JSON data
+      parameters:
+        - name: new_company
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
                 properties:
                   name:
                     type: string
-                
-      responses:
-        200:
-          description: Successful read user list 
-          schema:
-            type: object
-            properties:
-              create_zone_response:
-                type: object
-                properties:
-                  id:
+                    description: Name of company
+                  image_url:
                     type: string
-  
-  /shop_category/create:
-    post:
-      operationId: api.shop_category_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
-      parameters:
-        - name: new_shop_category
-          in: body
-          description: User to create
-          required: True
-          schema:
-            type: object
-            properties:
-              create_shop_category:
-                type: object
-                description: Email of user to create
-                properties:
-                  type:
-                    type: string
-                
-      responses:
-        200:
-          description: Successful read user list 
-          schema:
-            type: object
-            properties:
-              create_shop_category_response:
-                type: object
-                properties:
-                  id:
-                    type: string 
-                  type:
-                    type: string
-  
-  /shop_order/create:
-    post:
-      operationId: api.shop_order_create
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
-      parameters:
-        - name: new_shop_order
-          in: body
-          description: User to create
-          required: True
-          schema:
-            type: object
-            properties:
-              create_shop_order:
-                type: object
-                description: Email of user to create
-                properties:
-                  shop_id:
-                    type: integer
-                  price_paid:
-                    type: boolean
-                  order_taker_id:
-                    type: integer
-                  order_items:
+                    description: Profile image url of company
+                  zones:
                     type: array
-                    items:
-                      properties:
-                        id:
-                          type: integer
-                        quantity_units:
-                          type: integer
-                
+                    description: Company zones
+                    properties:
+                      id:
+                        type: integer
+                        description: Zone database id
+                    required:
+                     - id
+                required:
+                 - name
+                 - image_url
+                 - zones
+            required:
+             - data
       responses:
         200:
-          description: Successful read user list 
+          description: Return data for newly created company 
           schema:
             type: object
             properties:
-              create_shop_response:
+              data:
+                type: object
+
+
+# Company_product related endpoints
+  /inventory:
+    get:
+      operationId: endpoint_entry.get_company_product
+      description: Return all company products in the database
+      responses:
+        200:
+          description: List of all company products 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /inventory/update:
+    post:
+      operationId: endpoint_entry.inventory_update
+      description: Update inventory stock with JSON data
+      parameters:
+        - name: inventory_data
+          in: body
+          description: items and stock deltas
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                description: Data wrapper
+                properties:
+                  company_product_id:
+                    type: integer
+                    description: Database id of company product
+                  stock_delta:
+                    type: integer
+                    description: Delta of stock for item
+                required:
+                 - company_product_id
+                 - stock_delta
+            required:
+             - data
+      responses:
+        200:
+          description: goal_order_taker data 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /create/company_product:
+    post:
+      operationId: endpoint_entry.company_product_create
+      description: Create a new company_product with JSON data
+      parameters:
+        - name: new_product
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
                 type: object
                 properties:
-                  id:
-                    type: string 
-  
-  /shop_order/update/delivered:
+                  company:
+                    type: integer
+                    description: Company database id
+                  name:
+                    type: string
+                    description: Product name
+                  price_buy:
+                    type: number
+                    minimum: 0
+                    description: Price product is purchased for from Company
+                  price_sell:
+                    type: number
+                    minimum: 0
+                    description: Price product is sold for
+                  units_per_price:
+                    type: integer
+                    minimum: 1
+                    description: Number of units of product bought at price_buy
+                  stock:
+                    type: integer
+                    minimum: 0
+                    description: Number of units in stock of item
+                  image_url:
+                    type: string
+                    description: Product image url
+                  description:
+                    type: string
+                    x-nullable: true
+                    description: Product description
+                required:
+                 - company
+                 - name
+                 - price_buy
+                 - price_sell
+                 - units_per_price
+                 - stock
+                 - image_url
+                 - description
+            required:
+             - data
+      responses:
+        200:
+          description: Return data for newly created company_product
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+
+# Shop_order related endpoints
+  /orders/not_delivered:
+    get:
+      operationId: endpoint_entry.get_order_not_delivered
+      description: Return all shop orders in the database that have completed = False
+      responses:
+        200:
+          description: List of all shop orders that are not delivered 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /orders/today:
+    get:
+      operationId: endpoint_entry.get_order_today
+      description: Return all shop orders that are set to be delivered today
+      responses:
+        200:
+          description: List of all shop orders that are set to be delivered today 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /deliver/shop_order:
     post:
-      operationId: api.shop_order_update
-      tags:
-        - Users
-      summary: Create a user and add it to the user list
-      description: Create a new user in the user list
+      operationId: endpoint_entry.shop_order_update
+      description: Update a shop order as delivered with JSON data
       parameters:
         - name: update_shop_order
           in: body
@@ -593,26 +510,279 @@ paths:
           schema:
             type: object
             properties:
-              update_shop_order_delivered:
+              data:
                 type: object
                 description: Email of user to create
                 properties:
                   shop_order_id:
                     type: integer
+                    description: Email of user to create
                   order_fulfiller_id:
                     type: integer
-
+                    description: Email of user to create
+                required:
+                 - shop_order_id
+                 - order_fulfiller_id
+            required:
+             - data
       responses:
         200:
           description: Successful read user list 
           schema:
             type: object
             properties:
-              update_shop_order_delivered_response:
+              data:
+                type: object
+
+
+  /create/shop_order:
+    post:
+      operationId: endpoint_entry.shop_order_create
+      description: Create a new shop order with JSON data
+      parameters:
+        - name: new_shop_order
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
                 type: object
                 properties:
-                  request_payment:
-                    type: string 
+                  shop_id:
+                    type: integer
+                    description: Shop database id that the order is placed for
+                  price_paid:
+                    type: boolean
+                    description: True if the order was paid for when the order was taken
+                  deliver_days_from_today:
+                    type: integer
+                    description: Days from today that the order will be delivered
+                  memo:
+                    type: string
+                    description: Shop order memo
+                  order_taker_id:
+                    type: integer
+                    description: Order Taker database id
+                  order_items:
+                    type: array
+                    description: Array of items ordered by the shop
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          description: Company product database id
+                        quantity_units:
+                          type: integer
+                          description: Ammount of company product ordered
+                      required:
+                       - id
+                       - quantity_units
+                required:
+                 - shop_id
+                 - price_paid
+                 - deliver_days_from_today
+                 - memo
+                 - order_taker_id
+                 - order_items
+            required:
+             - data
+      responses:
+        200:
+          description: Return data for newly created shop order 
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+
+# Shop related endpoints
+  /shops/all:
+    get:
+      operationId: endpoint_entry.get_all_shops
+      description: Return all shops in database
+      responses:
+        200:
+          description: List of all shops
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /create/shop:
+    post:
+      operationId: endpoint_entry.shop_create
+      description: Create a new shop with JSON data
+      parameters:
+        - name: new_shop
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Shop name
+                  email:
+                    type: string
+                    x-nullable: true
+                    description: Shop email
+                  image_url:
+                    type: string
+                    description: Shop image url
+                  phone_number:
+                    type: string
+                    x-nullable: true
+                    description: Shop phone number
+                  category:
+                    type: integer
+                    x-nullable: true
+                    description: Shop category
+                  zones:
+                    type: array
+                    description: Shop zones
+                    properties:
+                      id:
+                        type: integer
+                        description: Zone database id
+                    required:
+                     - id
+                  street:
+                    type: string
+                    description: Shop street address
+                  city:
+                    type: string
+                    description: Shop city address
+                  providence:
+                    type: string
+                    description: Shop providence
+                  zip_4:
+                    type: string
+                    description: Shop zip_4 code
+                required:
+                 - name
+                 - email
+                 - image_url
+                 - phone_number
+                 - category
+                 - street
+                 - zones
+                 - city
+                 - providence
+                 - zip_4
+            required:
+             - data
+      responses:
+        200:
+          description: Return data for newly created shop 
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+
+# Shop_category related endpoints
+  /shop_categories/all:
+    get:
+      operationId: endpoint_entry.get_all_shop_category
+      description: Return all shop categories in database
+      responses:
+        200:
+          description: List of all shop categories
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /create/shop_category:
+    post:
+      operationId: endpoint_entry.shop_category_create
+      description: Create a new shop category with JSON data
+      parameters:
+        - name: new_shop_category
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    description: Shop category type
+                required:
+                 - type
+            required:
+             - data
+      responses:
+        200:
+          description: Return data for newly created shop category
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
+
+# Zone related endpoints
+  /zones/all:
+    get:
+      operationId: endpoint_entry.get_all_zones
+      description: Return all zones in database
+      responses:
+        200:
+          description: List of all zones 
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+
+
+  /create/zone:
+    post:
+      operationId: endpoint_entry.zone_create
+      description: Create a new zone with JSON data
+      parameters:
+        - name: new_zone
+          in: body
+          description: Data wrapper
+          required: True
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Zone name
+                required:
+                 - name
+            required:
+             - data
+      responses:
+        200:
+          description: Return data for newly created zone 
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+
 
 securityDefinitions:
   APIKeyHeader:
@@ -620,4 +790,3 @@ securityDefinitions:
     in: header
     name: X-API-Key
     x-apikeyInfoFunc: api.basic_auth
-    

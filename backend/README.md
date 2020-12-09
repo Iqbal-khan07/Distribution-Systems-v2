@@ -54,7 +54,7 @@
 # Bootstrap the Database
 1. If you already have previous versions of this projects database on your system or want to reset the database, do the following
     1. run the following command: psql
-    2. in the psql terminal, enter the following command: DROP TABLE IF EXISTS shop_order_item, shop_order, company_product, company_zone, company, shop_zone, shop, shop_category, zone, sys_user, sys_user_role;
+    2. in the psql terminal, enter the following command: DROP TABLE IF EXISTS order_taker_goal, shop_order_item, shop_order, company_product, company_zone, company, shop_zone, shop, shop_category, zone, sys_user, sys_user_role;
 2. Enter the following command: python backend_main.python
 3. Now press control+c to stop the python file from running
 4. comment out line 34 in backend_main.py "sql_related.database_bootstrap(db)"
