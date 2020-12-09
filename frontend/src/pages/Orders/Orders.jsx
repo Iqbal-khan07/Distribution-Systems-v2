@@ -168,6 +168,10 @@ const Orders = () => {
         setSelectedOrder(selectedShop[0])
     }
 
+    const handleReload = () => {
+        setReloading((p) => !p);
+    }
+
     return (
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
@@ -203,7 +207,7 @@ const Orders = () => {
                                     <OrderStatus
                                         delivered={0}
                                         paid={0}
-                                        pending={2}
+                                        pending={orders.length}
                                         credit={0}
                                     />
                                 </Grid>
@@ -217,7 +221,7 @@ const Orders = () => {
                             initialInventory={initialInventory}
                             shops={shopOptions}
                             products={productOptions}
-                            reload={setReloading}
+                            reload={handleReload}
                         />
                     ) : null}
                 </>

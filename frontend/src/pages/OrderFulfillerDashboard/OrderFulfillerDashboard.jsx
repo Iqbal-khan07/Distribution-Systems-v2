@@ -93,6 +93,10 @@ const OrderFulfillerDashboard = () => {
         fetchData().then()
     }, [reload])
 
+    const handleReload = () => {
+        setReloading((p) => !p);
+    }
+
     return (
         <WithSignedInSkeleton title={'Dashboard'}>
             {!loading ? (
@@ -116,7 +120,7 @@ const OrderFulfillerDashboard = () => {
                         <Grid item lg={12} xs={12}>
                             <Grid container spacing={2}>
                                 <Grid item lg={12} xs={12}>
-                                    <DeliveriesGrid orders={orders} reload={setReloading} />
+                                    <DeliveriesGrid orders={orders} reload={handleReload} />
                                 </Grid>
                             </Grid>
                         </Grid>
