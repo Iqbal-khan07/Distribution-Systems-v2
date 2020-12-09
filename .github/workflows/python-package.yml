@@ -24,81 +24,18 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install astroid==2.3.0
-        pip install attrs==20.3.0
-        pip install awscli==1.18.165
-        pip install backcall==0.2.0
-        pip install botocore==1.19.5
-        pip install certifi==2020.6.20
-        pip install chardet==3.0.4
-        pip install click==7.1.2
-        pip install clickclick==20.10.2
-        pip install colorama==0.4.3
-        pip install connexion==2.7.0
-        pip install decorator==4.4.2
-        pip install Django==2.0.2
-        pip install dnspython==1.16.0
-        pip install docutils==0.15.2
-        pip install eventlet==0.29.1
-        pip install Flask==1.1.2
-        pip install Flask-Cors==3.0.9
-        pip install Flask-SocketIO==4.3.1
-        pip install Flask-SQLAlchemy==2.1
-        pip install git-remote-codecommit==1.15.1
-        pip install greenlet==0.4.17
-        pip install idna==2.10
-        pip install ikp3db==1.4.1
-        pip install importlib-metadata==2.0.0
-        pip install inflection==0.5.1
-        pip install ipython==7.16.1
-        pip install ipython-genutils==0.2.0
-        pip install isort==4.3.21
-        pip install itsdangerous==1.1.0
-        pip install jedi==0.11.1
-        pip install Jinja2==2.11.2
-        pip install jmespath==0.10.0
-        pip install jsonschema==3.2.0
-        pip install lazy-object-proxy==1.5.1
-        pip install MarkupSafe==1.1.1
-        pip install mccabe==0.6.1
-        pip install openapi-spec-validator==0.2.9
-        pip install parso==0.1.1
-        pip install pbr==5.5.1
-        pip install pexpect==4.8.0
-        pip install pickleshare==0.7.5
-        pip install prompt-toolkit==3.0.8
-        pip install psycopg2-binary==2.8.6
-        pip install ptyprocess==0.6.0
-        pip install pyasn1==0.4.8
-        pip install Pygments==2.7.2
-        pip install pylint==2.4.4
-        pip install pylint-django==2.3.0
-        pip install pylint-flask==0.6
-        pip install pylint-plugin-utils==0.6
-        pip install pyrsistent==0.17.3
-        pip install python-dateutil==2.8.1
-        pip install python-dotenv==0.15.0
-        pip install python-engineio==3.13.2
-        pip install python-socketio==4.6.0
-        pip install pytz==2020.1
-        pip install PyYAML==5.3.1
-        pip install requests==2.24.0
-        pip install rsa==4.5
-        pip install s3transfer==0.3.3
-        pip install six==1.15.0
-        pip install SQLAlchemy==1.3.20
-        pip install stevedore==3.2.2
-        pip install swagger-ui-bundle==0.0.8
-        pip install traitlets==4.3.3
-        pip install typed-ast==1.2.0
-        pip install urllib3==1.25.11
-        pip install virtualenv==16.2.0
-        pip install virtualenv-clone==0.5.4
-        pip install virtualenvwrapper==4.8.4
-        pip install wcwidth==0.2.5
-        pip install Werkzeug==1.0.1
-        pip install wrapt==1.12.1
-        pip install ipp==3.4.0
+        sudo yum update
+        sudo pip install psycopg2-binary
+        sudo yum install postgresql postgresql-server postgresql-devel postgresql-contrib postgresql-docs
+        sudo pip install -U python-dotenv
+        sudo pip install flask
+        sudo pip install flask-socketio
+        sudo pip install eventlet
+        sudo pip install Flask-SQLAlchemy==2.1
+        sudo pip install requests
+        sudo pip install -U flask-cors
+        sudo pip install connexion
+        sudo pip install connexion[swagger-ui]
     - name: Testing test_sql_tables.py
       run: |
         sudo python backend/unit_tests/test_sql_tables.py
