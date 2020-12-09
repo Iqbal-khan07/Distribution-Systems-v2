@@ -207,7 +207,7 @@ const Orders = () => {
                                     <OrderStatus
                                         delivered={0}
                                         paid={0}
-                                        pending={2}
+                                        pending={orders.length}
                                         credit={0}
                                     />
                                 </Grid>
