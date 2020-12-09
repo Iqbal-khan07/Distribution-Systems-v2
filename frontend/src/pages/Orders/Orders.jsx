@@ -1,41 +1,21 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 import ShowAddOrderFormButton from "./components/ShowAddOrderFormButton/ShowAddOrderFormButton";
 import OrderTable from "./components/OrderTable/OrderTable";
 import OrderForm from "./components/OrderForm/OrderForm";
 import OrderInfoPage from "./components/OrderInfoPage/OrderInfoPage";
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import OrderStatus from "./components/OrderStatus/OrderStatus";
 import axios from 'axios';
+import {UserContext} from "../../context/UserContext";
+import {ORDER_FULFILLER} from "../../constants/ROLES";
 
-// const shopRows = [
-//     createData(1001, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1002, 'Super Mart', '01/02/2020', '$150.00', '', 'Paid'),
-//     createData(1003, 'Corner Central', '01/13/2020', '$400.00', '', 'Pending'),
-//     createData(1004, 'General Plus', '03/01/2020', '$350.00', 'Leave with Manager', 'Paid'),
-//     createData(1005, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1006, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1007, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1008, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1009, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1010, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1011, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1012, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1013, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-//     createData(1014, 'ABC General Store', '01/01/2020', '$350.00', 'Leave with Manager', 'Delivered'),
-// ];
 
-function createData(id, customer, date, amount, memo, status) {
-    return { id, customer, date, amount, memo, status };
-}
+// function createData(id, customer, date, amount, memo, status) {
+//     return { id, customer, date, amount, memo, status };
+// }
 
-const useStyles = makeStyles((theme) => ({
-    rootContainer: {
-        margin: "20px 0"
-    }
-}));
 
 // const shopOptions = [
 //     {
@@ -71,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 const calculateTotalAmountFromOrderItems = (orderItems) => {
     let cost = 0;
-    for(let i=0; i < orderItems.length; i++){
+    for (let i = 0; i < orderItems.length; i++) {
         cost += orderItems[i].productTotalCost
     }
     return cost;
@@ -80,50 +60,52 @@ const calculateTotalAmountFromOrderItems = (orderItems) => {
 const mapOrdersToOrderOptions = (orders) => {
     return orders.map((o) => {
         return {
-            id: o.id ,
+            id: o.id,
             customer: o.shopName,
             date: o.date,
             amount: calculateTotalAmountFromOrderItems(o.orderItems),
             memo: o.memo,
-            status: 'Pending'
+            status: `${o.amountDue === 0? 'Paid': 'Pending'}`
         }
     })
-
 }
 
 const Orders = () => {
-    const classes =useStyles();
+    const { user } = useContext(UserContext);
     const [productOptions, setProductOptions] = useState([]);
     const [orders, setOrders] = useState([]);
     const [shopOptions, setShopOptions] = useState([]);
     const [showOrderForm, setOrderForm] = useState(false)
     const [loading, setLoading] = useState(true)
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [reload, setReloading] = useState(false);
+    const [initialInventory, setInitialInventory] = useState({})
 
     // TODO FIX THE ORDER FORM!
-    useEffect(  () => {
+    useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("company_product/request/all");
+            let response = await axios.get("inventory");
             let body = response.data;
-            const productsList = body.request_company_product_response.map((p) => {
+            const productsList = body.data.map((p) => {
                 return {
                     id: p.id,
                     name: p.name,
                     unitPrice: p.price_sell_per_unit
                 }
-            }).filter((p) => p.id < 5)
+            })
             setProductOptions(productsList)
 
-            response = await axios.get("/shop/request/not_delivered");
+            response = await axios.get("/orders/not_delivered");
             body = response.data;
+            console.log(body);
 
-            const orders = body.request_shop_order_not_delivered_response.map((o) => {
+            const orders = body.data.map((o) => {
                 const orderItems = o.shop_order_items.map((item) => {
                     return {
                         productName: item.company_product.name,
                         productUnitPrice: item.company_product.price_sell_per_unit,
                         unitsOrdered: item.quantity_units,
-                        productTotalCost: item.quantity_units*item.company_product.price_sell_per_unit
+                        productTotalCost: item.quantity_units * item.company_product.price_sell_per_unit
                     }
                 })
 
@@ -131,7 +113,7 @@ const Orders = () => {
                     id: o.id,
                     date: (new Date(o.date_ordered)).toDateString(),
                     shopId: o.shop.id,
-                    pic: "",
+                    pic: o.shop.image_url,
                     shopName: o.shop.name,
                     street: o.shop.street,
                     city: o.shop.city,
@@ -140,29 +122,39 @@ const Orders = () => {
                     phone: o.shop.phone_number,
                     email: o.shop.email,
                     orderItems: orderItems,
-                    memo: ""
+                    memo: o.memo,
+                    amountDue: o.price_due,
                 }
             })
 
-            response = await axios.get("/shop/request/all");
+            response = await axios.get("/shops/all");
             body = response.data;
 
-            const shopOptions = body.request_shop_response.map((s) => {
+            const shopOptions = body.data.map((s) => {
                 return {
                     id: s.id,
                     name: s.name,
                     zone: ""
                 }
             });
+
+            response = await axios.get('/inventory');
+            body = response.data.data;
+
+
+            const inventory = {}
+            for (let i=0; i < body.length; i++) {
+                inventory[body[i].id] = body[i].stock;
+            }
+
+            setInitialInventory(inventory)
             setShopOptions(shopOptions);
             setSelectedOrder(orders[0])
             setOrders(orders)
             setLoading(false)
         }
         fetchData().then()
-    }, [])
-
-
+    }, [reload])
 
 
     const onFormShowHandler = () => {
@@ -178,46 +170,60 @@ const Orders = () => {
         setSelectedOrder(selectedShop[0])
     }
 
+    const handleReload = () => {
+        setReloading((p) => !p);
+    }
+
     return (
         <WithSignedInSkeleton title={"Orders"}>
             {!loading ? (
                 <>
-                    <div className={classes.rootContainer}>
-                        <Grid container spacing={3}>
-                            <Grid item lg={9}>
-                                <OrderTable
-                                    rows={mapOrdersToOrderOptions(orders)}
-                                    orderShowDetailHandler={orderShowDetailHandler}
-                                />
-                                <OrderInfoPage
-                                    details={selectedOrder}
-                                />
+                    <Grid container spacing={3}>
+                        <Grid item lg={9} xs={12}>
+                            <Grid container>
+                                <Grid item lg={12} xs={12}>
+                                    <OrderTable
+                                        rows={mapOrdersToOrderOptions(orders)}
+                                        orderShowDetailHandler={orderShowDetailHandler}
+                                    />
+                                </Grid>
+                                <Grid item lg={12} xs={12}>
+                                    {orders.length > 0 && 
+                                    <OrderInfoPage
+                                        details={selectedOrder}
+                                    />
+                                    }
+                                </Grid>
                             </Grid>
-                            <Grid item lg={3} container direction={"column"} spacing={2}>
-                                <div>
+                        </Grid>
+                        <Grid item lg={3} xs={12}>
+                            <Grid container spacing={2} justify="center">
+                                <Grid item lg={12} xs={6}>
                                     <ShowAddOrderFormButton
-                                        disable={showOrderForm}
+                                        disable={showOrderForm || user.role === ORDER_FULFILLER}
                                         onClickHandler={onFormShowHandler}
                                         title={"Add New Order"}
                                     />
-                                </div>
-                                <div>
+                                </Grid>
+                                <Grid item lg={12} xs={6}>
                                     <OrderStatus
                                         delivered={0}
                                         paid={0}
-                                        pending={2}
+                                        pending={orders.length}
                                         credit={0}
                                     />
-                                </div>
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </div>
+                    </Grid>
                     {showOrderForm ? (
                         <OrderForm
                             showForm={showOrderForm}
                             onCloseButtonHandler={onFormCloseHandler}
+                            initialInventory={initialInventory}
                             shops={shopOptions}
                             products={productOptions}
+                            reload={handleReload}
                         />
                     ) : null}
                 </>
@@ -225,7 +231,6 @@ const Orders = () => {
             ) : <CircularProgress />
 
             }
-
         </WithSignedInSkeleton>
 
     )

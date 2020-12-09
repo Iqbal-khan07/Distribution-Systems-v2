@@ -1,23 +1,29 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import axios from 'axios'
+import * as Yup from "yup"
+import { Formik, Form, Field } from "formik"
+
 import Backdrop from "@material-ui/core/Backdrop";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 
-
-import OrderProductTable from "../OrderProductTable/OrderProductTable";
-import {Button} from "@material-ui/core";
-
-import * as Yup from "yup"
-import {Formik, Form, Field} from "formik"
-import { TextField, fieldToTextField } from 'formik-material-ui'
-import MenuItem from "@material-ui/core/MenuItem";
-
-import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from 'formik-material-ui-pickers';
-import MuiTextField from '@material-ui/core/TextField';
+
+import ShopSelect from "./components/ShopSelect/ShopSelect";
+import PaymentMethodSelect from "./components/PaymentMethodSelect/PaymentMethodSelect";
+import MultiLineInput from "../../../../shared/MultiLineInput/MultiLineInput";
+import OrderProductTable from "./components/OrderProductTable/OrderProductTable";
+
+import { UserContext } from "../../../../context/UserContext";
+import { NotificationContext } from "../../../../context/NotificationContext";
+import { ERROR, SUCCESSFUL } from "../../../../constants/NOTIFICATION_TYPES";
+import PaymentMethods from "../../../../constants/PAYMENT_METHODS";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -26,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
     },
     paper_root: {
         padding: "15px",
-        height: "70%",
         margin: "100px auto",
         textAlign: "center",
         backgroundColor: "#ffffff",
         position: "relative",
         borderRadius: 30
     },
+
     form_container: {
         display: "flex",
         flexDirection: "column",
@@ -44,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     holder: {
         marginBottom: theme.spacing(1)
     },
+
     button: {
         backgroundColor: "#5DB285",
         color: "#e5e4e4",
@@ -54,7 +61,26 @@ const useStyles = makeStyles((theme) => ({
             color: "#e5e4e4"
         }
     },
+    title: {
+        display: "inline",
+        color: "#5DB285",
+        fontSize: '2rem',
+        fontWeight: "bold"
+    },
+    // date select
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        margin: theme.spacing(1),
+        marginBottom: theme.spacing(3),
+        marginRight: '100%',
+        width: 170
+    },
+
     submitButton: {
+        marginTop: theme.spacing(3),
         backgroundColor: "#5DB285",
         color: "#e5e4e4",
         width: 170,
@@ -67,108 +93,103 @@ const useStyles = makeStyles((theme) => ({
         }
 
     },
-    title: {
-        display: "inline",
-        color: "#5DB285",
-        fontSize: '2rem',
-        fontWeight: "bold"
-    },
-    // shop select
-    formControl: {
-        margin: theme.spacing(1),
-        maxWidth: 300,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-    // date select
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 300
-    },
 
 }));
 
-
 const DELIVERY_DATE = 'deliveryDate'
 const SELECTED_SHOP = 'shop'
+const METHOD = 'method'
 const PRODUCT_QUANTITY = 'products'
 const MEMO = 'memo'
 
+
 const validationSchema = Yup.object({
-    // name: Yup.string("Enter a name")
-    //     .required("Name is required"),
-    // email: Yup.string("Enter your email")
-    //     .email("Enter a valid email")
-    //     .required("Email is required"),
-    // password: Yup.string("")
-    //     .min(8, "Password must contain at least 8 characters")
-    //     .required("Enter your password"),
-    // confirmPassword: Yup.string("Enter your password")
-    //     .required("Confirm your password")
-    //     .oneOf([Yup.ref("password")], "Password does not match")
+    [SELECTED_SHOP]: Yup.number().required()
 })
 
 const initializeProductQuantity = (products) => {
     let productsQuantityObject = {}
-    for(let i=0; i < products.length; i++){
+    for (let i = 0; i < products.length; i++) {
         productsQuantityObject[products[i].id] = 0
     }
     return productsQuantityObject
 }
 
-function multiLine(props){
-    const { form: {setFieldValue}, field: {name},} = props;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-     const onChange = React.useCallback(
-        (event) => {
-          const {value} = event.target;
-          setFieldValue(name, value);
-        },
-        [setFieldValue, name]
-     );
-     return <MuiTextField
-         {...fieldToTextField(props)}
-         onChange={onChange}
-         rows={3}
-         multiline
-         variant="outlined"
-     />;
+const convertToAPIProductQuantity = (input) => {
+    const keys = Object.keys(input);
+    const output = []
+    for (let i = 0; i < keys.length; i++) {
+        if (input[keys[i]] > 0) {
+            output.push({
+                id: Number(keys[i]),
+                quantity_units: input[keys[i]]
+            })
+        }
+    }
+    return output;
 }
 
+const areInventoriesEqual = (inventory1, inventory2) => {
+    const key1 = Object.keys(inventory1);
+    const key2 = Object.keys(inventory2);
+    if (key1.length !== key2.length) return false;
 
+    for(let i=0; i < key1.length; i++){
+        if(inventory2[key1[i]] !== inventory1[key1[i]]) {
+            return false;
+        }
+    }
+    return true;
+}
 
-export default function OrderForm({showForm, onCloseButtonHandler, products, shops}){
+const initializeItemQuantity = (products) => {
+    const itemNumbers = {}
+    for (let i=0; i < products.length; i++){
+        itemNumbers[products[i].id] = 0
+    }
+    return itemNumbers;
+}
+
+const setDateInAdvanceBy =  (days) => {
+    return new Date(Date.now() + (days * 24 * 3600 * 1000))
+}
+
+export default function OrderForm({ showForm, onCloseButtonHandler, products, shops, initialInventory, reload }) {
     const classes = useStyles();
+    const { user } = useContext(UserContext);
+    const { setANotification } = useContext(NotificationContext)
+    const [inventory, setInventory] = useState(initialInventory);
+    const [itemsQuantity, setItemsQuantity] = useState(initializeItemQuantity(products));
 
-    const shopSelect = (
-        <Field
-            component={TextField}
-            type="text"
-            name={SELECTED_SHOP}
-            label="Client*"
-            select
-            variant="standard"
-            helperText="Select a Shop (Required)"
-            margin="normal"
-            InputLabelProps={{
-                shrink: true,
-            }}
-            className={classes.formControl}
-        >
-            <MenuItem value="">
-                <em>None</em>
-            </MenuItem>
-            {shops.map((shop) => (
-                <MenuItem key={shop.id} value={shop.id}>{`${shop.name} ${shop.zone}`}</MenuItem>
-            ))}
-        </Field>
-    )
+    useEffect(() => {
+        const timer = setInterval(async () => {
+            const response = await axios.get('/inventory');
+            const body = response.data.data;
+
+            const newInventory = {}
+            for (let i=0; i < body.length; i++) {
+                newInventory[body[i].id] = body[i].stock;
+            }
+            console.log('updating')
+            setInventory((prevInventory) => {
+                if(!areInventoriesEqual(newInventory, inventory)){
+                    return newInventory;
+                }
+                return prevInventory;
+            });
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [inventory])
+
+    const handleItemQuantityChange = (productId, change) => {
+        setItemsQuantity((prevItems) => {
+            prevItems[productId] += change;
+            return {
+                ...prevItems
+            }
+        })
+    }
 
     const dateSelect = (
         <Field
@@ -179,34 +200,42 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
         />
     )
 
-    const memo = (
-        <Field
-          component={multiLine}
-          name={MEMO}
-          type="test"
-          label="Memo"
-
-        />
-    )
-
     return (
         <Formik
             initialValues={{
                 [SELECTED_SHOP]: '',
-                [DELIVERY_DATE]: new Date(),
+                [DELIVERY_DATE]: setDateInAdvanceBy(7),
                 [PRODUCT_QUANTITY]: initializeProductQuantity(products),
+                [METHOD]: PaymentMethods.CASH_ON_DELIVERY,
                 [MEMO]: ''
             }}
             validationSchema={validationSchema}
-            onSubmit={(values, {setSubmitting, resetForm}) => {
-                  setTimeout(() => {
-                    setSubmitting(false);
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
+                setSubmitting(true)
+                const differenceInDays = Math.ceil((values[DELIVERY_DATE].getTime() - Date.now()) / (1000 * 3600 * 24));
+                try {
+                    await axios.post('/create/shop_order', {
+                        data: {
+                            shop_id: values[SELECTED_SHOP],
+                            price_paid: values[METHOD] === PaymentMethods.CASH,
+                            deliver_days_from_today: differenceInDays,
+                            memo: values[MEMO],
+                            order_taker_id: user.id,
+                            order_items: convertToAPIProductQuantity(values[PRODUCT_QUANTITY])
+                        }
+                    })
+                    setANotification('Order Submitted Successfully', SUCCESSFUL)
+                    setSubmitting(false)
+                    reload()
+                } catch (e) {
+                    setANotification('Order Failed to submit! Please try again', ERROR)
+                } finally {
                     resetForm()
-                    alert(JSON.stringify(values, null, 2));
-                  }, 500);
+                    onCloseButtonHandler()
+                }
             }}
         >
-            {({submitForm, isSubmitting, touched, errors, values}) => (
+            {({ submitForm, isSubmitting, touched, errors, values }) => (
                 <Backdrop className={classes.backdrop} open={showForm} >
                     <Paper className={classes.paper_root}>
                         <div>
@@ -223,30 +252,55 @@ export default function OrderForm({showForm, onCloseButtonHandler, products, sho
                         </div>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <Form>
-                                <div className={classes.form_container}>
-                                    {shopSelect}
-                                    <br />
-                                    {dateSelect}
-                                    <br />
-                                    <br />
-                                    <OrderProductTable
-                                        products={products}
-                                        value={values[PRODUCT_QUANTITY]}
-                                        name={PRODUCT_QUANTITY}
-                                    />
-                                    <br />
-                                    {memo}
-                                    <br />
-                                </div>
-                                <div style={{position: 'absolute', width: "100%", bottom: 10}}>
-                                    <Button
-                                        className={classes.submitButton}
-                                        disabled={isSubmitting}
-                                        onClick={submitForm}
-                                    >
-                                        Place Order
-                                    </Button>
-                                </div>
+                                <Grid container direction={"column"}>
+                                    <Grid container item direction={"row"} spacing={10}>
+                                        <Grid item>
+                                            <Grid item>
+                                                <ShopSelect
+                                                    shops={shops}
+                                                    width={250}
+                                                    name={SELECTED_SHOP}
+                                                />
+                                            </Grid>
+                                            <Grid item>
+                                                {dateSelect}
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <PaymentMethodSelect
+                                                methods={Object.values(PaymentMethods)}
+                                                width={250}
+                                                name={METHOD}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item>
+                                        <OrderProductTable
+                                            products={products}
+                                            inventory={inventory}
+                                            value={values[PRODUCT_QUANTITY]}
+                                            name={PRODUCT_QUANTITY}
+                                            itemsQuantity={itemsQuantity}
+                                            updateItemQuantity={handleItemQuantityChange}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <MultiLineInput
+                                            name={MEMO}
+                                            rows={2}
+                                            placeholder={'Memo'}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            className={classes.submitButton}
+                                            disabled={isSubmitting}
+                                            onClick={submitForm}
+                                        >
+                                            Place Order
+                                        </Button>
+                                    </Grid>
+                                </Grid>
                             </Form>
                         </MuiPickersUtilsProvider>
                     </Paper>

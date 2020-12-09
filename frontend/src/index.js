@@ -10,12 +10,15 @@ import theme from "./theme/theme";
 import reportWebVitals from './reportWebVitals';
 
 import './index.css';
+import NotificationContextProvider from "./context/NotificationContext";
 
 ReactDOM.render(
         <ThemeProvider theme={theme}>
-            <UserContextProvider>
-                <App />
-            </UserContextProvider>
+            <NotificationContextProvider>
+                <UserContextProvider>
+                    <App />
+                </UserContextProvider>
+            </NotificationContextProvider>
         </ThemeProvider>
     ,
     document.getElementById('root')

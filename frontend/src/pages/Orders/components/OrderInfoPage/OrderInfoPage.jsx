@@ -16,8 +16,7 @@ const useStyles = makeStyles((theme) => ({
         // padding: theme.spacing(2),
         paddingBottom: theme.spacing(5),
         minWidth: 500,
-        maxWidth: '90%',
-        marginTop: 30
+        marginTop: 30,
     },
     pic: {
         margin: theme.spacing(2),
@@ -52,19 +51,18 @@ export default function OrderInfoPage({ details }) {
                 </Grid>
                 <Divider />
                 <Grid container spacing={2}>
-                    <Grid item lg={8} xs={8}>
+                    <Grid item lg={7} xs={8}>
                         <Grid container spacing={1}>
                             <Grid item lg>
                                 <Avatar alt="Shop Photo" src={details.pic} variant="square" className={classes.pic}/>
                             </Grid>
                             <Grid item lg className={classes.top}>
                                 <Typography>
-                                    INSERT LOGO HERE
                                 </Typography>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item lg={4} className={classes.top}>
+                    <Grid item lg={5} className={classes.top}>
                         <Grid container spacing={0}>
                             <Grid item lg={12} xs={12}>
                                 <Typography>
@@ -114,7 +112,7 @@ export default function OrderInfoPage({ details }) {
                     </Grid>
                 </Grid>
                 <Grid container className={classes.sectionSpacing}>
-                    <InvoiceTable orderItems={details.orderItems}></InvoiceTable>
+                    <InvoiceTable orderItems={details.orderItems} memo={details.memo}/>
                 </Grid>
 
             </div>

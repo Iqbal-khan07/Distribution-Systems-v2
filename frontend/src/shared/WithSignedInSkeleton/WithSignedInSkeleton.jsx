@@ -4,6 +4,7 @@ import {UserContext} from "../../context/UserContext";
 import Navbar from "../Navbar/NavBar";
 import SideDrawer from "../SideDrawer/SideDrawer";
 import {Typography} from "@material-ui/core";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,22 +24,29 @@ const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
     },
     content: {
+        minHeight: '100vh',
         flexGrow: 1,
         padding: theme.spacing(3),
+    },
+
+    contentContainer: {
+        paddingTop: theme.spacing(3),
     },
 }));
 
 const WithSignedInSkeleton = ({children, title}) => {
     const classes = useStyles();
-    const {user} = useContext(UserContext);
+    const { user, logout } = useContext(UserContext);
     const [open, setOpen] = React.useState(true);
+    let history = useHistory();
 
     const handleToggleOpen = () => {
         open ? setOpen(false): setOpen(true);
     };
 
     const handleLogout = () => {
-
+        logout()
+        history.push('/');
     }
 
     return (
@@ -47,6 +55,7 @@ const WithSignedInSkeleton = ({children, title}) => {
                 expanded={open}
                 userName={user.name}
                 handleToggleOpen={handleToggleOpen}
+                urlLink={user.imageUrl}
                 handleLogout={handleLogout}
             />
 
@@ -58,7 +67,9 @@ const WithSignedInSkeleton = ({children, title}) => {
             <main className={classes.content}>
                 <div className={classes.toolbar} />
                 <Typography variant={"h4"} className={classes.title}>{title}</Typography>
+                <div className={classes.contentContainer}>
                 {children}
+                </div>
             </main>
         </div>
     )
