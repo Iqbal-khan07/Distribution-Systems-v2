@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import WithSignedInSkeleton from "../../shared/WithSignedInSkeleton/WithSignedInSkeleton";
 import { Grid } from "@material-ui/core";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from 'axios';
-import { UserContext } from "../../context/UserContext";
 import EmployeeTable from "./components/EmployeeTable/EmployeeTable";
 import EmployeeInfoCard from "./components/EmployeeInfoCard/EmployeeInfoCard";
 import AddEmployeeButton from "./components/AddEmployeeButton/AddEmployeeButton";
@@ -12,18 +11,28 @@ import AddEmployeeForm from "./components/AddEmployeeForm/AddEmployeeForm";
 import OrdersFulfilledCard from "./components/OrdersFulfilledCard/OrdersFulfilledCard";
 import OrderTakerGoalCard from "./components/OrderTakerGoalCard/OrderTakerGoalCard";
 import SetGoalForm from "./components/SetGoalForm/SetGoalForm";
-import { SUPER_USER } from "../../constants/ROLES";
 
 const useStyles = makeStyles((theme) => ({
     rootContainer: {
     }
 }));
 
+const deliveredOrders = (deliveries, id) => {
+    let completed = 0;
+    for (let i = 0; i < deliveries.length; i++) {
+        if (deliveries[i].orderFulfillerId != null && deliveries[i].orderFulfillerId === id) {
+            completed++;
+        }
+    }
+    return completed;
+};
+
+
 const Employees = () => {
     const classes = useStyles();
-    const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(true);
     const [employees, setEmployees] = useState([]);
+    const [deliveries, setDeliveries] = useState([]);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [showEmployeeForm, setShowEmployeeForm] = useState(false);
     const [showOFComponents, setShowOFComponents] = useState(false);
@@ -36,7 +45,6 @@ const Employees = () => {
             let response = await axios.get("/users/all");
             let body = response.data;
 
-            const roleOptions = [];
             const rawEmployees = body.data.map((s) => {
                 return {
                     id: s.id,
@@ -56,7 +64,20 @@ const Employees = () => {
                 {id: 2, role: "Order Fulfiller"},
                 {id: 3, role: "Administrator"}
             ]
-              
+            response = await axios.get("/orders/today");
+            body = response.data;
+            const rawDeliveries = body.data.map((s) => {
+                let UFId = null;
+                if (s.order_fulfiller) {
+                    UFId = s.order_fulfiller.id;
+                }
+                return {
+                    id: s.id,
+                    orderFulfillerId: UFId
+                }
+            });
+
+            setDeliveries(rawDeliveries);
             setEmployees(rawEmployees);
             setSelectedEmployee(rawEmployees[0]);
             setRoles(roles);
@@ -132,8 +153,7 @@ const Employees = () => {
                                     {showOFComponents ?
                                         <OrdersFulfilledCard
                                             name={`${selectedEmployee.first} ${selectedEmployee.last}`}
-                                            delivered={0}
-                                            total={4}
+                                            delivered={deliveredOrders(deliveries, selectedEmployee.id)}
                                         /> : null
                                     }
                                     {showOTComponents ?
