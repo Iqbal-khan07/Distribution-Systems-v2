@@ -1,5 +1,16 @@
 # Backend Heroku Link: https://immense-retreat-89767.herokuapp.com/
 # Frontend Heroku Link: https://commercial-distribution-soln-2.herokuapp.com/
+# NOTE, for logging in on the Frontend Heroku, you need to have an account created on the system, but there are default accounts that can be used
+# Order Taker: 
+1. user: order_taker
+2. pass: ot1234
+# Order Fulfiller:
+1. user: order_fulfiller
+2. pass: of1234
+# Administrator:
+1. user: admin
+2. pass: root
+
 
 # Project Description
 This project was created by four individuals:
