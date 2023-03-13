@@ -14,7 +14,7 @@
 
 # Project Description
 This project was created by four individuals:
-1. Zoraiz Naeem
+1. Sanan Naeem
 3. Denisse Mendoza
 4. Abdul-Quddus Adeniji
 4. Tylor Autore
