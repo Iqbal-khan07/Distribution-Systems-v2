@@ -56,7 +56,7 @@ containing the data.
 
 The frontend team is composed of two members:
 1. Denisse Mendoza
-2. Zoraiz Naeem
+2. Sanan Naeem
 
 More information on the technical aspects of the frontend project and how to set up the frontend 
 project on a local machine can be found in the frontend/README.rm file
